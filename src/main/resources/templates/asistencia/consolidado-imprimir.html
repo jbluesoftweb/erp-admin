@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imprimir Consolidado - ERP Admin</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      padding: 10mm;
+    }
+
+    /* TÍTULOS */
+    .titulo-principal {
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      margin: 15px 0 8px 0;
+      text-align: center;
+    }
+
+    /* TABLAS NUMÉRICAS */
+    .tabla-numerica {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .tabla-numerica th,
+    .tabla-numerica td {
+      border: 1px solid #000;
+      padding: 4px 6px;
+      text-align: center;
+      font-size: 9px;
+    }
+
+    .tabla-numerica th {
+      background: #e0e0e0;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    .tabla-numerica td:first-child,
+    .tabla-numerica th:first-child {
+      text-align: left;
+      padding-left: 8px;
+      font-weight: bold;
+    }
+
+    .tabla-numerica td:last-child {
+      font-weight: bold;
+      background: #f5f5f5;
+    }
+
+    /* TABLAS DE OCURRENCIAS */
+    .tabla-ocurrencias {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .tabla-ocurrencias th,
+    .tabla-ocurrencias td {
+      border: 1px solid #000;
+      padding: 3px 5px;
+      font-size: 8px;
+    }
+
+    .tabla-ocurrencias th {
+      background: #e0e0e0;
+      font-weight: bold;
+      text-align: left;
+      font-size: 9px;
+    }
+
+    .ocurrencia-group {
+      background: #d0d0d0;
+      font-weight: bold;
+      text-align: left;
+      padding: 4px 8px;
+      font-size: 9px;
+    }
+
+    .row-num {
+      text-align: center;
+      width: 30px;
+    }
+
+    /* CONFIGURACIÓN DE IMPRESIÓN */
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+      }
+
+      /* Evitar saltos de página dentro de tablas */
+      .tabla-numerica,
+      .tabla-ocurrencias {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body onload="window.print()">
+
+<div th:if="${consolidado != null}">
+
+  <!-- TÍTULO PRINCIPAL -->
+  <div class="titulo-principal">
+    CONSOLIDADO DE ASISTENCIA - <span th:text="${consolidado.empresaDescripcion}">Mi Empresa S.A.C.</span><br>
+    <span th:text="${#temporals.format(consolidado.fechaRegistro, 'dd-MM-yyyy')}">10-03-2026</span>
+  </div>
+
+  <!-- REGISTRO DEL PERSONAL -->
+  <div class="section-title">
+    REGISTRO DEL PERSONAL DEL <span th:text="${consolidado.empresaDescripcion}">Mi Empresa S.A.C.</span>
+    DEL <span th:text="${#temporals.format(consolidado.fechaRegistro, 'dd-MM-yyyy')}">10-03-2026</span>
+  </div>
+
+  <table class="tabla-numerica">
+    <thead>
+    <tr>
+      <th></th>
+      <th th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.grupo1'])}">GRUPO 1</th>
+      <th th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.grupo2'])}">GRUPO 2</th>
+      <th>TOTAL</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>EFECTIVOS</td>
+      <td th:text="${consolidado.totalEfectivosGrupo1}">15</td>
+      <td th:text="${consolidado.totalEfectivosGrupo2}">24</td>
+      <td th:text="${consolidado.totalEfectivosGeneral}">39</td>
+    </tr>
+    <tr>
+      <td>DESCUENTOS</td>
+      <td th:text="${consolidado.totalDescuentosGrupo1}">3</td>
+      <td th:text="${consolidado.totalDescuentosGrupo2}">6</td>
+      <td th:text="${consolidado.totalDescuentosGeneral}">9</td>
+    </tr>
+    <tr>
+      <td>DISPONIBLES</td>
+      <td th:text="${consolidado.totalDisponiblesGrupo1}">12</td>
+      <td th:text="${consolidado.totalDisponiblesGrupo2}">18</td>
+      <td th:text="${consolidado.totalDisponiblesGeneral}">30</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- ASISTENCIA DEL PERSONAL POR DEPARTAMENTOS -->
+  <div class="section-title">
+    ASISTENCIA DEL PERSONAL POR DEPARTAMENTOS DEL <span th:text="${consolidado.empresaDescripcion}">Mi Empresa S.A.C.</span>
+    DEL <span th:text="${#temporals.format(consolidado.fechaRegistro, 'dd-MM-yyyy')}">10-03-2026</span>
+  </div>
+
+  <table class="tabla-numerica">
+    <thead>
+    <tr>
+      <th>PERSONAL</th>
+      <th th:each="comp : ${consolidado.consolidadoTotal}"
+          th:style="${comp.efectivos > 0 ? 'background: #0066cc; color: white;' : 'background: #cc0000; color: white;'}"
+          th:text="${comp.departamentoDescripcion}">DEPTO-1</th>
+      <th>TOTAL</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>EFECTIVOS</td>
+      <td th:each="comp : ${consolidado.consolidadoTotal}"
+          th:text="${comp.efectivos}">5</td>
+      <td th:text="${consolidado.totalEfectivosGeneral}">39</td>
+    </tr>
+    <tr>
+      <td>DESCUENTOS</td>
+      <td th:each="comp : ${consolidado.consolidadoTotal}"
+          th:text="${comp.descuentos}">1</td>
+      <td th:text="${consolidado.totalDescuentosGeneral}">9</td>
+    </tr>
+    <tr>
+      <td>DISPONIBLES</td>
+      <td th:each="comp : ${consolidado.consolidadoTotal}"
+          th:text="${comp.disponibles}">4</td>
+      <td th:text="${consolidado.totalDisponiblesGeneral}">30</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- OCURRENCIAS -->
+  <div class="section-title">OCURRENCIAS</div>
+
+  <table class="tabla-ocurrencias">
+    <thead>
+    <tr>
+      <th style="width: 30px;">N°</th>
+      <th style="width: 80px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+      <th style="width: 180px;">APELLIDOS Y NOMBRES</th>
+      <th style="width: 60px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.departamento'])}">CÍA</th>
+      <th style="width: 50px;">INICIO</th>
+      <th style="width: 50px;">FIN</th>
+      <th>DETALLE</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#maps.isEmpty(consolidado.ocurrenciasAgrupadas)}">
+      <td colspan="7" style="text-align: center; padding: 10px;">
+        No hay ocurrencias registradas
+      </td>
+    </tr>
+
+    <th:block th:each="entry : ${consolidado.ocurrenciasAgrupadas}">
+      <tr>
+        <td colspan="7" class="ocurrencia-group">
+          PERSONAL - <span th:text="${entry.key}">PERMISO</span>
+        </td>
+      </tr>
+      <tr th:each="registro, iter : ${entry.value}">
+        <td class="row-num" th:text="${iter.count}">1</td>
+        <td th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
+        <td th:text="${registro.fullName}">García Pérez Juan</td>
+        <td style="text-align: center;" th:text="${registro.departamento.descripcionCorta}">DEPTO-1</td>
+        <td style="text-align: center;" th:text="${registro.fechaInicio != null ? #temporals.format(registro.fechaInicio, 'dd/MM') : '-'}">01/03</td>
+        <td style="text-align: center;" th:text="${registro.fechaTermino != null ? #temporals.format(registro.fechaTermino, 'dd/MM') : '-'}">05/03</td>
+        <td th:text="${registro.detalle != null ? registro.detalle : '-'}">Médico</td>
+      </tr>
+    </th:block>
+    </tbody>
+  </table>
+
+  <!-- PERSONAL PRESENTE -->
+  <div class="section-title">PERSONAL PRESENTE</div>
+
+  <table class="tabla-ocurrencias">
+    <thead>
+    <tr>
+      <th style="width: 30px;">N°</th>
+      <th style="width: 80px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+      <th style="width: 180px;">APELLIDOS Y NOMBRES</th>
+      <th style="width: 60px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.departamento'])}">DEPARTAMENTO</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(consolidado.personalPresente)}">
+      <td colspan="4" style="text-align: center; padding: 10px;">
+        No hay personal presente
+      </td>
+    </tr>
+    <tr th:each="registro, iter : ${consolidado.personalPresente}">
+      <td class="row-num" th:text="${iter.count}">1</td>
+      <td th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
+      <td th:text="${registro.fullName}">García Pérez Juan</td>
+      <td style="text-align: center;" th:text="${registro.departamento.descripcionCorta}">DEPTO-1</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>

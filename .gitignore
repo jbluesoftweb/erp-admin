@@ -1,0 +1,7 @@
+backup_pre_rename_20260919.sql
+*.sql
+!migrations/*.sql
+.idea/
+target/
+*.zip
+.DS_Store

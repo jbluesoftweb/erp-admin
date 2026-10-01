@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{layout :: head}"></th:block>
+
+    <style>
+        /* ALERTS */
+        .alert-custom {
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 991px) {
+            .info-bar {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .date-selector,
+            .effective-counter {
+                justify-self: center;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- SIDEBAR -->
+<div th:replace="~{layout :: sidebar}"></div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- MAIN WRAPPER -->
+<div class="main-wrapper">
+    <!-- TOP HEADER -->
+    <div th:replace="~{layout :: header}"></div>
+
+    <!-- CONTENT AREA -->
+    <div class="content-area">
+        <!-- ALERTS -->
+        <div th:if="${success}" class="alert-custom alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <span th:text="${success}"></span>
+        </div>
+
+        <div th:if="${error}" class="alert-custom alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div th:if="${info}" class="alert alert-info" th:text="${info}"></div>
+
+        <!-- INFO BAR -->
+        <div class="info-bar">
+            <div class="info-item">
+                <div>
+                    <div class="info-label" th:text="${existeRegistroAnterior ? 'Último Registro:' : 'Primer Registro:'}">Último Registro:</div>
+                    <div class="info-value" th:text="${existeRegistroAnterior ? #temporals.format(fechaUltimoRegistro, 'dd-MM-yyyy') : 'SIN REGISTRO'}">08-03-2026</div>
+                </div>
+            </div>
+
+            <div class="date-selector">
+                <i class="bi bi-calendar3"></i>
+                <label>Fecha del Registro:</label>
+                <input type="text"
+                       id="fechaRegistroPicker"
+                       class="flatpickr-input"
+                       th:value="${#temporals.format(fechaRegistro, 'dd-MM-yyyy')}"
+                       placeholder="Seleccionar fecha"
+                       style="background: white; color: #333; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; cursor: pointer;"
+                       readonly="readonly">
+            </div>
+
+            <div class="effective-counter">
+                <div class="info-label">Efectivo:</div>
+                <div class="efectivo-badge" th:text="${totalPersonal}">6</div>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form id="formAsistencia" th:action="@{/asistencia/guardar-bloque}" method="post">
+            <input type="hidden" name="fechaRegistro" id="fechaRegistroHidden" th:value="${#temporals.format(fechaRegistro, 'yyyy-MM-dd')}">
+
+            <!-- GRUPO 1 -->
+            <div class="section-title" th:text="${etiquetas['rrhh.personal.grupo1']}">Grupo 1</div>
+            <div class="data-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 280px;">Datos</th>
+                        <th style="width: 200px;">Ocurrencia</th>
+                        <th style="width: 140px;">Inicio</th>
+                        <th style="width: 140px;">Fin</th>
+                        <th>Detalle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p, iter : ${grupo1}">
+                        <td class="row-num" th:text="${iter.count}">1</td>
+                        <td>
+                            <span th:text="${p.nivel.descripcionCorta + ' ' + p.especialidad.descripcionCorta}">MY ART</span>
+                            <span th:text="${p.apPat + ' ' + p.apMat + ' ' + p.nombres}">Martinez Sanchez John</span>
+                            <input type="hidden" th:name="'registros[' + ${iter.index} + '].idPersonal'" th:value="${p.idPersonal}">
+                        </td>
+                        <td>
+                            <select class="form-select ocurrencia-select"
+                                    th:name="'registros[' + ${iter.index} + '].idOcurrencia'"
+                                    th:data-index="${iter.index}">
+                                <option th:each="oc : ${ocurrencias}"
+                                        th:value="${oc.idOcurrencia}"
+                                        th:text="${oc.descripcion}"
+                                        th:selected="${oc.idOcurrencia == 1}">Asistió</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="date"
+                                   class="form-control fecha-inicio"
+                                   th:name="'registros[' + ${iter.index} + '].fechaInicio'"
+                                   th:data-index="${iter.index}"
+                                   disabled>
+                        </td>
+                        <td>
+                            <input type="date"
+                                   class="form-control fecha-fin"
+                                   th:name="'registros[' + ${iter.index} + '].fechaTermino'"
+                                   th:data-index="${iter.index}"
+                                   disabled>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   class="form-control detalle-input"
+                                   th:name="'registros[' + ${iter.index} + '].detalle'"
+                                   th:data-index="${iter.index}"
+                                   placeholder="Detalle (opcional)"
+                                   disabled>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(grupo1)}">
+                        <td colspan="6" style="text-align: center; color: #999; padding: 20px;">
+                            No hay personal de [[${etiquetas['rrhh.personal.grupo1']}]] registrado
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- GRUPO 2 -->
+            <div class="section-title" th:text="${etiquetas['rrhh.personal.grupo2']}">Grupo 2</div>
+            <div class="data-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 280px;">Datos</th>
+                        <th style="width: 200px;">Ocurrencia</th>
+                        <th style="width: 140px;">Inicio</th>
+                        <th style="width: 140px;">Fin</th>
+                        <th>Detalle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p, iter : ${grupo2}">
+                        <td class="row-num" th:text="${iter.count}">1</td>
+                        <td>
+                            <span th:text="${p.nivel.descripcionCorta + ' ' + p.especialidad.descripcionCorta}">TCO 1 T/INTG</span>
+                            <span th:text="${p.apPat + ' ' + p.apMat + ' ' + p.nombres}">Perez Jobs Arnold</span>
+                            <input type="hidden"
+                                   th:name="'registros[' + ${grupo1.size() + iter.index} + '].idPersonal'"
+                                   th:value="${p.idPersonal}">
+                        </td>
+                        <td>
+                            <select class="form-select ocurrencia-select"
+                                    th:name="'registros[' + ${grupo1.size() + iter.index} + '].idOcurrencia'"
+                                    th:data-index="${grupo1.size() + iter.index}">
+                                <option th:each="oc : ${ocurrencias}"
+                                        th:value="${oc.idOcurrencia}"
+                                        th:text="${oc.descripcion}"
+                                        th:selected="${oc.idOcurrencia == 1}">Asistió</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="date"
+                                   class="form-control fecha-inicio"
+                                   th:name="'registros[' + ${grupo1.size() + iter.index} + '].fechaInicio'"
+                                   th:data-index="${grupo1.size() + iter.index}"
+                                   disabled>
+                        </td>
+                        <td>
+                            <input type="date"
+                                   class="form-control fecha-fin"
+                                   th:name="'registros[' + ${grupo1.size() + iter.index} + '].fechaTermino'"
+                                   th:data-index="${grupo1.size() + iter.index}"
+                                   disabled>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   class="form-control detalle-input"
+                                   th:name="'registros[' + ${grupo1.size() + iter.index} + '].detalle'"
+                                   th:data-index="${grupo1.size() + iter.index}"
+                                   placeholder="Detalle (opcional)"
+                                   disabled>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(grupo2)}">
+                        <td colspan="6" style="text-align: center; color: #999; padding: 20px;">
+                            No hay personal de [[${etiquetas['rrhh.personal.grupo2']}]] registrado
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- OCURRENCIAS (Pre-llenadas del último registro) -->
+            <div class="section-title">Ocurrencias</div>
+            <div class="data-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 280px;">Datos</th>
+                        <th style="width: 200px;">Ocurrencia</th>
+                        <th style="width: 140px;">Inicio</th>
+                        <th style="width: 140px;">Fin</th>
+                        <th>Detalle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="pd, iter : ${ocurrenciasPreLlenadas}">
+                        <td class="row-num" th:text="${iter.count}">1</td>
+                        <td>
+                            <span th:text="${pd.nivelSnapshot + ' ' + pd.especialidadSnapshot}">MY ART</span>
+                            <span th:text="${pd.fullName}">Martinez Sanchez John</span>
+                            <input type="hidden"
+                                   th:name="'registros[' + ${grupo1.size() + grupo2.size() + iter.index} + '].idPersonal'"
+                                   th:value="${pd.personal.idPersonal}">
+                        </td>
+                        <td>
+                            <select class="form-select ocurrencia-select"
+                                    th:name="'registros[' + ${grupo1.size() + grupo2.size() + iter.index} + '].idOcurrencia'"
+                                    th:data-index="${grupo1.size() + grupo2.size() + iter.index}">
+                                <option th:each="oc : ${ocurrencias}"
+                                        th:value="${oc.idOcurrencia}"
+                                        th:text="${oc.descripcion}"
+                                        th:selected="${oc.idOcurrencia == pd.ocurrencia.idOcurrencia}">Permiso</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="date"
+                                   class="form-control fecha-inicio"
+                                   th:name="'registros[' + ${grupo1.size() + grupo2.size() + iter.index} + '].fechaInicio'"
+                                   th:value="${pd.fechaInicio}"
+                                   th:data-index="${grupo1.size() + grupo2.size() + iter.index}">
+                        </td>
+                        <td>
+                            <input type="date"
+                                   class="form-control fecha-fin"
+                                   th:name="'registros[' + ${grupo1.size() + grupo2.size() + iter.index} + '].fechaTermino'"
+                                   th:value="${pd.fechaTermino}"
+                                   th:data-index="${grupo1.size() + grupo2.size() + iter.index}">
+                        </td>
+                        <td>
+                            <input type="text"
+                                   class="form-control detalle-input"
+                                   th:name="'registros[' + ${grupo1.size() + grupo2.size() + iter.index} + '].detalle'"
+                                   th:value="${pd.detalle}"
+                                   th:data-index="${grupo1.size() + grupo2.size() + iter.index}"
+                                   placeholder="Detalle (opcional)">
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(ocurrenciasPreLlenadas)}">
+                        <td colspan="6" style="text-align: center; color: #999; padding: 20px;">
+                            No hay ocurrencias del último registro
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SAVE BUTTON -->
+            <div class="save-section">
+                <button type="submit" class="btn-save" onclick="return confirm('¿Está seguro de guardar el registro del día?\n\nVerifique que todas las ocurrencias estén correctas.')">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div th:replace="~{layout :: footer}"></div>
+
+<!-- SCRIPTS -->
+<div th:replace="~{layout :: scripts}"></div>
+
+<script>
+    // DATEPICKER con Flatpickr (SIN RECARGAR PÁGINA)
+    document.addEventListener('DOMContentLoaded', function() {
+        const picker = flatpickr("#fechaRegistroPicker", {
+            locale: "es",
+            dateFormat: "d-m-Y",
+            altInput: false,
+            allowInput: false,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    // Solo actualizar el hidden input, NO recargar página
+                    const date = selectedDates[0];
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
+
+                    document.getElementById('fechaRegistroHidden').value = formattedDate;
+
+                    // OPCIONAL: Mostrar confirmación
+                    console.log('Fecha seleccionada:', formattedDate);
+                }
+            }
+        });
+
+        // MANEJO DE OCURRENCIAS
+        const selects = document.querySelectorAll('.ocurrencia-select');
+
+        selects.forEach(select => {
+            select.addEventListener('change', function() {
+                const index = this.dataset.index;
+                const fechaInicio = document.querySelector(`.fecha-inicio[data-index="${index}"]`);
+                const fechaFin = document.querySelector(`.fecha-fin[data-index="${index}"]`);
+                const detalle = document.querySelector(`.detalle-input[data-index="${index}"]`);
+
+                if (this.value === '1') { // Asistió
+                    fechaInicio.disabled = true;
+                    fechaFin.disabled = true;
+                    detalle.disabled = true;
+                    fechaInicio.value = '';
+                    fechaFin.value = '';
+                    detalle.value = '';
+                } else {
+                    fechaInicio.disabled = false;
+                    fechaFin.disabled = false;
+                    detalle.disabled = false;
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

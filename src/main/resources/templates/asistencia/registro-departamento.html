@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Asistencia por Departamento - ERP Admin</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      padding: 10mm;
+    }
+
+    .titulo-principal {
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: bold;
+      margin: 18px 0 8px 0;
+    }
+
+    .tabla-numerica {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .tabla-numerica th,
+    .tabla-numerica td {
+      border: 1px solid #000;
+      padding: 5px 8px;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .tabla-numerica th {
+      background: #e0e0e0;
+      font-weight: bold;
+    }
+
+    .tabla-numerica td:first-child,
+    .tabla-numerica th:first-child {
+      text-align: left;
+      padding-left: 8px;
+    }
+
+    .tabla-ocurrencias {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .tabla-ocurrencias th,
+    .tabla-ocurrencias td {
+      border: 1px solid #000;
+      padding: 4px 6px;
+      text-align: center;
+      font-size: 10px;
+    }
+
+    .tabla-ocurrencias th {
+      background: #e0e0e0;
+      font-weight: bold;
+    }
+
+    .tabla-ocurrencias td {
+      text-align: left;
+    }
+
+    .ocurrencia-group {
+      background: #f5f5f5;
+      font-weight: bold;
+      text-align: left !important;
+      padding: 5px 8px;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div th:if="${error != null}" style="text-align: center; padding: 60px 20px; font-family: Arial, sans-serif;">
+    <div style="font-size: 48px; margin-bottom: 15px;">📋</div>
+    <div style="font-size: 16px; font-weight: bold; color: #555;" th:text="${error}">
+        No existe registro para esta fecha
+    </div>
+</div>
+
+<th:block th:if="${error == null}">
+
+<div class="titulo-principal">
+  REGISTRO - <span th:text="${resumen.nombreDepartamento}">DEPARTAMENTO</span>
+  DEL <span th:text="${#temporals.format(resumen.fechaRegistro, 'dd/MM/yyyy')}">09/03/2026</span>
+</div>
+
+<table class="tabla-numerica">
+  <thead>
+  <tr>
+    <th>PERSONAL</th>
+    <th th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.grupo1'])}">GRUPO 1</th>
+    <th th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.grupo2'])}">GRUPO 2</th>
+    <th>TOTAL</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>EFECTIVOS</td>
+    <td th:text="${resumen.efectivosGrupo1}">5</td>
+    <td th:text="${resumen.efectivosGrupo2}">8</td>
+    <td th:text="${resumen.efectivosTotal}">13</td>
+  </tr>
+  <tr>
+    <td>DESCUENTOS</td>
+    <td th:text="${resumen.descuentosGrupo1}">1</td>
+    <td th:text="${resumen.descuentosGrupo2}">2</td>
+    <td th:text="${resumen.descuentosTotal}">3</td>
+  </tr>
+  <tr>
+    <td>DISPONIBLES</td>
+    <td th:text="${resumen.disponiblesGrupo1}">4</td>
+    <td th:text="${resumen.disponiblesGrupo2}">6</td>
+    <td th:text="${resumen.disponiblesTotal}">10</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="section-title" th:text="'OCURRENCIAS ' + ${#strings.toUpperCase(etiquetas['rrhh.personal.grupo1'])}">OCURRENCIAS GRUPO 1</div>
+<table class="tabla-ocurrencias">
+  <thead>
+  <tr>
+    <th>N°</th><th th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th><th>NOMBRE</th><th>FECHA INICIO</th><th>FECHA FIN</th><th>DETALLE</th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:if="${ocurrenciasGrupo1 != null and !ocurrenciasGrupo1.isEmpty()}">
+    <th:block th:each="entry : ${ocurrenciasGrupo1}">
+      <tr>
+        <td colspan="6" class="ocurrencia-group">
+          PERSONAL - <span th:text="${entry.key}">PERMISO</span>
+        </td>
+      </tr>
+      <tr th:each="registro, iter : ${entry.value}">
+        <td style="text-align:center;" th:text="${iter.count}">1</td>
+        <td style="text-align:center;" th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
+        <td th:text="${registro.fullName}">PÉREZ GARCÍA JUAN</td>
+        <td style="text-align:center;" th:text="${registro.fechaInicio != null ? #temporals.format(registro.fechaInicio, 'dd/MM/yyyy') : ''}"></td>
+        <td style="text-align:center;" th:text="${registro.fechaTermino != null ? #temporals.format(registro.fechaTermino, 'dd/MM/yyyy') : ''}"></td>
+        <td th:text="${registro.detalle != null ? registro.detalle : ''}"></td>
+      </tr>
+    </th:block>
+  </th:block>
+  <tr th:if="${ocurrenciasGrupo1 == null or ocurrenciasGrupo1.isEmpty()}">
+    <td colspan="6" style="text-align:center;">No hay ocurrencias de [[${etiquetas['rrhh.personal.grupo1']}]]</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="section-title" th:text="'OCURRENCIAS ' + ${#strings.toUpperCase(etiquetas['rrhh.personal.grupo2'])}">OCURRENCIAS GRUPO 2</div>
+<table class="tabla-ocurrencias">
+  <thead>
+  <tr>
+    <th>N°</th><th th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th><th>NOMBRE</th><th>FECHA INICIO</th><th>FECHA FIN</th><th>DETALLE</th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:if="${ocurrenciasGrupo2 != null and !ocurrenciasGrupo2.isEmpty()}">
+    <th:block th:each="entry : ${ocurrenciasGrupo2}">
+      <tr>
+        <td colspan="6" class="ocurrencia-group">
+          PERSONAL - <span th:text="${entry.key}">PERMISO</span>
+        </td>
+      </tr>
+      <tr th:each="registro, iter : ${entry.value}">
+        <td style="text-align:center;" th:text="${iter.count}">1</td>
+        <td style="text-align:center;" th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">TCO 1</td>
+        <td th:text="${registro.fullName}">LÓPEZ RUIZ PEDRO</td>
+        <td style="text-align:center;" th:text="${registro.fechaInicio != null ? #temporals.format(registro.fechaInicio, 'dd/MM/yyyy') : ''}"></td>
+        <td style="text-align:center;" th:text="${registro.fechaTermino != null ? #temporals.format(registro.fechaTermino, 'dd/MM/yyyy') : ''}"></td>
+        <td th:text="${registro.detalle != null ? registro.detalle : ''}"></td>
+      </tr>
+    </th:block>
+  </th:block>
+  <tr th:if="${ocurrenciasGrupo2 == null or ocurrenciasGrupo2.isEmpty()}">
+    <td colspan="6" style="text-align:center;">No hay ocurrencias de [[${etiquetas['rrhh.personal.grupo2']}]]</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="section-title">PERSONAL PRESENTE</div>
+<table class="tabla-ocurrencias">
+  <thead>
+  <tr><th style="width:10%;">N°</th><th style="width:20%;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th><th>NOMBRE</th></tr>
+  </thead>
+  <tbody>
+  <tr th:if="${personalPresente != null}" th:each="registro, iter : ${personalPresente}">
+    <td style="text-align:center;" th:text="${iter.count}">1</td>
+    <td style="text-align:center;" th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
+    <td th:text="${registro.fullName}">VARGAS SOTO LUIS</td>
+  </tr>
+  <tr th:if="${personalPresente == null or personalPresente.isEmpty()}">
+    <td colspan="3" style="text-align:center;">No hay personal presente</td>
+  </tr>
+  </tbody>
+</table>
+
+</th:block>
+
+</body>
+</html>

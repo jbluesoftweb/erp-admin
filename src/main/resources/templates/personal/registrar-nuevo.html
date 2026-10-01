@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{layout :: head}"></th:block>
+    <style>
+        .page-card { max-width: 780px; }
+        .section-separator { margin: 22px 0 18px 0; }
+        .admin-badge {
+            background: #1a2e0f;
+            color: #d4af37;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+<div th:replace="~{layout :: sidebar}"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="main-wrapper">
+    <div th:replace="~{layout :: header}"></div>
+
+    <div class="content-area">
+
+        <!-- ALERTS -->
+        <div th:if="${success}" class="alert-custom alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert-custom alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <a th:href="@{/personal/agregar}" class="btn-cancelar">
+            <i class="bi bi-arrow-left"></i> Volver a buscar personal
+        </a>
+
+        <div class="page-card">
+            <div class="page-card-header">
+                <i class="bi bi-person-plus-fill" style="color:#d4af37; font-size:18px;"></i>
+                <span>Registrar Personal Nuevo</span>
+                <small><span class="admin-badge">ADMIN_SYS</span></small>
+            </div>
+            <div class="page-card-body">
+
+                <form th:action="@{/personal/registrar}" method="post">
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}"/>
+
+                    <!-- SECCIÓN 1: IDENTIFICACIÓN -->
+                    <div class="form-section-title">
+                        <i class="bi bi-person-vcard"></i> Identificación
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Código <span class="required">*</span></label>
+                            <input type="text" name="codigo"
+                                   maxlength="9"
+                                   placeholder="Ej: 330501500"
+                                   required autocomplete="off">
+                            <span class="field-hint">9 caracteres numéricos</span>
+                        </div>
+                        <div class="form-group">
+                            <label>DNI <span class="required">*</span></label>
+                            <input type="text" name="dni"
+                                   maxlength="8"
+                                   placeholder="Ej: 46528501"
+                                   required autocomplete="off">
+                            <span class="field-hint">8 caracteres numéricos</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN 2: NOMBRES -->
+                    <div class="section-separator">
+                        <div class="form-section-title">
+                            <i class="bi bi-alphabet-uppercase"></i> Apellidos y Nombres
+                        </div>
+                    </div>
+                    <div class="form-row triple">
+                        <div class="form-group">
+                            <label>Apellido Paterno <span class="required">*</span></label>
+                            <input type="text" name="apPat"
+                                   maxlength="50"
+                                   placeholder="Ej: GARCIA"
+                                   required
+                                   style="text-transform:uppercase;">
+                        </div>
+                        <div class="form-group">
+                            <label>Apellido Materno <span class="required">*</span></label>
+                            <input type="text" name="apMat"
+                                   maxlength="50"
+                                   placeholder="Ej: PEREZ"
+                                   required
+                                   style="text-transform:uppercase;">
+                        </div>
+                        <div class="form-group">
+                            <label>Nombres <span class="required">*</span></label>
+                            <input type="text" name="nombres"
+                                   maxlength="100"
+                                   placeholder="Ej: JUAN ALBERO"
+                                   required
+                                   style="text-transform:uppercase;">
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN 3: TIPO DE PERSONAL -->
+                    <div class="section-separator">
+                        <div class="form-section-title">
+                            <i class="bi bi-shield-fill"></i> Tipo de Personal
+                        </div>
+                    </div>
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <label>Tipo de Personal <span class="required">*</span></label>
+                            <select id="selectTipo" onchange="filtrarNivelesEspecialidades()">
+                                <option value="">-- selecciona --</option>
+                                <option th:each="tp : ${tipoPersonales}"
+                                        th:value="${tp.idTipoPersonal}"
+                                        th:text="${tp.descripcionCorta + ' - ' + tp.descripcionLarga}">
+                                </option>
+                            </select>
+                            <span class="field-hint">
+                                Selecciona primero el tipo para filtrar nivel y especialidad
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN 4: DATOS PROFESIONALES -->
+                    <div class="section-separator">
+                        <div class="form-section-title">
+                            <i class="bi bi-award-fill"></i> Datos Profesionales
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><span th:text="${etiquetas['rrhh.personal.nivel']}">Nivel</span> <span class="required">*</span></label>
+                            <select name="idNivel" id="selectNivel" required>
+                                <option value="">-- selecciona tipo primero --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><span th:text="${etiquetas['rrhh.personal.especialidad']}">Especialidad</span> <span class="required">*</span></label>
+                            <select name="idEspecialidad" id="selectEspecialidad" required>
+                                <option value="">-- selecciona tipo primero --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><span th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</span> <span class="required">*</span></label>
+                            <select name="idDepartamento" required>
+                                <option value="">-- selecciona --</option>
+                                <option th:each="c : ${departamentos}"
+                                        th:value="${c.idDepartamento}"
+                                        th:text="${c.descripcionCorta}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Antigüedad (años) <span class="required">*</span></label>
+                            <input type="number" name="antiguedad"
+                                   min="0" max="20000"
+                                   placeholder="Ej: 5"
+                                   required>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN 5: CARGO -->
+                    <div class="section-separator">
+                        <div class="form-section-title">
+                            <i class="bi bi-briefcase"></i> Cargo (opcional)
+                        </div>
+                    </div>
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <label>Cargo</label>
+                            <input type="text" name="cargo"
+                                   maxlength="50"
+                                   placeholder="Ej: Jefe de Departamento">
+                            <span class="field-hint">Dejar vacío si no aplica</span>
+                        </div>
+                    </div>
+
+                    <!-- ACCIONES -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-institucional-gold">
+                            <i class="bi bi-floppy-fill"></i> Guardar
+                        </button>
+                        <a th:href="@{/personal/agregar}" class="btn-cancelar">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+<div th:replace="~{layout :: scripts}"></div>
+
+<!-- Arrays de niveles y especialidades para filtrado dinámico -->
+<script th:inline="none">
+    const todosNiveles = [];
+    const todasEspecialidades  = [];
+</script>
+<script th:inline="javascript">
+    /*[# th:each="g : ${niveles}"]*/
+    todosNiveles.push({
+        idNivel:          [[${g.idNivel}]],
+        descripcionCorta: [[${g.descripcionCorta}]],
+        descripcionLarga: [[${g.descripcionLarga}]],
+        idTipoPersonal:    [[${g.tipoPersonal.idTipoPersonal}]]
+    });
+    /*[/]*/
+    /*[# th:each="a : ${especialidades}"]*/
+    todasEspecialidades.push({
+        idEspecialidad:           [[${a.idEspecialidad}]],
+        descripcionCorta: [[${a.descripcionCorta}]],
+        descripcionLarga: [[${a.descripcionLarga}]],
+        idTipoPersonal:    [[${a.tipoPersonal.idTipoPersonal}]]
+    });
+    /*[/]*/
+
+    function filtrarNivelesEspecialidades() {
+        const tipoSeleccionado = parseInt(
+            document.getElementById('selectTipo').value
+        );
+        const selectNivel = document.getElementById('selectNivel');
+        const selectEspecialidad  = document.getElementById('selectEspecialidad');
+
+        selectNivel.innerHTML = '<option value="">-- selecciona --</option>';
+        selectEspecialidad.innerHTML  = '<option value="">-- selecciona --</option>';
+
+        if (!tipoSeleccionado) return;
+
+        todosNiveles.forEach(g => {
+            if (g.idTipoPersonal === tipoSeleccionado) {
+                const opt = document.createElement('option');
+                opt.value = g.idNivel;
+                opt.text  = g.descripcionCorta + ' - ' + g.descripcionLarga;
+                selectNivel.appendChild(opt);
+            }
+        });
+
+        todasEspecialidades.forEach(a => {
+            if (a.idTipoPersonal === tipoSeleccionado) {
+                const opt = document.createElement('option');
+                opt.value = a.idEspecialidad;
+                opt.text  = a.descripcionCorta + ' - ' + a.descripcionLarga;
+                selectEspecialidad.appendChild(opt);
+            }
+        });
+    }
+
+    // Forzar mayúsculas en apellidos y nombres
+    ['apPat', 'apMat', 'nombres'].forEach(name => {
+        const input = document.querySelector(`input[name="${name}"]`);
+        if (input) {
+            input.addEventListener('input', function() {
+                const pos = this.selectionStart;
+                this.value = this.value.toUpperCase();
+                this.setSelectionRange(pos, pos);
+            });
+        }
+    });
+</script>
+</body>
+</html>

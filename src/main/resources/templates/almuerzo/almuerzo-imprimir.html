@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir Almuerzo - ERP Admin</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            padding: 8mm;
+        }
+
+        /* TÍTULO PRINCIPAL */
+        .titulo-principal {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        /* TABLA */
+        .tabla-almuerzo {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .tabla-almuerzo th,
+        .tabla-almuerzo td {
+            border: 1px solid #000;
+            padding: 8px 6px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .tabla-almuerzo th {
+            background: #e0e0e0;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .tabla-almuerzo td.nombre {
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .tabla-almuerzo td.numero {
+            width: 40px;
+            font-weight: bold;
+        }
+
+        .tabla-almuerzo td.nivel {
+            width: 80px;
+        }
+
+        .tabla-almuerzo td.especialidad {
+            width: 80px;
+        }
+
+        /* Reemplaza los estilos actuales de firma y codigo */
+        .tabla-almuerzo td.codigo {
+            width: 100px;
+            height: 60px;
+            min-height: 60px;
+        }
+
+        .tabla-almuerzo td.firma {
+            width: 120px;
+            height: 60px;
+            min-height: 60px;
+        }
+
+        /* ENCABEZADO DE SECCIÓN */
+        .seccion-header {
+            background: #d0d0d0;
+            font-weight: bold;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 11px;
+        }
+
+        .tabla-almuerzo tbody tr {
+            height: 60px;
+        }
+
+        /* CONFIGURACIÓN DE IMPRESIÓN */
+        @page {
+            size: A4 portrait;
+            margin: 8mm;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            /* Evitar salto de página entre título y tabla */
+            .titulo-principal {
+                page-break-after: avoid;
+                margin-bottom: 10px;
+            }
+
+            /* Mantener título y tabla juntos */
+            div[th\:if] {
+                page-break-inside: avoid;
+            }
+
+            .tabla-almuerzo {
+                page-break-before: avoid;
+            }
+        }
+
+
+    </style>
+</head>
+
+<body onload="window.print()">
+
+<div th:if="${almuerzo != null}">
+
+    <!-- TÍTULO PRINCIPAL -->
+    <div class="titulo-principal">
+        <span th:text="'RELACIÓN DE PERSONAL: ' + ${#strings.toUpperCase(etiquetas['rrhh.personal.grupo1'])} + ', SUPERVISORES, ' + ${#strings.toUpperCase(etiquetas['rrhh.personal.grupo2'])}">RELACIÓN DE PERSONAL: GRUPO 1, SUPERVISORES, GRUPO 2</span><br>
+        <span th:text="${departamento.descripcionLarga}">DEPARTAMENTO DE TECNOLOGÍA</span><br>
+        QUE PASA ALIMENTOS EL <span th:text="${#temporals.format(almuerzo.fecha, 'dd-MM-yyyy')}">12-03-2026</span>
+    </div>
+
+    <!-- TABLA DE ALMUERZO -->
+    <table class="tabla-almuerzo">
+        <thead>
+        <tr>
+            <th class="numero">N°</th>
+            <th class="nivel" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+            <th class="especialidad" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.especialidad'])}">ESPECIALIDAD</th>
+            <th>APELLIDOS Y NOMBRES</th>
+            <th class="codigo">FIRMA</th>
+            <th class="firma">HUELLA</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- UNA SOLA LISTA - SIN SEPARACIÓN -->
+        <tr th:each="personal : ${almuerzo.grupo1}">
+            <td class="numero" th:text="${personal.numero}">1</td>
+            <td class="nivel" th:text="${personal.nivel}">MY</td>
+            <td class="especialidad" th:text="${personal.especialidad}">ART</td>
+            <td class="nombre" th:text="${personal.nombreCompleto}">García Pérez Juan Alberto</td>
+            <td class="codigo"></td>
+            <td class="firma"></td>
+        </tr>
+
+        <!-- MENSAJE SI NO HAY DATOS -->
+        <tr th:if="${#lists.isEmpty(almuerzo.grupo1)}">
+            <td colspan="6" style="text-align: center; padding: 30px; color: #999;">
+                No hay personal presente registrado para esta fecha
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- TOTALES AL FINAL -->
+    <div th:if="${almuerzo.totalGeneral > 0}"
+         style="text-align: right; font-weight: bold; margin-top: 10px;">
+        TOTAL GENERAL: <span th:text="${almuerzo.totalGeneral}">0</span> personas
+    </div>
+
+</div>
+
+</body>
+</html>

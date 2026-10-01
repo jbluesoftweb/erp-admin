@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{layout :: head}"></th:block>
+
+    <style>
+        /* CONTROLES DE IMPRESIÓN (Solo en pantalla) */
+        .print-controls {
+            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 2px solid #4a7c2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .date-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-selector i {
+            font-size: 18px;
+        }
+
+        .date-selector label {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-print {
+            background: #d4af37;
+            border: 2px solid #b8941f;
+            color: #1a1a1a;
+            padding: 10px 40px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-print:hover {
+            background: #e6c04d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-print:disabled {
+            background: #ccc;
+            border-color: #999;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ALERTS */
+        .alert-custom {
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* ========== ESTILOS PARA IMPRESIÓN ========== */
+
+        /* Ocultar contenido en pantalla */
+        .print-only {
+            display: none;
+        }
+
+        /* Al imprimir */
+        @media print {
+            /* Configurar página A4 horizontal */
+            @page {
+                size: A4 landscape;
+                margin: 5mm;
+            }
+
+            /* Ocultar todos los elementos con clase no-print */
+            .no-print {
+                display: none !important;
+            }
+
+            /* Asegurar que body, main-wrapper y content-area ocupen todo */
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .main-wrapper {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .content-area {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                background: white !important;
+            }
+
+            /* Mostrar el contenido del registro */
+            .print-only {
+                display: block !important;
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+            }
+
+            /* Contenedor principal - altura completa */
+            .cuerpo {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                page-break-inside: avoid;
+            }
+
+            /* IZQUIERDA - 50% (Registro) */
+            .izquierda {
+                width: 50%;
+                float: left;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+
+            /* DERECHA - 50% (Personal Presente) */
+            .derecha {
+                width: 50%;
+                float: right;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+
+            .registro-title {
+                text-align: center;
+                font-size: 13px;
+                font-weight: bold;
+                margin: 5px 0;
+            }
+
+            .registro-table {
+                width: 100%;
+                padding: 1px;
+                border-collapse: collapse;
+                border: 1px solid #000;
+                font-size: 9px;
+                margin-bottom: 8px;
+            }
+
+            .registro-table th,
+            .registro-table td {
+                padding: 2px;
+                border: 1px solid #000;
+                text-align: center;
+                font-size: 8px;
+            }
+
+            .registro-table th {
+                font-size: 9px;
+                font-weight: bold;
+                background: #f0f0f0;
+            }
+
+            .registro-table td {
+                font-size: 9px;
+            }
+
+            .section-header {
+                font-size: 11px;
+                font-weight: bold;
+                margin: 6px 0 3px 0;
+            }
+
+            .ocurrencia-group {
+                background: #f5f5f5;
+                font-weight: bold;
+                text-align: left;
+                padding: 3px 5px;
+            }
+
+            h1, h2, h3 {
+                font-size: 13px;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- SIDEBAR -->
+<div class="no-print">
+    <div th:replace="~{layout :: sidebar}"></div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay no-print" id="sidebarOverlay"></div>
+
+<!-- MAIN WRAPPER -->
+<div class="main-wrapper">
+    <!-- TOP HEADER -->
+    <div class="no-print">
+        <div th:replace="~{layout :: header}"></div>
+    </div>
+
+    <!-- CONTENT AREA -->
+    <div class="content-area">
+        <!-- ALERTS -->
+        <div th:if="${success}" class="alert-custom alert-success no-print">
+            <i class="bi bi-check-circle-fill"></i>
+            <span th:text="${success}"></span>
+        </div>
+
+        <div th:if="${error}" class="alert-custom alert-danger no-print">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div th:if="${fechaSeleccionada == null}" class="alert-custom alert-info no-print">
+            <i class="bi bi-info-circle-fill"></i>
+            <span>Seleccione una fecha para visualizar el registro de asistencia</span>
+        </div>
+
+        <!-- CONTROLES DE IMPRESIÓN -->
+        <div class="print-controls no-print">
+            <div class="date-selector">
+                <i class="bi bi-calendar3"></i>
+                <label>Selecciona la fecha:</label>
+                <input type="date"
+                       id="fechaRegistroInput"
+                       th:value="${fechaSeleccionada}"
+                       style="background: white; color: #333; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px;">
+            </div>
+
+            <button type="button"
+                    class="btn-print"
+                    id="btnImprimir"
+                    onclick="imprimirRegistro()">
+                <i class="bi bi-printer"></i> Imprimir
+            </button>
+        </div>
+
+        <!-- CONTENIDO PARA IMPRIMIR (Oculto en pantalla) -->
+        <div class="print-only" th:if="${resumen != null}">
+            <div class="cuerpo">
+                <!-- COLUMNA IZQUIERDA -->
+                <div class="izquierda">
+
+                    <!-- TÍTULO -->
+                    <h2 class="registro-title">
+                        REGISTRO - <span th:text="${resumen.nombreDepartamento}">DEPARTAMENTO</span>
+                        DEL <span th:text="${#temporals.format(resumen.fechaRegistro, 'dd/MM/yyyy')}">09/03/2026</span>
+                    </h2>
+
+                    <!-- CUADRO RESUMEN -->
+                    <table class="registro-table">
+                        <thead>
+                        <tr>
+                            <th style="width: 25%;">PERSONAL</th>
+                            <th style="width: 25%;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.grupo1'])}">GRUPO 1</th>
+                            <th style="width: 25%;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.grupo2'])}">GRUPO 2</th>
+                            <th style="width: 25%;">TOTAL</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>EFECTIVOS</td>
+                            <td th:text="${resumen.efectivosGrupo1}">5</td>
+                            <td th:text="${resumen.efectivosGrupo2}">8</td>
+                            <td th:text="${resumen.efectivosTotal}">13</td>
+                        </tr>
+                        <tr>
+                            <td>DESCUENTOS</td>
+                            <td th:text="${resumen.descuentosGrupo1}">1</td>
+                            <td th:text="${resumen.descuentosGrupo2}">2</td>
+                            <td th:text="${resumen.descuentosTotal}">3</td>
+                        </tr>
+                        <tr>
+                            <td>DISPONIBLES</td>
+                            <td th:text="${resumen.disponiblesGrupo1}">4</td>
+                            <td th:text="${resumen.disponiblesGrupo2}">6</td>
+                            <td th:text="${resumen.disponiblesTotal}">10</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- OCURRENCIAS GRUPO 1 -->
+                    <h3 class="section-header" th:text="'OCURRENCIAS ' + ${#strings.toUpperCase(etiquetas['rrhh.personal.grupo1'])}">OCURRENCIAS GRUPO 1</h3>
+                    <table class="registro-table">
+                        <thead>
+                        <tr>
+                            <th style="width: 7%;">N°</th>
+                            <th style="width: 10%;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+                            <th style="width: 30%;">NOMBRE</th>
+                            <th style="width: 18%;">FECHA INICIO</th>
+                            <th style="width: 18%;">FECHA FIN</th>
+                            <th style="width: 17%;">DETALLE</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:if="${ocurrenciasGrupo1 != null and !ocurrenciasGrupo1.isEmpty()}">
+                            <th:block th:each="entry : ${ocurrenciasGrupo1}">
+                                <!-- Header de grupo de ocurrencia -->
+                                <tr>
+                                    <td colspan="6" class="ocurrencia-group">
+                                        PERSONAL - <span th:text="${entry.key}">PERMISO</span>
+                                    </td>
+                                </tr>
+                                <!-- Registros de esa ocurrencia -->
+                                <tr th:each="registro, iter : ${entry.value}">
+                                    <td th:text="${iter.count}">1</td>
+                                    <td th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
+                                    <td th:text="${registro.fullName}" style="text-align: left;">PÉREZ GARCÍA JUAN</td>
+                                    <td th:text="${registro.fechaInicio != null ? #temporals.format(registro.fechaInicio, 'dd/MM/yyyy') : ''}">01/03/2026</td>
+                                    <td th:text="${registro.fechaTermino != null ? #temporals.format(registro.fechaTermino, 'dd/MM/yyyy') : ''}">05/03/2026</td>
+                                    <td th:text="${registro.detalle != null ? registro.detalle : ''}" style="text-align: left;"></td>
+                                </tr>
+                            </th:block>
+                        </th:block>
+                        <tr th:if="${ocurrenciasGrupo1 == null or ocurrenciasGrupo1.isEmpty()}">
+                            <td colspan="6">No hay ocurrencias de [[${etiquetas['rrhh.personal.grupo1']}]]</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- OCURRENCIAS GRUPO 2 -->
+                    <h3 class="section-header" th:text="'OCURRENCIAS ' + ${#strings.toUpperCase(etiquetas['rrhh.personal.grupo2'])}">OCURRENCIAS GRUPO 2</h3>
+                    <table class="registro-table">
+                        <thead>
+                        <tr>
+                            <th style="width: 7%;">N°</th>
+                            <th style="width: 10%;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+                            <th style="width: 30%;">NOMBRE</th>
+                            <th style="width: 18%;">FECHA INICIO</th>
+                            <th style="width: 18%;">FECHA FIN</th>
+                            <th style="width: 17%;">DETALLE</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:if="${ocurrenciasGrupo2 != null and !ocurrenciasGrupo2.isEmpty()}">
+                            <th:block th:each="entry : ${ocurrenciasGrupo2}">
+                                <!-- Header de grupo de ocurrencia -->
+                                <tr>
+                                    <td colspan="6" class="ocurrencia-group">
+                                        PERSONAL - <span th:text="${entry.key}">PERMISO</span>
+                                    </td>
+                                </tr>
+                                <!-- Registros de esa ocurrencia -->
+                                <tr th:each="registro, iter : ${entry.value}">
+                                    <td th:text="${iter.count}">1</td>
+                                    <td th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">TCO 1</td>
+                                    <td th:text="${registro.fullName}" style="text-align: left;">LÓPEZ RUIZ PEDRO</td>
+                                    <td th:text="${registro.fechaInicio != null ? #temporals.format(registro.fechaInicio, 'dd/MM/yyyy') : ''}">02/03/2026</td>
+                                    <td th:text="${registro.fechaTermino != null ? #temporals.format(registro.fechaTermino, 'dd/MM/yyyy') : ''}">02/03/2026</td>
+                                    <td th:text="${registro.detalle != null ? registro.detalle : ''}" style="text-align: left;"></td>
+                                </tr>
+                            </th:block>
+                        </th:block>
+                        <tr th:if="${ocurrenciasGrupo2 == null or ocurrenciasGrupo2.isEmpty()}">
+                            <td colspan="6">No hay ocurrencias de [[${etiquetas['rrhh.personal.grupo2']}]]</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- COLUMNA DERECHA -->
+                <div class="derecha">
+                    <h1>PERSONAL PRESENTE</h1>
+
+                    <table class="registro-table">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%;">N°</th>
+                            <th style="width: 15%;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+                            <th style="width: 75%;">NOMBRE</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${personalPresente != null}" th:each="registro, iter : ${personalPresente}">
+                            <td th:text="${iter.count}">1</td>
+                            <td th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
+                            <td th:text="${registro.fullName}" style="text-align: left;">VARGAS SOTO LUIS</td>
+                        </tr>
+                        <tr th:if="${personalPresente == null or personalPresente.isEmpty()}">
+                            <td colspan="3">No hay personal presente</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="no-print">
+    <div th:replace="~{layout :: footer}"></div>
+</div>
+
+<!-- SCRIPTS -->
+<div th:replace="~{layout :: scripts}"></div>
+
+<script>
+    function imprimirRegistro() {
+        const fechaInput = document.getElementById('fechaRegistroInput');
+        const fecha = fechaInput.value;
+
+        if (!fecha) {
+            alert('Por favor seleccione una fecha');
+            return;
+        }
+
+        // Recargar con fecha y luego imprimir
+        window.location.href = '/asistencia/imprimir?fecha=' + fecha;
+    }
+
+    // Si hay fecha seleccionada y datos cargados, abrir impresión automáticamente
+    document.addEventListener('DOMContentLoaded', function() {
+        const hayDatos = document.querySelector('.print-only');
+        if (hayDatos && hayDatos.querySelector('.cuerpo')) {
+            // Esperar un poco para que todo cargue
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        }
+    });
+</script>
+</body>
+</html>

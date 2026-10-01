@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle != null ? pageTitle + ' - ERP Admin' : 'ERP Admin V.1.0.0'}">ERP Admin</title>
+
+    <!-- Bootstrap CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+
+    <!-- Bootstrap Icons -->
+    <link th:href="@{/css/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <!-- Flatpickr CSS (Date Picker) -->
+    <link th:href="@{/css/flatpickr.min.css}" rel="stylesheet">
+
+    <!-- Common Layout Styles -->
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR - Color Institucional */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 230px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a2e0f 0%, #2d5016 100%);
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1040;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-230px);
+        }
+
+        .sidebar-logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #3d6b1f;
+        }
+
+        .logo-box {
+            width: 120px;
+            height: 90px;
+            background: white;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-diagonal {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #000;
+            transform: rotate(-45deg);
+        }
+
+        .sidebar-title {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+            overflow-y: auto;
+            height: calc(100vh - 180px);
+        }
+
+        /* MENU ITEM - Links directos */
+        .menu-item {
+            padding: 15px 25px;
+            color: #ccc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: white;
+            border-left-color: #d4af37;
+        }
+
+        .menu-item i {
+            font-size: 18px;
+            width: 20px;
+        }
+
+        /* MENU CATEGORY - Categorías colapsables */
+        .menu-category {
+            padding: 15px 25px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .menu-category:hover {
+            background: rgba(212, 175, 55, 0.15);
+            color: white;
+        }
+
+        .menu-category i.bi-person-badge,
+        .menu-category i.bi-file-earmark-bar-graph {
+            font-size: 18px;
+            width: 20px;
+        }
+
+        .menu-category .arrow {
+            position: absolute;
+            right: 15px;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-category.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* SUBMENU - Sub-items */
+        .submenu {
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.collapsed {
+            max-height: 0;
+        }
+
+        .submenu-item {
+            padding: 12px 25px 12px 57px;
+            font-size: 13px;
+            border-left: 3px solid transparent;
+        }
+
+        .submenu-item:hover,
+        .submenu-item.active {
+            background: rgba(212, 175, 55, 0.08);
+            border-left-color: #d4af37;
+        }
+
+        /* Ítem de menú como botón (acciones POST dentro del sidebar) */
+        button.menu-item {
+            width: 100%;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-family: inherit;
+            text-align: left;
+        }
+
+        /* MAIN WRAPPER */
+        .main-wrapper {
+            margin-left: 230px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-wrapper.expanded {
+            margin-left: 0;
+        }
+
+        /* TOP HEADER */
+        .top-header {
+            background: white;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .header-left h2 {
+            font-size: 20px;
+            font-weight: normal;
+            color: #333;
+            margin: 0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* USER DROPDOWN MENU */
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1050;
+        }
+
+        .user-dropdown.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-dropdown-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-dropdown-header strong {
+            display: block;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .user-dropdown-header small {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .user-dropdown-item {
+            padding: 12px 15px;
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .user-dropdown-item:hover {
+            background: #f8f9fa;
+        }
+
+        .user-dropdown-item i {
+            font-size: 16px;
+            width: 20px;
+        }
+
+        .user-dropdown-divider {
+            height: 1px;
+            background: #eee;
+            margin: 5px 0;
+        }
+
+        /* CONTENT AREA */
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            background: #f5f5f5;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(90deg, #1a2e0f 0%, #2d5016 100%);
+            color: #d4af37;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 12px;
+            margin-left: 230px;
+            transition: margin-left 0.3s ease;
+            border-top: 2px solid #3d6b1f;
+        }
+
+        .footer.expanded {
+            margin-left: 0;
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-230px);
+            }
+
+            .sidebar.mobile-show {
+                transform: translateX(0);
+            }
+
+            .main-wrapper,
+            .footer {
+                margin-left: 0;
+            }
+
+            .header-left h2 {
+                font-size: 16px;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .content-area {
+                padding: 20px 15px;
+            }
+        }
+
+        /* OVERLAY para móvil */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1035;
+            display: none;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+<!-- SIDEBAR -->
+<div th:fragment="sidebar" class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-box">
+            <div class="logo-diagonal"></div>
+        </div>
+        <h1 class="sidebar-title">ERP Admin V.1.0.0</h1>
+    </div>
+
+    <div class="sidebar-menu">
+        <!-- DASHBOARD (siempre visible, link directo) -->
+        <a th:href="@{/dashboard}" class="menu-item" data-page="dashboard">
+            <i class="bi bi-house-door-fill"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <!-- CATEGORÍA: ADMIN - Departamento (solo si ADMIN_DPTO) -->
+        <div sec:authorize="hasAnyRole('ADMIN_DPTO', 'ADMIN_SYS')">
+            <div class="menu-category" onclick="toggleCategory(this)">
+                <i class="bi bi-person-badge"></i>
+                <span>ADMIN - <span th:text="${departamento != null ? departamento.descripcionCorta : 'Departamento'}">Depto 1</span></span>
+                <i class="bi bi-chevron-down arrow"></i>
+            </div>
+            <div class="submenu collapsed">
+                <a th:href="@{/asistencia/registrar}" class="menu-item submenu-item" data-page="registrar">
+                    <span>REGISTRAR</span>
+                </a>
+                <a th:href="@{/asistencia/actualizar}" class="menu-item submenu-item" data-page="actualizar">
+                    <span>ACTUALIZAR</span>
+                </a>
+                <a th:href="@{/asistencia/imprimir}" class="menu-item submenu-item" data-page="imprimir">
+                    <span>IMPRIMIR</span>
+                </a>
+                <a th:href="@{/almuerzo}" class="menu-item submenu-item" data-page="almuerzo">
+                    <span>ALMUERZO</span>
+                </a>
+                <!-- ADMIN REGISTROS: ADMIN_SYS (cualquier fecha) y ADMIN_APP (solo hoy, ya
+                     validado en el backend) -->
+                <a sec:authorize="hasAnyRole('ADMIN_SYS', 'ADMIN_APP')"
+                   th:href="@{/asistencia/admin}"
+                   class="menu-item submenu-item" data-page="asistencia-admin">
+                    <span>ADMIN REGISTROS</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- CATEGORÍA: ADMIN APP (solo si ADMIN_APP) -->
+        <div sec:authorize="hasAnyRole('ADMIN_APP', 'ADMIN_SYS')">
+            <div class="menu-category" onclick="toggleCategory(this)">
+                <i class="bi bi-file-earmark-bar-graph"></i>
+                <span>Admin App</span>
+                <i class="bi bi-chevron-down arrow"></i>
+            </div>
+            <div class="submenu collapsed">
+                <a th:href="@{/asistencia/consolidado}" class="menu-item submenu-item" data-page="consolidado">
+                    <span>CONSOLIDADO</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- CATEGORÍA: PERSONAL -->
+        <div sec:authorize="hasAnyRole('ADMIN_DPTO', 'ADMIN_APP', 'ADMIN_SYS')">
+            <div class="menu-category" onclick="toggleCategory(this)">
+                <i class="bi bi-people-fill"></i>
+                <span style="color: #d4af37;">PERSONAL</span>
+                <i class="bi bi-chevron-down arrow"></i>
+            </div>
+            <div class="submenu collapsed">
+
+                <!-- LISTAR: todos los roles -->
+                <a th:href="@{/personal/listar}"
+                   class="menu-item submenu-item" data-page="personal-listar">
+                    <span>LISTAR</span>
+                </a>
+
+                <!-- AGREGAR: solo ADMIN_APP y ADMIN_SYS -->
+                <a sec:authorize="hasAnyRole('ADMIN_APP', 'ADMIN_SYS')"
+                   th:href="@{/personal/agregar}"
+                   class="menu-item submenu-item" data-page="personal-agregar">
+                    <span>AGREGAR</span>
+                </a>
+
+                <!-- REGISTRAR: personal completamente nuevo, no existe en BD. Solo ADMIN_APP y ADMIN_SYS -->
+                <a sec:authorize="hasAnyRole('ADMIN_APP', 'ADMIN_SYS')"
+                   th:href="@{/personal/registrar}"
+                   class="menu-item submenu-item" data-page="personal-registrar">
+                    <span>REGISTRAR NUEVO</span>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- CATEGORÍA: USUARIOS — ADMIN_SYS (todos) y ADMIN_APP (solo ADMIN_DPTO de
+             su unidad, ya validado en el backend) -->
+        <div sec:authorize="hasAnyRole('ADMIN_SYS', 'ADMIN_APP')">
+            <div class="menu-category" onclick="toggleCategory(this)">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span style="color: #d4af37;">USUARIOS</span>
+                <i class="bi bi-chevron-down arrow"></i>
+            </div>
+            <div class="submenu collapsed">
+
+                <a th:href="@{/asistencia/usuarios}"
+                   class="menu-item submenu-item" data-page="usuarios-listar">
+                    <span>LISTAR</span>
+                </a>
+
+                <a th:href="@{/asistencia/usuarios/crear}"
+                   class="menu-item submenu-item" data-page="usuarios-crear">
+                    <span>CREAR</span>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- CATEGORÍA: SISTEMA (solo ADMIN_SYS) -->
+        <div sec:authorize="hasRole('ADMIN_SYS')">
+            <div class="menu-category" onclick="toggleCategory(this)">
+                <i class="bi bi-gear-fill"></i>
+                <span style="color: #d4af37;">SISTEMA</span>
+                <i class="bi bi-chevron-down arrow"></i>
+            </div>
+            <div class="submenu collapsed">
+
+                <a th:href="@{/admin/etiquetas}" class="menu-item submenu-item">
+                    <span>ADMINISTRAR ETIQUETAS</span>
+                </a>
+
+                <!-- th:action agrega el token CSRF automáticamente (igual que logout) -->
+                <form th:action="@{/admin/etiquetas/refrescar}" method="post" style="margin: 0;">
+                    <button type="submit" class="menu-item submenu-item">
+                        <span>REFRESCAR ETIQUETAS</span>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- SIDEBAR OVERLAY (Mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- TOP HEADER -->
+<div th:fragment="header" class="top-header">
+    <div class="header-left">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        <h2>
+            <span th:text="${headerTitle != null ? headerTitle : 'Administrativo'}">Administrativo</span>
+            <span th:if="${departamento != null}"> - </span>
+            <span th:if="${departamento != null}" th:text="${departamento.descripcionCorta}"></span>
+        </h2>
+    </div>
+    <div class="header-right">
+        <span style="font-size: 13px; color: #666;" class="d-none d-md-inline">Bienvenido,</span>
+        <div class="user-info" id="userMenu">
+            <div class="user-avatar">
+                <i class="bi bi-person-fill"></i>
+            </div>
+            <span class="user-name" sec:authentication="name">Usuario</span>
+            <i class="bi bi-chevron-down" style="font-size: 12px; color: #666;"></i>
+
+            <!-- USER DROPDOWN -->
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-dropdown-header">
+                    <strong sec:authentication="name">330501500</strong>
+                    <small th:if="${departamento != null}" th:text="${departamento.descripcionCorta}">Depto Tecnológico</small>
+                </div>
+
+                <!--
+
+                <a th:href="@{/perfil}" class="user-dropdown-item">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Mi Perfil</span>
+                </a>
+                -->
+
+                <a th:href="@{/asistencia/usuarios/mi-password}" class="user-dropdown-item">
+                    <i class="bi bi-key-fill"></i>
+                    <span>Cambiar Password</span>
+                </a>
+                <!--
+                <a th:href="@{/configuracion}" class="user-dropdown-item">
+                    <i class="bi bi-gear"></i>
+                    <span>Configuración</span>
+                </a>
+                -->
+                <div class="user-dropdown-divider"></div>
+                <form th:action="@{/logout}" method="post" style="margin: 0;">
+                    <button type="submit" class="user-dropdown-item" style="color: #dc3545;">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Cerrar Sesión</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div th:fragment="footer" class="footer" id="footer">
+    © 2026 ERP Admin - Sistema de Administración
+</div>
+
+<!-- SCRIPTS -->
+<th:block th:fragment="scripts">
+    <!-- Bootstrap JS -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- Flatpickr JS -->
+    <script th:src="@{/js/flatpickr.min.js}"></script>
+    <script th:src="@{/js/flatpickr-es.js}"></script>
+
+    <script>
+        // SIDEBAR TOGGLE
+        const sidebar = document.getElementById('sidebar');
+        const mainWrapper = document.querySelector('.main-wrapper');
+        const footer = document.getElementById('footer');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                if (window.innerWidth <= 991) {
+                    sidebar.classList.toggle('mobile-show');
+                    sidebarOverlay.classList.toggle('show');
+                } else {
+                    sidebar.classList.toggle('collapsed');
+                    mainWrapper.classList.toggle('expanded');
+                    if (footer) footer.classList.toggle('expanded');
+                }
+            });
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('mobile-show');
+                sidebarOverlay.classList.remove('show');
+            });
+        }
+
+        // USER DROPDOWN MENU
+        const userMenu = document.getElementById('userMenu');
+        const userDropdown = document.getElementById('userDropdown');
+
+        if (userMenu && userDropdown) {
+            userMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function() {
+                userDropdown.classList.remove('show');
+            });
+
+            userDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        // RESPONSIVE
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 991) {
+                sidebar.classList.remove('mobile-show');
+                sidebarOverlay.classList.remove('show');
+            }
+        });
+
+        // TOGGLE CATEGORY (Expandir/Colapsar)
+        function toggleCategory(element) {
+            const submenu = element.nextElementSibling;
+            const isCollapsed = submenu.classList.contains('collapsed');
+
+            if (isCollapsed) {
+                submenu.classList.remove('collapsed');
+                element.classList.add('expanded');
+            } else {
+                submenu.classList.add('collapsed');
+                element.classList.remove('expanded');
+            }
+        }
+
+        // MARK ACTIVE MENU ITEM (JavaScript - NO Thymeleaf)
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const dataPage = item.getAttribute('data-page');
+            if (dataPage && currentPath.includes(dataPage)) {
+                item.classList.add('active');
+
+                // Si es un sub-item, expandir su categoría padre
+                if (item.classList.contains('submenu-item')) {
+                    const submenu = item.closest('.submenu');
+                    if (submenu) {
+                        submenu.classList.remove('collapsed');
+                        const category = submenu.previousElementSibling;
+                        if (category) {
+                            category.classList.add('expanded');
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</th:block>
+</body>
+</html>

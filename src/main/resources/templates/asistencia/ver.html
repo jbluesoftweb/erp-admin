@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+      lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Registros del Día</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-icons.min.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">Sistema de Asistencia</span>
+            <div class="d-flex align-items-center">
+                <span class="navbar-text text-white me-3">
+                    <i class="bi bi-person-circle"></i> <span sec:authentication="name">Usuario</span>
+                </span>
+                <a href="/dashboard" class="btn btn-outline-light btn-sm me-2">
+                    <i class="bi bi-house"></i> Dashboard
+                </a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-box-arrow-right"></i> Salir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-info">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">
+                            <i class="bi bi-list-check"></i> Registros del Día
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Fecha:</strong> 
+                                <span th:text="${#temporals.format(fecha, 'dd/MM/yyyy')}">08/03/2026</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Registrados:</strong> 
+                                <span class="badge bg-success" th:text="${totalRegistros}">0</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Total Personal:</strong> 
+                                <span class="badge bg-info" th:text="${totalPersonal}">0</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Pendientes:</strong> 
+                                <span class="badge bg-warning text-dark" th:text="${pendientes}">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="row mb-3">
+            <div class="col-12 d-flex align-items-center gap-2 flex-wrap">
+                <a th:href="@{/asistencia/registrar}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Registrar Asistencia
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
+
+                <!-- ELIMINAR ÚLTIMO REGISTRO: solo ADMIN_SYS -->
+                <div sec:authorize="hasRole('ADMIN_SYS')"
+                     th:if="${totalRegistros > 0}">
+                    <form th:action="@{/asistencia/eliminar-ultimo}"
+                          method="post"
+                          style="display:inline;"
+                          th:data-fecha="${fechaConsulta}"
+                          onsubmit="return confirmarEliminar(this)">
+                        <input type="hidden"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}"/>
+                        <input type="hidden" name="idDepartamento"
+                               th:value="${departamento.idDepartamento}"/>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash-fill"></i>
+                            Eliminar Registro
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de Registros -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-table"></i> Detalle de Registros
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Código</th>
+                                        <th th:text="${etiquetas['rrhh.personal.nivel']}">Nivel</th>
+                                        <th>Apellidos y Nombres</th>
+                                        <th th:text="${etiquetas['rrhh.personal.especialidad']}">Especialidad</th>
+                                        <th>Ant.</th>
+                                        <th>Ocurrencia</th>
+                                        <th>Detalle</th>
+                                        <th>Fechas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${#lists.isEmpty(registros)}">
+                                        <td colspan="9" class="text-center text-muted">
+                                            <i class="bi bi-inbox"></i> No hay registros para esta fecha
+                                        </td>
+                                    </tr>
+                                    <tr th:each="registro, iterStat : ${registros}" 
+                                        th:class="${registro.ocurrencia.tipo == 'DISPONIBLE' ? 'table-success' : 'table-warning'}">
+                                        <td th:text="${iterStat.count}">1</td>
+                                        <td><strong th:text="${registro.codigo}">330501500</strong></td>
+                                        <td th:text="${registro.nivelSnapshot}">TTE</td>
+                                        <td th:text="${registro.fullName}">APELLIDO APELLIDO Nombres</td>
+                                        <td th:text="${registro.especialidadSnapshot}">INF</td>
+                                        <td th:text="${registro.antiguedad}">10</td>
+                                        <td>
+                                            <span class="badge" 
+                                                  th:classappend="${registro.ocurrencia.tipo == 'DISPONIBLE' ? 'bg-success' : 'bg-warning text-dark'}"
+                                                  th:text="${registro.ocurrencia.descripcion}">
+                                                Asistió
+                                            </span>
+                                        </td>
+                                        <td th:text="${registro.detalle ?: '-'}">-</td>
+                                        <td>
+                                            <small th:if="${registro.fechaInicio != null}">
+                                                <strong>Inicio:</strong> 
+                                                <span th:text="${#temporals.format(registro.fechaInicio, 'dd/MM/yyyy')}"></span>
+                                                <br>
+                                                <strong>Término:</strong> 
+                                                <span th:text="${#temporals.format(registro.fechaTermino, 'dd/MM/yyyy')}"></span>
+                                            </small>
+                                            <span th:if="${registro.fechaInicio == null}">-</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <td colspan="6" class="text-end"><strong>TOTALES:</strong></td>
+                                        <td colspan="3">
+                                            <span class="badge bg-success me-2">
+                                                Registrados: <span th:text="${#lists.size(registros)}">0</span>
+                                            </span>
+                                            <span class="badge bg-info">
+                                                Pendientes: <span th:text="${pendientes}">0</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    
+    <style>
+        @media print {
+            .navbar, .btn, .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</body>
+</html>
