@@ -35,18 +35,20 @@ datos. Ver [Personalización](#personalización) más abajo.
    CREATE DATABASE tu_base OWNER tu_usuario;
    ```
 
-2. Crear el esquema completo (tablas, vistas, triggers) y los datos
-   iniciales para poder iniciar sesión por primera vez, ejecutando los
-   scripts con ese mismo usuario:
+2. Crear el esquema completo (tablas, vistas, triggers) y cargar los
+   datos de ejemplo para poder iniciar sesión por primera vez,
+   ejecutando los scripts con ese mismo usuario y **en este orden**:
 
    ```bash
    psql -h localhost -U tu_usuario -d tu_base -f db/init-schema.sql
-   psql -h localhost -U tu_usuario -d tu_base -f db/seed_admin_sys.sql
+   psql -h localhost -U tu_usuario -d tu_base -f db/seed_chimu.sql
    ```
 
-   Ver [Datos iniciales](#datos-iniciales-primer-usuario-admin_sys) abajo
-   para el detalle de qué crea el segundo script y con qué usuario
-   podrás loguearte.
+   Usa una base de datos nueva y vacía: la aplicación asume que la
+   ocurrencia "Asistió" es la número 1. Ver
+   [Datos de ejemplo](#datos-de-ejemplo-sucursal-chimu) abajo para el
+   detalle de qué crea el segundo script y con qué usuarios podrás
+   loguearte.
 
 3. Configurar las variables de entorno de conexión antes de levantar la
    aplicación:
@@ -72,34 +74,47 @@ datos. Ver [Personalización](#personalización) más abajo.
 > internamente, fuera de este repositorio). Usar `create` o `update`,
 > aunque sea para pruebas, borra y recrea las tablas mapeadas por JPA en
 > cada arranque — incluyendo los datos que haya cargado
-> `seed_admin_sys.sql`.
+> `seed_chimu.sql`.
 
-### Datos iniciales (primer usuario ADMIN_SYS)
+### Datos de ejemplo (sucursal CHIMU)
 
-Una vez creado el esquema (`db/init-schema.sql`), corre el script de
-datos semilla para poder iniciar sesión por primera vez:
+`db/seed_chimu.sql` carga un caso de ejemplo completo: la sucursal CHIMU
+de una empresa ficticia de seguridad y vigilancia ("Blue Security"), con
+sus departamentos, personal y usuarios. Es idempotente: puede ejecutarse
+más de una vez sin duplicar datos. Todos los nombres y DNI son ficticios.
+Para tu propia organización, parte de este archivo y cámbiale los datos.
 
-```bash
-psql -U tu_usuario -d tu_base -f db/seed_admin_sys.sql
-```
-
-Este script asume que las tablas de `rrhh`/`iam` ya existen y están
-vacías (o sin estos códigos todavía). Crea una empresa, departamento,
-tipo de personal, nivel y especialidad genéricos, un registro de
-personal, el usuario y el vínculo usuario-rol-sistema necesario para
-poder loguearse.
-
-Login resultante:
-
-| Campo | Valor |
+| Elemento | Contenido |
 |---|---|
-| Código de usuario | `000000001` |
-| Contraseña | `Peru123` |
+| Sucursal (`rrhh.empresa`) | `CHIMU` |
+| Departamentos | `Dpto1`, `Dpto2`, `Dpto3` |
+| Tipos de personal (grupos) | `VIGILANTE`, `SUPERVISOR` |
+| Niveles | `Tco` (Técnico en Seguridad) para vigilantes; `ING` (Ingeniero en Seguridad) para supervisores |
+| Especialidad | `Sec` (Seguridad), en ambos tipos |
+| Personal | 20 trabajadores, códigos `300000001` a `300000020`, repartidos entre los 3 departamentos |
+| Ocurrencias de asistencia | `ASI` Asistió, `PER` Permiso, `HOS` Hospitalizado |
+| Etiquetas de pantalla | nivel, grupo 1 (Vigilantes), grupo 2 (Supervisores), departamento, especialidad |
 
-Esa contraseña es reconocida por la aplicación como "contraseña por
-defecto" (ver `PasswordForceChangeInterceptor`), así que en el primer
-login se forzará el cambio automáticamente — no hace falta configurar
-nada adicional para eso.
+Usuarios con acceso (contraseña inicial **`Peru123`**; la aplicación
+fuerza el cambio en el primer login, ver `PasswordForceChangeInterceptor`):
+
+| Código | Trabajador | Rol |
+|---|---|---|
+| `300000001` | System | `ADMIN_SYS` |
+| `300000002` | Administrador | `ADMIN_APP` |
+| `300000003` | Supervisor de Dpto1 | `ADMIN_DPTO` |
+| `300000004` | Supervisor de Dpto2 | `ADMIN_DPTO` |
+| `300000005` | Supervisor de Dpto3 | `ADMIN_DPTO` |
+
+El resto del personal no tiene usuario: lo registra el `ADMIN_DPTO` de su
+departamento.
+
+> **Notas:** (1) La aplicación asume que la ocurrencia "Asistió" tiene
+> `id_ocurrencia = 1` y código `ASI`, y que el grupo 1 es el tipo de
+> personal con id 1 y el grupo 2 el de id 2. El script ya lo respeta si
+> se ejecuta sobre una base nueva. (2) Las etiquetas se cargan en memoria
+> al arrancar: si las modificas directamente en la base, reinicia la
+> aplicación.
 
 ## Personalización
 
@@ -119,8 +134,8 @@ base de datos directamente.
 | Rol | Alcance |
 |---|---|
 | `ADMIN_SYS` | Administración completa: usuarios, roles, etiquetas del sistema. |
-| `ADMIN_APP` | Administración a nivel de aplicación. |
-| `ADMIN_DPTO` / `JEFE_DPTO` | Administración/jefatura a nivel de departamento. |
+| `ADMIN_APP` | Administración de la sucursal: crea y gestiona usuarios `ADMIN_DPTO`. |
+| `ADMIN_DPTO` | Registra y consulta al personal y la asistencia de su propio departamento. |
 
 ## Licencia
 
