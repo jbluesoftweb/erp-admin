@@ -10,33 +10,38 @@ datos. Ver [Personalización](#personalización) más abajo.
 
 ## Stack técnico
 
-- Java 21 · Spring Boot 4.0.3
+- Java 25 · Spring Boot 4.0.3
 - Spring Data JPA / Hibernate
 - Spring Security
 - Thymeleaf + Bootstrap 5
-- PostgreSQL 14
+- PostgreSQL 18
 - Maven
 
 ## Requisitos
 
-- JDK 21+
-- PostgreSQL 14+
+- JDK 25
+- PostgreSQL 18
 - Maven (o usar el wrapper incluido, `./mvnw`)
 
 ## Puesta en marcha (desarrollo local)
 
-1. Crear la base de datos en PostgreSQL:
+1. Crear un usuario para la aplicación y una base de datos a su nombre
+   (desde la consola de administración de PostgreSQL, por ejemplo
+   `sudo -u postgres psql`):
 
-   ```bash
-   createdb -U postgres tu_base
+   ```sql
+   CREATE ROLE tu_usuario LOGIN;
+   \password tu_usuario
+   CREATE DATABASE tu_base OWNER tu_usuario;
    ```
 
 2. Crear el esquema completo (tablas, vistas, triggers) y los datos
-   iniciales para poder iniciar sesión por primera vez:
+   iniciales para poder iniciar sesión por primera vez, ejecutando los
+   scripts con ese mismo usuario:
 
    ```bash
-   psql -U postgres -d tu_base -f db/init-schema.sql
-   psql -U postgres -d tu_base -f db/seed_admin_sys.sql
+   psql -h localhost -U tu_usuario -d tu_base -f db/init-schema.sql
+   psql -h localhost -U tu_usuario -d tu_base -f db/seed_admin_sys.sql
    ```
 
    Ver [Datos iniciales](#datos-iniciales-primer-usuario-admin_sys) abajo
@@ -53,9 +58,10 @@ datos. Ver [Personalización](#personalización) más abajo.
    ./mvnw spring-boot:run
    ```
 
-   (`DB_URL` y `DB_USERNAME` tienen un valor por defecto en
-   `application.properties` para desarrollo local; `DB_PASSWORD` es
-   obligatorio y nunca debe hardcodearse ni commitearse.)
+   (Las tres variables son obligatorias: no hay valores por defecto. La
+   contraseña nunca debe escribirse en `application.properties` ni
+   commitearse. En IntelliJ IDEA se definen en *Run → Edit
+   Configurations → Environment variables*.)
 
 4. La aplicación queda disponible en `http://localhost:8080`.
 
