@@ -13,6 +13,23 @@
     --texto-gris: #666;
 }
 
+/* Base: cuerpo, tipografía y fondo general (identidad JBlueSoft, ver jb-tokens.css).
+   El marco (barra lateral, cabecera, pie) está en layout.css. */
+body {
+    font-family: var(--jb-font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--jb-ink);
+    background-color: var(--jb-page-bg);
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--jb-font-title);
+}
+
 /* Page Card Layouts */
 .page-card {
     background: white;

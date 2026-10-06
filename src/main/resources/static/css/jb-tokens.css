@@ -48,6 +48,27 @@
   --jb-success-border: rgba(74, 222, 128, .30);
   --jb-success-text:   #86EFAC;
 
+  /* Tema claro (panel interno: contenido, cabecera, pie) */
+  --jb-page-bg:       #F4F6FA;   /* fondo del área de contenido */
+  --jb-surface:       #FFFFFF;   /* cabecera, desplegables */
+  --jb-surface-hover: #EEF2F8;   /* hover sobre superficie clara */
+  --jb-ink:           #0F172A;   /* texto principal sobre claro */
+  --jb-ink-2:         #5B6477;   /* texto secundario sobre claro */
+  --jb-line:          #E3E8F0;   /* bordes sobre claro */
+  --jb-focus-light:   #0284C7;   /* anillo de foco cian sobre claro (el cian de marca no llega a 3:1 sobre blanco) */
+  --jb-danger-ink:    #C62828;   /* acción destructiva sobre claro */
+
+  /* Barra lateral (sobre --jb-bg) */
+  --jb-nav-hover:     rgba(232, 236, 244, .06);
+  --jb-nav-active:    var(--jb-primary-soft);
+  --jb-nav-disabled:  var(--jb-placeholder);
+  --jb-overlay:       rgba(2, 6, 23, .6);
+
+  /* Sombras del marco */
+  --jb-shadow-header: 0 1px 2px rgba(15, 23, 42, .04);
+  --jb-shadow-pop:    0 12px 32px rgba(15, 23, 42, .14), 0 2px 6px rgba(15, 23, 42, .06);
+  --jb-shadow-drawer: 8px 0 32px rgba(0, 0, 0, .35);
+
   /* Tipografía */
   --jb-font-title: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   --jb-font-body:  "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
