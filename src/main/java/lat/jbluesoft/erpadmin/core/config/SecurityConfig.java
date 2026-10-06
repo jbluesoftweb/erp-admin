@@ -55,7 +55,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // Recursos públicos
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/fonts/**", "/webjars/**").permitAll()
                         .requestMatchers("/login", "/error").permitAll()
 
                         // Dashboard - Accesible por todos los roles autenticados

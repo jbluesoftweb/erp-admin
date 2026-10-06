@@ -2,154 +2,96 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ERP Admin</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0B1220">
+    <title>Iniciar sesión · erpadmin</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo-icon.svg}">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .login-container {
-            max-width: 400px;
-            width: 100%;
-        }
-        
-        .login-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        
-        .login-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .login-header h1 {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0;
-        }
-        
-        .login-header p {
-            margin: 5px 0 0 0;
-            opacity: 0.9;
-            font-size: 14px;
-        }
-        
-        .login-body {
-            padding: 30px;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            padding: 12px;
-            font-weight: bold;
-            transition: transform 0.2s;
-        }
-        
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .alert {
-            border-radius: 10px;
-        }
-    </style>
+    <link th:href="@{/css/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/css/jb-tokens.css}" rel="stylesheet">
+    <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
-<body>
-    <div class="login-container">
-        <div class="login-card">
-            <!-- Header -->
-            <div class="login-header">
-                <h1>Sistema de Asistencia</h1>
-                <p>Sistema ERP Administrativo</p>
+<body class="jb-login">
+
+    <!-- Panel de marca (se oculta en pantallas pequeñas) -->
+    <aside class="jb-brand" aria-hidden="true">
+        <div class="jb-brand-top">
+            <img th:src="@{/img/logo-icon.svg}" alt="">
+            <span class="jb-brand-name">erpadmin</span>
+        </div>
+
+        <div class="jb-brand-main">
+            <h1>Tu equipo, <span>bajo control.</span></h1>
+            <p>Gestión de personal, asistencia y reportes consolidados para cada sucursal y departamento.</p>
+            <ul class="jb-features">
+                <li><i class="bi bi-people"></i> Personal organizado por sucursal y departamento</li>
+                <li><i class="bi bi-calendar-check"></i> Registro diario de asistencia y ocurrencias</li>
+                <li><i class="bi bi-bar-chart-line"></i> Reportes consolidados listos para imprimir</li>
+            </ul>
+        </div>
+
+        <div class="jb-brand-foot">Desarrollado por <strong>JBlueSoft</strong></div>
+    </aside>
+
+    <!-- Formulario -->
+    <main class="jb-form-wrap">
+        <section class="jb-card">
+            <div class="jb-card-mobile-logo">
+                <img th:src="@{/img/logo-icon.svg}" alt="">
+                <span>erpadmin</span>
             </div>
-            
-            <!-- Body -->
-            <div class="login-body">
-                <!-- Mensaje de error -->
-                <div th:if="${error}" class="alert alert-danger" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                    <span th:text="${error}"></span>
+
+            <h2>Iniciar sesión</h2>
+            <p class="jb-sub">Ingresa con tu código de trabajador.</p>
+
+            <div th:if="${error}" class="jb-alert jb-alert-error" role="alert">
+                <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                <span th:text="${error}"></span>
+            </div>
+            <div th:if="${message}" class="jb-alert jb-alert-success" role="status">
+                <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                <span th:text="${message}"></span>
+            </div>
+
+            <form id="login-form" th:action="@{/login}" method="post">
+                <div class="jb-field">
+                    <label for="codigo" class="jb-label">Código</label>
+                    <input type="text" id="codigo" name="codigo" class="jb-input"
+                           placeholder="9 dígitos"
+                           inputmode="numeric" autocomplete="username"
+                           maxlength="9" pattern="[0-9]{9}"
+                           title="El código tiene 9 dígitos"
+                           required autofocus>
                 </div>
-                
-                <!-- Mensaje de logout -->
-                <div th:if="${message}" class="alert alert-success" role="alert">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span th:text="${message}"></span>
-                </div>
-                
-                <!-- Formulario de login -->
-                <form th:action="@{/login}" method="post">
-                    <!-- Código -->
-                    <div class="mb-3">
-                        <label for="codigo" class="form-label">Código</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="codigo" 
-                            name="codigo" 
-                            placeholder="Ingrese su código"
-                            required
-                            autofocus
-                            maxlength="9"
-                            pattern="[0-9]{9}"
-                        >
-                        <small class="form-text text-muted">9 dígitos</small>
-                    </div>
-                    
-                    <!-- Password -->
-                    <div class="mb-4">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input 
-                            type="password" 
-                            class="form-control" 
-                            id="password" 
-                            name="password" 
-                            placeholder="Ingrese su contraseña"
-                            required
-                        >
-                    </div>
-                    
-                    <!-- Submit -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-login">
-                            Ingresar al Sistema
+
+                <div class="jb-field">
+                    <label for="password" class="jb-label">Contraseña</label>
+                    <div class="jb-input-wrap">
+                        <input type="password" id="password" name="password"
+                               class="jb-input has-toggle"
+                               placeholder="Tu contraseña"
+                               autocomplete="current-password" required>
+                        <button type="button" id="toggle-password" class="jb-toggle"
+                                aria-label="Mostrar contraseña" aria-pressed="false">
+                            <i class="bi bi-eye" aria-hidden="true"></i>
                         </button>
                     </div>
-                </form>
-                
-                <!-- Footer info -->
-                <div class="mt-4 text-center">
-                    <small class="text-muted">
-                        <p class="mb-1">📅 Fecha: <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy')}"></span></p>
-                        <p class="mb-0">v1.0.0 - 2026</p>
-                    </small>
+                    <span id="caps-hint" class="jb-caps" role="status">
+                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i> Bloq Mayús está activado
+                    </span>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Bootstrap 5 JS -->
-    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+                <button type="submit" id="login-submit" class="jb-btn">
+                    <span class="jb-spinner" aria-hidden="true"></span>
+                    <span>Ingresar</span>
+                </button>
+            </form>
+
+            <div class="jb-card-foot">erpadmin v1.0.0 · JBlueSoft</div>
+        </section>
+    </main>
+
+    <script th:src="@{/js/login.js}"></script>
 </body>
 </html>

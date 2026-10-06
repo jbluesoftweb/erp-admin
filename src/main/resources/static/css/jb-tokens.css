@@ -1,0 +1,58 @@
+/* ==========================================================
+   JBlueSoft design tokens — única fuente de verdad del diseño.
+   Colores, tipografía y espaciado se definen aquí y el resto
+   de hojas de estilo solo los consumen con var(--...).
+   ========================================================== */
+
+@font-face { font-family: "Space Grotesk"; font-weight: 600; font-style: normal; font-display: swap;
+  src: url("../fonts/jb/space-grotesk-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("../fonts/jb/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("../fonts/jb/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("../fonts/jb/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: swap;
+  src: url("../fonts/jb/inter-latin-600-normal.woff2") format("woff2"); }
+
+:root {
+  /* Marca */
+  --jb-bg:        #0B1220;   /* fondo oscuro principal */
+  --jb-bg-2:      #121B2E;   /* superficies sobre el fondo oscuro */
+  --jb-primary:   #2E7DF6;   /* azul de acción */
+  --jb-primary-h: #1F6BE0;   /* azul al pasar el mouse */
+  --jb-accent:    #38BDF8;   /* cian cielo (acento secundario) */
+  --jb-text:      #E8ECF4;   /* texto sobre oscuro */
+  --jb-text-2:    #8A93A6;   /* texto secundario */
+  --jb-border:    rgba(232, 236, 244, .12);
+  --jb-border-h:  rgba(232, 236, 244, .25);  /* borde al pasar el mouse */
+  --jb-primary-d: #1A5CC4;   /* azul del botón al pasar el mouse */
+  --jb-on-primary:       #FFFFFF;                  /* texto sobre azul */
+  --jb-on-primary-muted: rgba(255, 255, 255, .4);
+  --jb-placeholder:      #7A849A;
+  --jb-primary-soft:     rgba(46, 125, 246, .16);  /* fondo de íconos */
+  --jb-primary-glow:     rgba(46, 125, 246, .28);  /* halo del panel de marca */
+  --jb-primary-shadow:   rgba(46, 125, 246, .35);  /* sombra del botón */
+  --jb-accent-glow:      rgba(56, 189, 248, .16);
+  --jb-focus-ring:       rgba(56, 189, 248, .22);  /* anillo de foco */
+  --jb-shadow-card:      0 24px 60px rgba(0, 0, 0, .35);
+
+  /* Estados */
+  --jb-danger:    #F87171;
+  --jb-success:   #4ADE80;
+  --jb-warning:   #FBBF24;
+  --jb-danger-bg:      rgba(248, 113, 113, .12);
+  --jb-danger-border:  rgba(248, 113, 113, .35);
+  --jb-danger-text:    #FCA5A5;
+  --jb-success-bg:     rgba(74, 222, 128, .10);
+  --jb-success-border: rgba(74, 222, 128, .30);
+  --jb-success-text:   #86EFAC;
+
+  /* Tipografía */
+  --jb-font-title: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --jb-font-body:  "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Forma */
+  --jb-radius:    12px;
+  --jb-radius-sm: 8px;
+}

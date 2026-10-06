@@ -1,0 +1,272 @@
+/* Login — JBlueSoft. Usa solo variables de jb-tokens.css */
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+.jb-login {
+  min-height: 100vh;
+  min-height: 100dvh; /* la barra del navegador móvil no tapa el botón */
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  background: var(--jb-bg);
+  color: var(--jb-text);
+  font-family: var(--jb-font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Panel de marca (izquierda) ----------
+   Todo el panel se mide en em: el tamaño base escala con el ancho
+   (16px hasta ~1600px, ~19px en 2560, 24px en 3840) y el contenido
+   crece en proporción en vez de perderse en la pantalla. */
+.jb-brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5em;
+  font-size: clamp(1rem, .55rem + .4vw, 1.625rem);
+  padding-block:
+    max(clamp(32px, 5vh, 96px), env(safe-area-inset-top))
+    max(clamp(32px, 5vh, 96px), env(safe-area-inset-bottom));
+  /* En monitores anchos el contenido no se estira: el relleno crece
+     para dejar una columna de lectura de 34em centrada en el panel. */
+  --jb-brand-pad: max(clamp(32px, 4.5vw, 160px), calc((100% - 34em) / 2));
+  padding-inline: max(var(--jb-brand-pad), env(safe-area-inset-left)) var(--jb-brand-pad);
+  overflow: hidden;
+  background:
+    radial-gradient(60% 50% at 15% 10%, var(--jb-primary-glow), transparent 70%),
+    radial-gradient(50% 45% at 90% 95%, var(--jb-accent-glow), transparent 70%),
+    var(--jb-bg);
+  border-right: 1px solid var(--jb-border);
+}
+.jb-brand-top { display: flex; align-items: center; gap: .75em; }
+.jb-brand-top img { width: 2.75em; height: 2.75em; display: block; }
+.jb-brand-name {
+  font-family: var(--jb-font-title);
+  font-weight: 700;
+  font-size: 1.5em;
+  letter-spacing: .01em;
+}
+.jb-brand-main h1 {
+  font-family: var(--jb-font-title);
+  font-weight: 700;
+  font-size: clamp(2rem, .5rem + 2.6vw, 6rem);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin: 0 0 .5em;
+  max-width: 14ch;
+  overflow-wrap: break-word;
+}
+.jb-brand-main h1 span { color: var(--jb-accent); }
+.jb-brand-main p {
+  color: var(--jb-text-2);
+  font-size: 1.05em;
+  line-height: 1.6;
+  max-width: 44ch;
+  margin: 0 0 2em;
+}
+.jb-features { list-style: none; margin: 0; padding: 0; display: grid; gap: .9em; font-size: .95em; }
+.jb-features li { display: flex; align-items: center; gap: .75em; color: var(--jb-text); }
+.jb-features i {
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.2em; height: 2.2em; border-radius: var(--jb-radius-sm);
+  background: var(--jb-primary-soft);
+  color: var(--jb-accent);
+  font-size: 1.05em;
+}
+.jb-brand-foot { color: var(--jb-text-2); font-size: .85em; }
+.jb-brand-foot strong { color: var(--jb-text); font-family: var(--jb-font-title); font-weight: 600; }
+
+/* ---------- Panel del formulario (derecha) ---------- */
+.jb-form-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-block:
+    max(32px, env(safe-area-inset-top))
+    max(32px, env(safe-area-inset-bottom));
+  padding-inline:
+    24px
+    max(24px, env(safe-area-inset-right));
+}
+/* La tarjeta también se mide en em:
+   16px base y hasta 24px en 4K. Nunca baja de 1rem, así los inputs quedan en >=16px. */
+.jb-card {
+  /* margin:auto centra cuando hay espacio y, si no cabe, la tarjeta
+     empieza arriba y se alcanza con scroll (nunca queda cortada). */
+  margin: auto;
+  width: 100%;
+  max-width: 25em;
+  font-size: clamp(1rem, .55rem + .4vw, 1.5rem);
+  background: var(--jb-bg-2);
+  border: 1px solid var(--jb-border);
+  border-radius: 1em;
+  padding: 2.25em 2em 1.75em;
+  box-shadow: var(--jb-shadow-card);
+}
+.jb-card-mobile-logo { display: none; align-items: center; gap: .625em; margin-bottom: 1.5em; }
+.jb-card-mobile-logo img { width: 2.25em; height: 2.25em; }
+.jb-card-mobile-logo span { font-family: var(--jb-font-title); font-weight: 700; font-size: 1.25em; }
+
+.jb-card h2 {
+  font-family: var(--jb-font-title);
+  font-weight: 700;
+  font-size: 1.6em;
+  margin: 0 0 .25em;
+}
+.jb-card .jb-sub { color: var(--jb-text-2); font-size: .95em; margin: 0 0 1.5em; }
+
+.jb-alert {
+  display: flex; align-items: flex-start; gap: .625em;
+  padding: .75em .875em; margin-bottom: 1.25em;
+  border-radius: var(--jb-radius-sm);
+  font-size: .9em; line-height: 1.4;
+  border: 1px solid transparent;
+  overflow-wrap: anywhere;
+}
+.jb-alert i { margin-top: 1px; }
+.jb-alert-error   { background: var(--jb-danger-bg);  border-color: var(--jb-danger-border);  color: var(--jb-danger-text); }
+.jb-alert-success { background: var(--jb-success-bg); border-color: var(--jb-success-border); color: var(--jb-success-text); }
+
+.jb-field { margin-bottom: 1.125em; }
+.jb-label { display: block; font-size: .85em; font-weight: 500; color: var(--jb-text); margin-bottom: .4em; }
+.jb-hint  { display: block; font-size: .78em; color: var(--jb-text-2); margin-top: .4em; }
+.jb-input-wrap { position: relative; }
+.jb-input {
+  display: block;
+  width: 100%;
+  min-height: 2.875em; /* 46px */
+  padding: .625em .875em;
+  background: var(--jb-bg);
+  color: var(--jb-text);
+  border: 1px solid var(--jb-border);
+  border-radius: var(--jb-radius-sm);
+  font: inherit;
+  font-size: 1em; /* >=16px: evita el zoom automático de iOS Safari */
+  line-height: 1.5;
+  transition: border-color .15s, box-shadow .15s;
+}
+.jb-input::placeholder { color: var(--jb-placeholder); opacity: 1; }
+.jb-input:hover { border-color: var(--jb-border-h); }
+.jb-input:focus {
+  outline: none;
+  border-color: var(--jb-accent);
+  box-shadow: 0 0 0 3px var(--jb-focus-ring);
+}
+.jb-input.has-toggle { padding-right: 3em; }
+.jb-toggle {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: 2.875em; min-height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: 0; color: var(--jb-text-2); cursor: pointer;
+  font-size: 1em;
+  border-radius: 0 var(--jb-radius-sm) var(--jb-radius-sm) 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.jb-toggle i { font-size: 1.05em; }
+.jb-toggle:hover { color: var(--jb-text); }
+.jb-toggle:focus-visible { outline: 2px solid var(--jb-accent); outline-offset: -2px; }
+.jb-caps { display: none; color: var(--jb-warning); font-size: .78em; margin-top: .4em; }
+.jb-caps.on { display: block; }
+
+.jb-btn {
+  width: 100%; min-height: 3em; margin-top: .375em; /* 48px */
+  padding: .625em 1em;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  background: var(--jb-primary-h);
+  color: var(--jb-on-primary);
+  border: 0; border-radius: var(--jb-radius-sm);
+  font-family: var(--jb-font-title); font-weight: 600; font-size: 1em;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background .15s, transform .15s, box-shadow .15s;
+}
+.jb-btn:hover { background: var(--jb-primary-d); box-shadow: 0 8px 20px var(--jb-primary-shadow); transform: translateY(-1px); }
+.jb-btn:focus-visible { outline: 2px solid var(--jb-accent); outline-offset: 3px; }
+.jb-btn[disabled] { opacity: .75; cursor: progress; transform: none; box-shadow: none; }
+.jb-spinner {
+  width: 1em; height: 1em; border-radius: 50%;
+  border: 2px solid var(--jb-on-primary-muted); border-top-color: var(--jb-on-primary);
+  animation: jb-spin .7s linear infinite; display: none;
+}
+.jb-btn.loading .jb-spinner { display: inline-block; }
+@keyframes jb-spin { to { transform: rotate(360deg); } }
+
+.jb-card-foot {
+  margin-top: 1.5em; padding-top: 1.125em;
+  border-top: 1px solid var(--jb-border);
+  text-align: center; color: var(--jb-text-2); font-size: .8em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jb-btn, .jb-input { transition: none; }
+  .jb-btn:hover { transform: none; }
+  .jb-spinner { animation-duration: 1.6s; }
+}
+
+/* ---------- Pantallas pequeñas: una sola columna ---------- */
+@media (max-width: 880px) {
+  .jb-login { grid-template-columns: minmax(0, 1fr); }
+  .jb-brand { display: none; }
+  .jb-card-mobile-logo { display: flex; }
+  .jb-form-wrap {
+    padding-block:
+      max(24px, env(safe-area-inset-top))
+      max(24px, env(safe-area-inset-bottom));
+    padding-inline:
+      max(16px, env(safe-area-inset-left))
+      max(16px, env(safe-area-inset-right));
+  }
+  .jb-card { padding: 1.75em 1.375em 1.375em; }
+}
+
+/* Celulares muy angostos (320 px) */
+@media (max-width: 360px) {
+  .jb-form-wrap { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); }
+  .jb-card { padding: 1.5em 1.125em 1.25em; }
+}
+
+/* Poca altura (celular en horizontal): tarjeta más compacta */
+@media (max-height: 480px) {
+  .jb-form-wrap { padding-block: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-bottom)); }
+  .jb-card { padding-block: 1.25em 1em; }
+  .jb-card-mobile-logo { margin-bottom: .875em; }
+  .jb-card .jb-sub { margin-bottom: 1em; }
+  .jb-field { margin-bottom: .75em; }
+  .jb-card-foot { margin-top: .875em; padding-top: .75em; }
+}
+
+/* Tablet en vertical (768x1024, 820x1180, 900x1200…): dos columnas
+   quedan apretadas y una sola columna deja la pantalla vacía, así que la
+   marca vuelve como encabezado compacto y el conjunto se centra.
+   Desde 1024 px (iPad en horizontal o iPad Pro en vertical) hay dos columnas. */
+@media (min-width: 600px) and (max-width: 1023px) and (min-height: 800px) and (orientation: portrait) {
+  .jb-login {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+  }
+  .jb-brand {
+    display: flex;
+    gap: 1.75em;
+    font-size: 1rem;
+    --jb-brand-pad: max(32px, calc((100% - 25rem) / 2));
+    padding-block: max(32px, env(safe-area-inset-top)) 0;
+    border-right: 0;
+    background: none;
+  }
+  .jb-brand-main h1 { font-size: 2.25rem; max-width: none; }
+  .jb-brand-main p { margin: 0; }
+  .jb-features, .jb-brand-foot { display: none; }
+  .jb-card-mobile-logo { display: none; }
+  .jb-form-wrap { padding-top: 32px; }
+  .jb-login {
+    background:
+      radial-gradient(60% 40% at 15% 0%, var(--jb-primary-glow), transparent 70%),
+      var(--jb-bg);
+  }
+}

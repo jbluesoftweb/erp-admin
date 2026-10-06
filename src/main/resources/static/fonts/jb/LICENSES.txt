@@ -1,0 +1,4 @@
+Fuentes autoalojadas (distribuidas vía Fontsource), bajo SIL Open Font License 1.1:
+- Space Grotesk — https://github.com/floriankarsten/space-grotesk
+- Inter — https://github.com/rsms/inter
+Texto de la licencia: https://openfontlicense.org
