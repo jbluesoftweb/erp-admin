@@ -114,6 +114,11 @@
   --jb-info-ink:       #075985;
   --jb-info-line:      #B3E1F6;
 
+  /* Violeta: cuarto tono para diferenciar categorías (rol ADMIN_DPTO) */
+  --jb-violet-subtle: #F1EBFD;
+  --jb-violet-ink:    #5B21B6;
+  --jb-violet-line:   #D4C3F7;
+
   /* Hoja impresa (asistencia/imprimir): blanco y negro, sin la marca.
      Son los valores originales; cambiarlos cambia el documento impreso. */
   --jb-print-paper:    #FFFFFF;

@@ -1,0 +1,41 @@
+/* ==========================================================================
+   Usuarios — Listar
+   Tarjeta, tabla (con desplazamiento propio), badges de rol, total y
+   botones vienen de common.css y del tema de Bootstrap.
+   ========================================================================== */
+
+/* Columnas de texto alineadas a la izquierda (la tabla común las centra) */
+.usuarios-table th,
+.usuarios-table td { text-align: left; }
+
+/* Acciones: hasta dos líneas para que la tabla quepa en escritorio;
+   alineadas a la izquierda para que "Editar" quede en la misma columna */
+.usuarios-table td.td-acciones {
+    min-width: 13.5rem;
+    white-space: normal;
+}
+
+.usuarios-table .col-nombre { min-width: 13rem; }
+
+/* Correos largos: se parten en vez de ensanchar la tabla */
+.usuarios-table .td-email {
+    min-width: 11rem;
+    max-width: 17rem;
+    overflow-wrap: anywhere;
+}
+
+.usuarios-table .texto-secundario { color: var(--jb-ink-2); }
+
+/* Estado de la cuenta */
+.badge-estado {
+    display: inline-block;
+    padding: 3px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-estado.activo   { background: var(--jb-success-subtle); color: var(--jb-success-ink);  border-color: var(--jb-success-line); }
+.badge-estado.inactivo { background: var(--jb-danger-subtle);  color: var(--jb-danger-ink-2); border-color: var(--jb-danger-line); }

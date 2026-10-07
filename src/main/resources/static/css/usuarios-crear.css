@@ -1,0 +1,9 @@
+/* ==========================================================================
+   Usuarios — Crear usuario
+   Tarjeta, formulario, avisos y botones vienen de common.css.
+   ========================================================================== */
+
+.page-card { max-width: 600px; }
+
+/* El aviso de la contraseña inicial va dentro del formulario */
+.page-card form .alert-custom { margin-bottom: 0; }

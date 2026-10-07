@@ -1,0 +1,24 @@
+/* ==========================================================================
+   Personal — Editar persona
+   Tarjeta, datos fijos, formulario y botones vienen de common.css.
+   ========================================================================== */
+
+.page-card { max-width: 780px; }
+
+/* La sección "Cargo" va después de bloques condicionales por rol */
+.page-card form > .form-section-title { margin-top: 10px; }
+
+/* Tipo de personal (grupo 1 / grupo 2) junto al nombre */
+.tipo-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.tipo-grupo1 { background: var(--jb-primary-tint); color: var(--jb-link-h);    border-color: var(--jb-primary-tint); }
+.tipo-grupo2 { background: var(--jb-accent-tint);  color: var(--jb-accent-ink); border-color: var(--jb-info-line); }

@@ -3,109 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:replace="~{layout :: head}"></th:block>
-    <style>
-        .page-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        .page-card-header {
-            background: linear-gradient(90deg, #2d5016 0%, #3d6b1f 100%);
-            padding: 14px 20px;
-            border-left: 4px solid #d4af37;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .page-card-header span {
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .controls-bar {
-            padding: 15px 20px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .btn-crear {
-            background: #d4af37;
-            color: #1a1a1a;
-            border: 2px solid #b8941f;
-            padding: 8px 20px;
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: 20px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-crear:hover { background: #e5c04a; color: #1a1a1a; }
-        .data-table { width: 100%; border-collapse: collapse; }
-        .data-table th {
-            padding: 11px 14px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #495057;
-            text-transform: uppercase;
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-            text-align: left;
-        }
-        .data-table td {
-            padding: 10px 14px;
-            font-size: 13px;
-            border-bottom: 1px solid #e9ecef;
-            vertical-align: middle;
-        }
-        .data-table tbody tr:hover { background: #f8f9fa; }
-        .badge-rol {
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        .rol-admin-sys  { background: #1a2e0f; color: #d4af37; }
-        .rol-admin-app  { background: #cce5ff; color: #004085; }
-        .rol-admin-dpto { background: #d4edda; color: #155724; }
-        .rol-jefe-dpto  { background: #fff3cd; color: #856404; }
-        .badge-estado {
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .activo    { background: #d4edda; color: #155724; }
-        .inactivo  { background: #f8d7da; color: #721c24; }
-        .btn-accion {
-            padding: 5px 12px;
-            font-size: 12px;
-            border-radius: 3px;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .btn-editar    { background: #2d5016; color: white; }
-        .btn-editar:hover { background: #3d6b1f; color: white; }
-        .btn-password  { background: #856404; color: white; }
-        .btn-password:hover { background: #6d5202; color: white; }
-        .btn-deshabilitar { background: #dc3545; color: white; }
-        .btn-deshabilitar:hover { background: #b02a37; color: white; }
-        .btn-reactivar { background: #0d6efd; color: white; }
-        .btn-reactivar:hover { background: #0a58ca; color: white; }
-    </style>
+    <link th:href="@{/css/usuarios-listar.css}" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{layout :: sidebar}"></div>
@@ -125,35 +23,36 @@
         </div>
 
         <div class="controls-bar">
-            <span style="font-size:13px; font-weight:600; color:#333;">
-                <i class="bi bi-people-fill"></i>
+            <span class="badge-total">
+                <i class="bi bi-people-fill" aria-hidden="true"></i>
                 Total: <strong th:text="${usuarios.size()}">0</strong> usuarios
             </span>
-            <a th:href="@{/asistencia/usuarios/crear}" class="btn-crear">
-                <i class="bi bi-person-plus-fill"></i> Crear Usuario
+            <a th:href="@{/asistencia/usuarios/crear}" class="btn-institucional-gold">
+                <i class="bi bi-person-plus-fill" aria-hidden="true"></i> Crear Usuario
             </a>
         </div>
 
         <div class="page-card">
             <div class="page-card-header">
-                <i class="bi bi-shield-lock-fill" style="color:#d4af37;"></i>
+                <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
                 <span>Usuarios ERP Admin</span>
             </div>
-            <table class="data-table">
+            <div class="data-table usuarios-table">
+            <table>
                 <thead>
                 <tr>
                     <th>Código</th>
-                    <th>Nombre</th>
+                    <th class="col-nombre">Nombre</th>
                     <th th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</th>
                     <th>Email</th>
                     <th>Rol</th>
                     <th>Estado</th>
-                    <th style="text-align:center;">Acciones</th>
+                    <th class="td-acciones">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:if="${usuarios.isEmpty()}">
-                    <td colspan="7" style="text-align:center; color:#999; padding:30px;">
+                    <td colspan="7" class="td-empty">
                         No hay usuarios registrados.
                     </td>
                 </tr>
@@ -167,7 +66,7 @@
                                            + ' ' + u.personal.fullName}">
                             </span>
                         <span th:if="${u.personal == null}"
-                              style="color:#999;">Sin personal asignado</span>
+                              class="texto-secundario">Sin personal asignado</span>
                     </td>
 
                     <td>
@@ -175,7 +74,7 @@
                                   th:text="${u.personal.departamento.descripcionCorta}">
                             </span>
                     </td>
-                    <td th:text="${u.email ?: '-'}"></td>
+                    <td class="td-email" th:text="${u.email ?: '-'}"></td>
 
                     <td>
                         <span th:with="rol=${rolesMap[u.idUsuario]}"
@@ -195,43 +94,44 @@
                               class="badge-estado inactivo">Inactivo</span>
                     </td>
 
-                    <td style="text-align:center; white-space:nowrap;">
+                    <td class="td-acciones">
                         <a th:href="@{/asistencia/usuarios/editar/{id}(id=${u.idUsuario})}"
-                           class="btn-accion btn-editar">
-                            <i class="bi bi-pencil-fill"></i> Editar
+                           class="btn btn-sm btn-primary">
+                            <i class="bi bi-pencil-fill" aria-hidden="true"></i> Editar
                         </a>
                         <a th:href="@{/asistencia/usuarios/resetear-password/{id}(id=${u.idUsuario})}"
-                           class="btn-accion btn-password">
-                            <i class="bi bi-key-fill"></i> Password
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-key-fill" aria-hidden="true"></i> Password
                         </a>
 
                         <form th:if="${u.enabled}"
                               th:action="@{/asistencia/usuarios/deshabilitar/{id}(id=${u.idUsuario})}"
-                              method="post" style="display:inline;"
+                              method="post"
                               th:data-nombre="${u.codigo}"
                               onsubmit="return confirmarDeshabilitar(this)">
                             <input type="hidden"
                                    th:name="${_csrf.parameterName}"
                                    th:value="${_csrf.token}"/>
-                            <button type="submit" class="btn-accion btn-deshabilitar">
-                                <i class="bi bi-person-x-fill"></i> Deshabilitar
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-person-x-fill" aria-hidden="true"></i> Deshabilitar
                             </button>
                         </form>
 
                         <form th:if="${!u.enabled}"
                               th:action="@{/asistencia/usuarios/reactivar/{id}(id=${u.idUsuario})}"
-                              method="post" style="display:inline;">
+                              method="post">
                             <input type="hidden"
                                    th:name="${_csrf.parameterName}"
                                    th:value="${_csrf.token}"/>
-                            <button type="submit" class="btn-accion btn-reactivar">
-                                <i class="bi bi-person-check-fill"></i> Reactivar
+                            <button type="submit" class="btn btn-sm btn-success">
+                                <i class="bi bi-person-check-fill" aria-hidden="true"></i> Reactivar
                             </button>
                         </form>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
     </div>

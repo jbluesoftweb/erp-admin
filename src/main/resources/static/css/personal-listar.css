@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Personal — Listar
+   Barra de controles, filtros, tabla, badges y botones vienen de common.css
+   y del tema de Bootstrap. Aquí solo la disposición propia de la pantalla.
+   ========================================================================== */
+
+/* Formulario de filtros (departamento + búsqueda) */
+.filtros-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.filtros-form select { min-width: 9rem; }
+.filtros-form input[type="text"] { min-width: 12.5rem; }
+
+/* Total y botón Agregar */
+.controls-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Columnas */
+.personal-table .col-datos-generales { text-align: left; padding-left: 16px; min-width: 16rem; }
+.personal-table .td-datos { padding-left: 16px; }
+.personal-table .col-dpto { min-width: 7rem; }
+
+@media (max-width: 575.98px) {
+    .filtros-form,
+    .filtros-form .filter-group { width: 100%; }
+    .filtros-form .filter-group input[type="text"] { flex: 1; min-width: 0; }
+}
+
+/* Escritorio: el botón de búsqueda a la altura del campo (en celular ambos miden 44 px) */
+@media (min-width: 992px) {
+    .filtros-form .btn-institucional { min-height: 36px; padding: 6px 14px; }
+}

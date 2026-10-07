@@ -1,0 +1,19 @@
+/* ==========================================================================
+   Usuarios — Editar usuario (email y rol)
+   Tarjeta, datos fijos, badges de rol, formulario y botones vienen de
+   common.css.
+   ========================================================================== */
+
+.page-card { max-width: 600px; }
+
+/* Cada formulario (email, rol) tiene su propio botón */
+.page-card .form-row.single { margin-bottom: 0; }
+.page-card .form-actions { margin-top: 16px; padding-top: 0; border-top: 0; }
+
+/* Separa el formulario de email del de rol */
+.page-card .section-divider {
+    margin: 26px 0;
+    border: 0;
+    border-top: 1px dashed var(--jb-line-strong);
+    opacity: 1;
+}

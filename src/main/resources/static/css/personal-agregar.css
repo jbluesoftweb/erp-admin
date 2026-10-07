@@ -1,0 +1,161 @@
+/* ==========================================================================
+   Personal — Agregar (buscar en SIN_EMPRESA e incorporar)
+   Plantilla: personal/registrar-persona.html. Tarjeta, alertas, campos y
+   botones vienen de common.css; aquí la búsqueda y los resultados.
+   ========================================================================== */
+
+.page-card { max-width: 750px; }
+
+.search-help {
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: var(--jb-ink-2);
+}
+
+/* Buscador: campo + botón */
+.search-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    flex: 1 1 16rem;
+    max-width: 480px;
+    min-width: 0;
+    min-height: 40px;
+    padding: 9px 12px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--jb-ink);
+    background: var(--jb-surface);
+    border: 1px solid var(--jb-line-strong);
+    border-radius: var(--jb-radius-sm);
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.search-box input::placeholder { color: var(--jb-ink-3); opacity: 1; }
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--jb-primary-h);
+    box-shadow: 0 0 0 3px var(--jb-input-focus);
+}
+
+/* Resultados */
+/* Texto corrido (con el número dentro): bloque, no flex */
+.resultados-count {
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--jb-success-ink);
+}
+
+.resultado-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    background: var(--jb-surface-2);
+    border: 1px solid var(--jb-line);
+    border-radius: var(--jb-radius-sm);
+    transition: border-color .15s, background-color .15s;
+}
+
+.resultado-item:hover {
+    border-color: var(--jb-primary-h);
+    background: var(--jb-row-hover);
+}
+
+.resultado-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.resultado-nombre {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--jb-ink);
+    overflow-wrap: anywhere;
+}
+
+.resultado-meta {
+    font-size: 12px;
+    color: var(--jb-ink-2);
+}
+
+/* Incorporar: etiqueta + departamento + botón */
+.asignar-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.asignar-group label {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--jb-ink);
+}
+
+.asignar-group select {
+    min-height: 40px;
+    min-width: 9rem;
+    max-width: 100%;
+    padding: 7px 12px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--jb-ink);
+    background: var(--jb-surface);
+    border: 1px solid var(--jb-line-strong);
+    border-radius: var(--jb-radius-sm);
+}
+
+.asignar-group select:focus {
+    outline: none;
+    border-color: var(--jb-primary-h);
+    box-shadow: 0 0 0 3px var(--jb-input-focus);
+}
+
+/* Sección exclusiva de ADMIN_SYS */
+.admin-section {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--jb-line-strong);
+}
+
+.admin-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    font-family: var(--jb-font-title);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--jb-ink-2);
+}
+
+.admin-section-help {
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--jb-ink-2);
+}
+
+@media (max-width: 991.98px) {
+    .search-box input,
+    .asignar-group select { min-height: 44px; font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .search-box input, .resultado-item { transition: none; }
+}

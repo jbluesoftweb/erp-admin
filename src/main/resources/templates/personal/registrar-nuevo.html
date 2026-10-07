@@ -2,20 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{layout :: head}"></th:block>
-    <style>
-        .page-card { max-width: 780px; }
-        .section-separator { margin: 22px 0 18px 0; }
-        .admin-badge {
-            background: #1a2e0f;
-            color: #d4af37;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-    </style>
+    <link th:href="@{/css/personal-registrar-nuevo.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -38,12 +25,12 @@
         </div>
 
         <a th:href="@{/personal/agregar}" class="btn-cancelar">
-            <i class="bi bi-arrow-left"></i> Volver a buscar personal
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver a buscar personal
         </a>
 
         <div class="page-card">
             <div class="page-card-header">
-                <i class="bi bi-person-plus-fill" style="color:#d4af37; font-size:18px;"></i>
+                <i class="bi bi-person-plus-fill" aria-hidden="true"></i>
                 <span>Registrar Personal Nuevo</span>
                 <small><span class="admin-badge">ADMIN_SYS</span></small>
             </div>
@@ -60,16 +47,16 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Código <span class="required">*</span></label>
-                            <input type="text" name="codigo"
+                            <label for="codigo">Código <span class="required">*</span></label>
+                            <input type="text" id="codigo" name="codigo"
                                    maxlength="9"
                                    placeholder="Ej: 123456789"
                                    required autocomplete="off">
                             <span class="field-hint">9 caracteres numéricos</span>
                         </div>
                         <div class="form-group">
-                            <label>DNI <span class="required">*</span></label>
-                            <input type="text" name="dni"
+                            <label for="dni">DNI <span class="required">*</span></label>
+                            <input type="text" id="dni" name="dni"
                                    maxlength="8"
                                    placeholder="Ej: 46528501"
                                    required autocomplete="off">
@@ -85,28 +72,28 @@
                     </div>
                     <div class="form-row triple">
                         <div class="form-group">
-                            <label>Apellido Paterno <span class="required">*</span></label>
-                            <input type="text" name="apPat"
+                            <label for="apPat">Apellido Paterno <span class="required">*</span></label>
+                            <input type="text" id="apPat" name="apPat"
                                    maxlength="50"
                                    placeholder="Ej: GARCIA"
                                    required
-                                   style="text-transform:uppercase;">
+                                   class="text-uppercase">
                         </div>
                         <div class="form-group">
-                            <label>Apellido Materno <span class="required">*</span></label>
-                            <input type="text" name="apMat"
+                            <label for="apMat">Apellido Materno <span class="required">*</span></label>
+                            <input type="text" id="apMat" name="apMat"
                                    maxlength="50"
                                    placeholder="Ej: PEREZ"
                                    required
-                                   style="text-transform:uppercase;">
+                                   class="text-uppercase">
                         </div>
                         <div class="form-group">
-                            <label>Nombres <span class="required">*</span></label>
-                            <input type="text" name="nombres"
+                            <label for="nombres">Nombres <span class="required">*</span></label>
+                            <input type="text" id="nombres" name="nombres"
                                    maxlength="100"
                                    placeholder="Ej: JUAN ALBERO"
                                    required
-                                   style="text-transform:uppercase;">
+                                   class="text-uppercase">
                         </div>
                     </div>
 
@@ -118,7 +105,7 @@
                     </div>
                     <div class="form-row single">
                         <div class="form-group">
-                            <label>Tipo de Personal <span class="required">*</span></label>
+                            <label for="selectTipo">Tipo de Personal <span class="required">*</span></label>
                             <select id="selectTipo" onchange="filtrarNivelesEspecialidades()">
                                 <option value="">-- selecciona --</option>
                                 <option th:each="tp : ${tipoPersonales}"
@@ -140,13 +127,13 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label><span th:text="${etiquetas['rrhh.personal.nivel']}">Nivel</span> <span class="required">*</span></label>
+                            <label for="selectNivel"><span th:text="${etiquetas['rrhh.personal.nivel']}">Nivel</span> <span class="required">*</span></label>
                             <select name="idNivel" id="selectNivel" required>
                                 <option value="">-- selecciona tipo primero --</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label><span th:text="${etiquetas['rrhh.personal.especialidad']}">Especialidad</span> <span class="required">*</span></label>
+                            <label for="selectEspecialidad"><span th:text="${etiquetas['rrhh.personal.especialidad']}">Especialidad</span> <span class="required">*</span></label>
                             <select name="idEspecialidad" id="selectEspecialidad" required>
                                 <option value="">-- selecciona tipo primero --</option>
                             </select>
@@ -155,8 +142,8 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label><span th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</span> <span class="required">*</span></label>
-                            <select name="idDepartamento" required>
+                            <label for="idDepartamento"><span th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</span> <span class="required">*</span></label>
+                            <select id="idDepartamento" name="idDepartamento" required>
                                 <option value="">-- selecciona --</option>
                                 <option th:each="c : ${departamentos}"
                                         th:value="${c.idDepartamento}"
@@ -165,8 +152,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Antigüedad (años) <span class="required">*</span></label>
-                            <input type="number" name="antiguedad"
+                            <label for="antiguedad">Antigüedad (años) <span class="required">*</span></label>
+                            <input type="number" id="antiguedad" name="antiguedad"
                                    min="0" max="20000"
                                    placeholder="Ej: 5"
                                    required>
@@ -181,8 +168,8 @@
                     </div>
                     <div class="form-row single">
                         <div class="form-group">
-                            <label>Cargo</label>
-                            <input type="text" name="cargo"
+                            <label for="cargo">Cargo</label>
+                            <input type="text" id="cargo" name="cargo"
                                    maxlength="50"
                                    placeholder="Ej: Jefe de Departamento">
                             <span class="field-hint">Dejar vacío si no aplica</span>
@@ -191,11 +178,11 @@
 
                     <!-- ACCIONES -->
                     <div class="form-actions">
-                        <button type="submit" class="btn-institucional-gold">
-                            <i class="bi bi-floppy-fill"></i> Guardar
+                        <button type="submit" class="btn-institucional">
+                            <i class="bi bi-floppy-fill" aria-hidden="true"></i> Guardar
                         </button>
                         <a th:href="@{/personal/agregar}" class="btn-cancelar">
-                            <i class="bi bi-x-lg"></i> Cancelar
+                            <i class="bi bi-x-lg" aria-hidden="true"></i> Cancelar
                         </a>
                     </div>
 

@@ -2,124 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{layout :: head}"></th:block>
-    <style>
-        .page-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            overflow: hidden;
-            max-width: 600px;
-        }
-        .page-card-header {
-            background: linear-gradient(90deg, #2d5016 0%, #3d6b1f 100%);
-            padding: 14px 20px;
-            border-left: 4px solid #d4af37;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .page-card-header span {
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .page-card-body { padding: 25px 30px; }
-        .form-section-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            margin-bottom: 18px;
-        }
-        .form-row.single { grid-template-columns: 1fr; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #444;
-            text-transform: uppercase;
-        }
-        .form-group label .req { color: #dc3545; margin-left: 3px; }
-        .form-group input,
-        .form-group select {
-            padding: 9px 12px;
-            font-size: 13px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            color: #333;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #2d5016;
-            box-shadow: 0 0 0 2px rgba(45,80,22,0.12);
-        }
-        .form-group .hint {
-            font-size: 11px;
-            color: #aaa;
-        }
-        .form-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        .btn-guardar {
-            background: #d4af37;
-            color: #1a1a1a;
-            border: 2px solid #b8941f;
-            padding: 10px 30px;
-            font-size: 14px;
-            font-weight: 700;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-guardar:hover { background: #e5c04a; }
-        .btn-cancelar {
-            color: #666;
-            font-size: 13px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .btn-cancelar:hover { color: #333; }
-        .btn-volver {
-            color: #2d5016;
-            font-size: 13px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 20px;
-        }
-        .btn-volver:hover { color: #3d6b1f; }
-        .info-box {
-            background: #e8f4fd;
-            border: 1px solid #bee5eb;
-            border-radius: 4px;
-            padding: 12px 16px;
-            font-size: 13px;
-            color: #0c5460;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-    </style>
+    <link th:href="@{/css/usuarios-crear.css}" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{layout :: sidebar}"></div>
@@ -134,19 +17,21 @@
             <span th:text="${error}"></span>
         </div>
 
-        <a th:href="@{/asistencia/usuarios}" class="btn-volver">
-            <i class="bi bi-arrow-left"></i> Volver al listado
+        <a th:href="@{/asistencia/usuarios}" class="btn-cancelar">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver al listado
         </a>
 
-        <div class="info-box">
-            <i class="bi bi-info-circle-fill"></i>
-            El personal debe estar registrado previamente.
-            El código del usuario debe coincidir con el código del personal asignado.
+        <div class="alert-custom alert-info">
+            <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+            <span>
+                El personal debe estar registrado previamente.
+                El código del usuario debe coincidir con el código del personal asignado.
+            </span>
         </div>
 
         <div class="page-card">
             <div class="page-card-header">
-                <i class="bi bi-person-plus-fill" style="color:#d4af37;"></i>
+                <i class="bi bi-person-plus-fill" aria-hidden="true"></i>
                 <span>Crear Usuario ERP Admin</span>
             </div>
             <div class="page-card-body">
@@ -162,40 +47,40 @@
                     </div>
                     <div class="form-row single">
                         <div class="form-group">
-                            <label>Código <span class="req">*</span></label>
-                            <input type="text" name="codigo"
+                            <label for="codigo">Código <span class="required">*</span></label>
+                            <input type="text" id="codigo" name="codigo"
                                    maxlength="9"
                                    placeholder="Ej: 123456789"
                                    required autocomplete="off">
-                            <span class="hint">
+                            <span class="field-hint">
                                 9 dígitos — debe existir en el registro de personal
                             </span>
                         </div>
                     </div>
 
                     <!-- EMAIL -->
-                    <div class="form-section-title" style="margin-top:10px;">
+                    <div class="form-section-title">
                         <i class="bi bi-envelope"></i> Email
                     </div>
                     <div class="form-row single">
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" name="email"
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email"
                                    maxlength="100"
                                    placeholder="Ej: usuario@tuinstitucion.gob.pe"
                                    autocomplete="off">
-                            <span class="hint">Opcional</span>
+                            <span class="field-hint">Opcional</span>
                         </div>
                     </div>
 
                     <!-- ROL -->
-                    <div class="form-section-title" style="margin-top:10px;">
+                    <div class="form-section-title">
                         <i class="bi bi-shield-fill"></i> Rol en ERP Admin
                     </div>
                     <div class="form-row single">
                         <div class="form-group">
-                            <label>Rol <span class="req">*</span></label>
-                            <select name="idRol" required>
+                            <label for="idRol">Rol <span class="required">*</span></label>
+                            <select id="idRol" name="idRol" required>
                                 <option value="">-- selecciona --</option>
                                 <option th:each="r : ${roles}"
                                         th:value="${r.idRol}"
@@ -206,21 +91,24 @@
                     </div>
 
                     <!-- CONTRASEÑA -->
-                    <div class="form-section-title" style="margin-top:10px;">
+                    <div class="form-section-title">
                         <i class="bi bi-key-fill"></i> Contraseña
                     </div>
-                    <div class="alert alert-info">
-                        La contraseña inicial será <strong>Peru123</strong>. El usuario
-                        deberá cambiarla obligatoriamente en su primer inicio de sesión.
+                    <div class="alert-custom alert-info">
+                        <i class="bi bi-key-fill" aria-hidden="true"></i>
+                        <span>
+                            La contraseña inicial será <strong>Peru123</strong>. El usuario
+                            deberá cambiarla obligatoriamente en su primer inicio de sesión.
+                        </span>
                     </div>
 
                     <!-- ACCIONES -->
                     <div class="form-actions">
-                        <button type="submit" class="btn-guardar">
-                            <i class="bi bi-floppy-fill"></i> Crear Usuario
+                        <button type="submit" class="btn-institucional">
+                            <i class="bi bi-floppy-fill" aria-hidden="true"></i> Crear Usuario
                         </button>
                         <a th:href="@{/asistencia/usuarios}" class="btn-cancelar">
-                            <i class="bi bi-x-lg"></i> Cancelar
+                            <i class="bi bi-x-lg" aria-hidden="true"></i> Cancelar
                         </a>
                     </div>
                 </form>

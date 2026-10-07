@@ -3,45 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:replace="~{layout :: head}"></th:block>
-    <style>
-        .td-acciones {
-            text-align: center;
-            white-space: nowrap;
-            width: 200px;
-        }
-        .btn-editar {
-            background: #2d5016;
-            color: white;
-            border: none;
-            padding: 5px 14px;
-            font-size: 12px;
-            border-radius: 3px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s;
-            display: inline-block;
-        }
-        .btn-editar:hover { background: #3d6b1f; color: white; }
-        .btn-mover {
-            background: #856404;
-            color: white;
-            border: none;
-            padding: 5px 14px;
-            font-size: 12px;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-mover:hover { background: #6d5202; }
-        .badge-total {
-            background: #2d5016;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-    </style>
+    <link th:href="@{/css/personal-listar.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -66,14 +28,12 @@
         <!-- CONTROLES -->
         <div class="controls-bar">
             <div class="controls-left">
-                <form th:action="@{/personal/listar}" method="get"
-                      style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <form th:action="@{/personal/listar}" method="get" class="filtros-form">
 
                     <!-- Filtro Departamento: solo ADMIN_APP y ADMIN_SYS -->
                     <div class="filter-group" th:if="${esAdminSys or esAdminApp}">
-                        <label>Por Departamento:</label>
-                        <select name="idDepartamento" onchange="this.form.submit()"
-                                style="min-width:140px;">
+                        <label for="filtroDepartamento">Por Departamento:</label>
+                        <select id="filtroDepartamento" name="idDepartamento" onchange="this.form.submit()">
                             <option value="">-- todas --</option>
                             <option th:each="c : ${departamentos}"
                                     th:value="${c.idDepartamento}"
@@ -85,28 +45,27 @@
 
                     <!-- Búsqueda: todos los roles -->
                     <div class="filter-group">
-                        <label>Buscar:</label>
-                        <input type="text" name="buscar"
+                        <label for="filtroBuscar">Buscar:</label>
+                        <input type="text" id="filtroBuscar" name="buscar"
                                th:value="${buscar}"
-                               placeholder="Código o apellidos..."
-                               style="min-width:200px;">
-                        <button type="submit" class="btn-institucional">
-                            <i class="bi bi-search"></i>
+                               placeholder="Código o apellidos...">
+                        <button type="submit" class="btn-institucional" aria-label="Buscar">
+                            <i class="bi bi-search" aria-hidden="true"></i>
                         </button>
                     </div>
                 </form>
             </div>
 
             <!-- Acciones derecha -->
-            <div style="display:flex; align-items:center; gap:15px;">
+            <div class="controls-right">
                 <span class="badge-total">
-                    <i class="bi bi-people-fill"></i>
+                    <i class="bi bi-people-fill" aria-hidden="true"></i>
                     Total: <span th:text="${listaPersonal.size()}">0</span>
                 </span>
                 <!-- Agregar: solo ADMIN_APP y ADMIN_SYS -->
                 <a th:if="${esAdminSys or esAdminApp}"
                    th:href="@{/personal/agregar}" class="btn-institucional-gold">
-                    <i class="bi bi-person-plus-fill"></i> Agregar
+                    <i class="bi bi-person-plus-fill" aria-hidden="true"></i> Agregar
                 </a>
             </div>
         </div>
@@ -118,14 +77,14 @@
         </div>
 
         <!-- TABLA -->
-        <div class="data-table">
+        <div class="data-table personal-table">
             <table>
                 <thead>
                 <tr>
-                    <th style="width:50px;">N°</th>
-                    <th style="text-align:left; padding-left:15px;">DATOS GENERALES</th>
-                    <th style="width:100px;" th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</th>
-                    <th style="width:200px;">ACCIONES</th>
+                    <th class="col-num">N°</th>
+                    <th class="col-datos-generales">DATOS GENERALES</th>
+                    <th class="col-dpto" th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</th>
+                    <th class="td-acciones">ACCIONES</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -152,8 +111,8 @@
                     <td class="td-acciones">
                         <!-- Editar: todos los roles -->
                         <a th:href="@{/personal/editar/{id}(id=${p.idPersonal})}"
-                           class="btn-editar">
-                            <i class="bi bi-pencil-fill"></i>
+                           class="btn btn-sm btn-primary">
+                            <i class="bi bi-pencil-fill" aria-hidden="true"></i>
                             <!-- Label dinámico: ADMIN_DPTO solo edita cargo -->
                             <span th:text="${esAdminDepto ? 'Cargo' : 'Editar'}"></span>
                         </a>
@@ -161,7 +120,7 @@
                         <!-- Mover a SIN_EMPRESA: ADMIN_SYS y ADMIN_APP (ADMIN_APP solo ve esto para personal de su propia unidad, ya filtrado en listaPersonal) -->
                         <form th:if="${esAdminSys or esAdminApp}"
                               th:action="@{/personal/mover-sin-unidad/{id}(id=${p.idPersonal})}"
-                              method="post" style="display:inline;"
+                              method="post"
                               th:data-nombre="${p.fullName}"
                               onsubmit="return confirmarMover(this)">
 
@@ -169,8 +128,9 @@
                             <input type="hidden"
                                    th:name="${_csrf.parameterName}"
                                    th:value="${_csrf.token}"/>
-                            <button type="submit" class="btn-mover">
-                                <i class="bi bi-box-arrow-right"></i> S/U
+                            <button type="submit" class="btn btn-sm btn-secondary"
+                                    title="Mover a SIN_EMPRESA">
+                                <i class="bi bi-box-arrow-right" aria-hidden="true"></i> S/U
                             </button>
                         </form>
 

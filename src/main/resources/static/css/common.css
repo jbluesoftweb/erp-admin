@@ -74,6 +74,16 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: auto;
 }
 
+/* Lo que va dentro de <small> (p. ej. "ROLE: <span>ADMIN_SYS</span>") no toma
+   el estilo del título */
+.page-card-header small span:not(.admin-badge) {
+    font: inherit;
+    font-weight: 600;
+    color: var(--jb-ink);
+    letter-spacing: normal;
+    text-transform: none;
+}
+
 .page-card-body {
     padding: 24px 28px;
 }
@@ -436,6 +446,9 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: 1px solid var(--jb-line);
 }
 
+/* Una sección que sigue a otra deja aire extra */
+.form-row + .form-section-title { margin-top: 10px; }
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -675,6 +688,102 @@ h1, h2, h3, h4, h5, h6 {
 .alert-custom.alert-danger:not(:has(> .bi))::before  { content: "\f33a"; content: "\f33a" / ""; color: var(--jb-danger-solid); }
 .alert-custom.alert-warning:not(:has(> .bi))::before { content: "\f33a"; content: "\f33a" / ""; color: var(--jb-warning-text); }
 .alert-custom.alert-info:not(:has(> .bi))::before    { content: "\f430"; content: "\f430" / ""; color: var(--jb-info-solid); }
+
+/* Enlace "Volver" (.btn-cancelar) encima de la tarjeta */
+.content-area > .btn-cancelar { margin-bottom: 12px; }
+
+/* Datos fijos (solo lectura) al inicio de un formulario de edición */
+.datos-fijos {
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    background: var(--jb-surface-2);
+    border: 1px solid var(--jb-line);
+    border-radius: var(--jb-radius-sm);
+}
+
+.datos-fijos-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    font-family: var(--jb-font-title);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--jb-ink-2);
+}
+
+.dato-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.dato-item:last-child { margin-bottom: 0; }
+.dato-label { min-width: 5.5rem; color: var(--jb-ink-2); }
+.dato-valor { font-weight: 600; color: var(--jb-ink); overflow-wrap: anywhere; }
+
+/* Total de registros de una lista */
+.badge-total {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--jb-primary-tint);
+    color: var(--jb-link);
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Distintivo de acción exclusiva de ADMIN_SYS. También dentro de la cabecera
+   de tarjeta, donde .page-card-header span le cambiaría color y tamaño. */
+.admin-badge,
+.page-card-header span.admin-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--jb-bg);
+    color: var(--jb-accent);
+    font-family: var(--jb-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Rol de usuario: cada rol con su tono (las clases rol-* vienen del servidor) */
+.badge-rol {
+    display: inline-block;
+    padding: 3px 10px;
+    border: 1px solid var(--jb-line);
+    border-radius: 999px;
+    background: var(--jb-surface-2);
+    color: var(--jb-ink-2);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.badge-rol.rol-admin-sys  { background: var(--jb-bg);             color: var(--jb-text);       border-color: var(--jb-bg); }
+.badge-rol.rol-admin-app  { background: var(--jb-primary-tint);   color: var(--jb-link-h);     border-color: var(--jb-primary-tint); }
+.badge-rol.rol-admin-dpto { background: var(--jb-violet-subtle);  color: var(--jb-violet-ink); border-color: var(--jb-violet-line); }
+.badge-rol.rol-jefe-dpto  { background: var(--jb-warning-subtle); color: var(--jb-warning-ink); border-color: var(--jb-warning-line); }
+
+/* Acciones por fila: botones compactos separados; los form van en línea.
+   El margen también separa las filas si una pantalla deja que se partan. */
+.td-acciones form { display: inline; }
+.td-acciones > .btn,
+.td-acciones > form { margin: 3px 2px; vertical-align: middle; }
 
 /* Status Badges */
 .badge-institucional {

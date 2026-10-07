@@ -1,0 +1,9 @@
+/* ==========================================================================
+   Personal — Registrar personal nuevo (solo ADMIN_SYS)
+   Tarjeta, formulario, distintivo ADMIN_SYS y botones vienen de common.css.
+   ========================================================================== */
+
+.page-card { max-width: 780px; }
+
+/* Aire entre secciones del formulario */
+.section-separator { margin: 22px 0 18px; }
