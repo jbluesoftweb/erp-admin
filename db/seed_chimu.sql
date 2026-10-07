@@ -166,8 +166,8 @@ END $$;
 INSERT INTO core.etiqueta (clave, valor_defecto, valor_personalizado, descripcion)
 VALUES
     ('rrhh.personal.nivel',        'Nivel',        'Nivel',        'Nivel del personal'),
-    ('rrhh.personal.grupo1',       'Grupo 1',      'Vigilantes',   'Grupo 1 de personal (tipo de personal id 1)'),
-    ('rrhh.personal.grupo2',       'Grupo 2',      'Supervisores', 'Grupo 2 de personal (tipo de personal id 2)'),
+    ('rrhh.personal.grupo1',       'Grupo 1',      'Vigilantes',   'Grupo 1 de personal'),
+    ('rrhh.personal.grupo2',       'Grupo 2',      'Supervisores', 'Grupo 2 de personal'),
     ('rrhh.personal.departamento', 'Departamento', 'Departamento', 'Departamento del personal'),
     ('rrhh.personal.especialidad', 'Especialidad', 'Especialidad', 'Especialidad del personal')
 ON CONFLICT (clave) DO NOTHING;
