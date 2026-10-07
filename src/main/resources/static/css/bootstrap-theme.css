@@ -1,0 +1,301 @@
+/* ==========================================================================
+   Tema de Bootstrap 5.3 — JBlueSoft
+   Redefine las variables de Bootstrap con la paleta de jb-tokens.css para que
+   todas las pantallas la tomen sin modificarlas. Se carga después de
+   bootstrap.min.css y jb-tokens.css. Usa solo variables jb-*.
+   ========================================================================== */
+
+:root {
+    /* Colores de tema */
+    --bs-primary: var(--jb-primary-h);
+    --bs-primary-rgb: var(--jb-primary-h-rgb);
+    --bs-secondary: var(--jb-neutral);
+    --bs-secondary-rgb: var(--jb-neutral-rgb);
+    --bs-success: var(--jb-success-solid);
+    --bs-success-rgb: var(--jb-success-solid-rgb);
+    --bs-warning: var(--jb-warning-solid);
+    --bs-warning-rgb: var(--jb-warning-solid-rgb);
+    --bs-danger: var(--jb-danger-solid);
+    --bs-danger-rgb: var(--jb-danger-solid-rgb);
+    --bs-info: var(--jb-info-solid);
+    --bs-info-rgb: var(--jb-info-solid-rgb);
+
+    /* Variantes tenues (alertas, list-group, etc.) */
+    --bs-primary-text-emphasis: var(--jb-link-h);
+    --bs-primary-bg-subtle: var(--jb-primary-tint);
+    --bs-primary-border-subtle: var(--jb-line-strong);
+    --bs-success-text-emphasis: var(--jb-success-ink);
+    --bs-success-bg-subtle: var(--jb-success-subtle);
+    --bs-success-border-subtle: var(--jb-success-line);
+    --bs-warning-text-emphasis: var(--jb-warning-ink);
+    --bs-warning-bg-subtle: var(--jb-warning-subtle);
+    --bs-warning-border-subtle: var(--jb-warning-line);
+    --bs-danger-text-emphasis: var(--jb-danger-ink-2);
+    --bs-danger-bg-subtle: var(--jb-danger-subtle);
+    --bs-danger-border-subtle: var(--jb-danger-line);
+    --bs-info-text-emphasis: var(--jb-info-ink);
+    --bs-info-bg-subtle: var(--jb-info-subtle);
+    --bs-info-border-subtle: var(--jb-info-line);
+    --bs-secondary-text-emphasis: var(--jb-ink);
+    --bs-secondary-bg-subtle: var(--jb-surface-2);
+    --bs-secondary-border-subtle: var(--jb-line);
+
+    /* Cuerpo y texto */
+    --bs-body-font-family: var(--jb-font-body);
+    --bs-body-color: var(--jb-ink);
+    --bs-body-color-rgb: var(--jb-ink-rgb);
+    --bs-body-bg: var(--jb-surface);
+    --bs-body-bg-rgb: var(--jb-surface-rgb);
+    --bs-emphasis-color: var(--jb-ink);
+    --bs-secondary-color: var(--jb-ink-2);     /* .text-muted, .form-text */
+    --bs-tertiary-color: var(--jb-ink-3);
+    --bs-secondary-bg: var(--jb-disabled-bg);  /* inputs deshabilitados */
+    --bs-tertiary-bg: var(--jb-surface-2);
+    --bs-heading-color: var(--jb-ink);
+
+    /* Enlaces */
+    --bs-link-color: var(--jb-link);
+    --bs-link-color-rgb: var(--jb-link-rgb);
+    --bs-link-hover-color: var(--jb-link-h);
+    --bs-link-hover-color-rgb: var(--jb-link-h-rgb);
+
+    /* Bordes y forma */
+    --bs-border-color: var(--jb-line);
+    --bs-border-color-translucent: var(--jb-line);
+    --bs-border-radius: var(--jb-radius-sm);
+    --bs-border-radius-sm: 6px;
+    --bs-border-radius-lg: var(--jb-radius);
+
+    /* Foco */
+    --bs-focus-ring-color: var(--jb-input-focus);
+}
+
+/* ---------- Botones ---------- */
+.btn {
+    --bs-btn-font-family: var(--jb-font-body);
+    --bs-btn-font-weight: 500;
+    --bs-btn-border-radius: var(--jb-radius-sm);
+    --bs-btn-disabled-opacity: 1;   /* deshabilitado sin opacidad: colores propios con contraste */
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--jb-focus-light);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+.btn:disabled,
+.btn.disabled,
+fieldset:disabled .btn {
+    --bs-btn-disabled-color: var(--jb-disabled-ink);
+    --bs-btn-disabled-bg: var(--jb-disabled-bg);
+    --bs-btn-disabled-border-color: var(--jb-line-strong);
+}
+
+.btn-primary {
+    --bs-btn-color: var(--jb-on-primary);
+    --bs-btn-bg: var(--jb-primary-h);
+    --bs-btn-border-color: var(--jb-primary-h);
+    --bs-btn-hover-color: var(--jb-on-primary);
+    --bs-btn-hover-bg: var(--jb-primary-d);
+    --bs-btn-hover-border-color: var(--jb-primary-d);
+    --bs-btn-active-color: var(--jb-on-primary);
+    --bs-btn-active-bg: var(--jb-primary-active);
+    --bs-btn-active-border-color: var(--jb-primary-active);
+    --bs-btn-focus-shadow-rgb: var(--jb-accent-rgb);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--jb-link);
+    --bs-btn-border-color: var(--jb-primary-h);
+    --bs-btn-hover-color: var(--jb-on-primary);
+    --bs-btn-hover-bg: var(--jb-primary-h);
+    --bs-btn-hover-border-color: var(--jb-primary-h);
+    --bs-btn-active-color: var(--jb-on-primary);
+    --bs-btn-active-bg: var(--jb-primary-active);
+    --bs-btn-active-border-color: var(--jb-primary-active);
+    --bs-btn-focus-shadow-rgb: var(--jb-accent-rgb);
+}
+
+.btn-secondary {
+    --bs-btn-color: var(--jb-on-primary);
+    --bs-btn-bg: var(--jb-neutral);
+    --bs-btn-border-color: var(--jb-neutral);
+    --bs-btn-hover-color: var(--jb-on-primary);
+    --bs-btn-hover-bg: var(--jb-neutral-h);
+    --bs-btn-hover-border-color: var(--jb-neutral-h);
+    --bs-btn-active-color: var(--jb-on-primary);
+    --bs-btn-active-bg: var(--jb-ink);
+    --bs-btn-active-border-color: var(--jb-ink);
+}
+
+.btn-success {
+    --bs-btn-color: var(--jb-on-primary);
+    --bs-btn-bg: var(--jb-success-solid);
+    --bs-btn-border-color: var(--jb-success-solid);
+    --bs-btn-hover-color: var(--jb-on-primary);
+    --bs-btn-hover-bg: var(--jb-success-solid-h);
+    --bs-btn-hover-border-color: var(--jb-success-solid-h);
+    --bs-btn-active-color: var(--jb-on-primary);
+    --bs-btn-active-bg: var(--jb-success-ink);
+    --bs-btn-active-border-color: var(--jb-success-ink);
+}
+
+.btn-warning {
+    --bs-btn-color: var(--jb-ink);
+    --bs-btn-bg: var(--jb-warning-solid);
+    --bs-btn-border-color: var(--jb-warning-solid);
+    --bs-btn-hover-color: var(--jb-ink);
+    --bs-btn-hover-bg: var(--jb-warning-solid-h);
+    --bs-btn-hover-border-color: var(--jb-warning-solid-h);
+    --bs-btn-active-color: var(--jb-ink);
+    --bs-btn-active-bg: var(--jb-warning-solid-h);
+    --bs-btn-active-border-color: var(--jb-warning-text);
+}
+
+.btn-danger {
+    --bs-btn-color: var(--jb-on-primary);
+    --bs-btn-bg: var(--jb-danger-solid);
+    --bs-btn-border-color: var(--jb-danger-solid);
+    --bs-btn-hover-color: var(--jb-on-primary);
+    --bs-btn-hover-bg: var(--jb-danger-solid-h);
+    --bs-btn-hover-border-color: var(--jb-danger-solid-h);
+    --bs-btn-active-color: var(--jb-on-primary);
+    --bs-btn-active-bg: var(--jb-danger-ink-2);
+    --bs-btn-active-border-color: var(--jb-danger-ink-2);
+}
+
+.btn-outline-danger {
+    --bs-btn-color: var(--jb-danger-solid);
+    --bs-btn-border-color: var(--jb-danger-solid);
+    --bs-btn-hover-color: var(--jb-on-primary);
+    --bs-btn-hover-bg: var(--jb-danger-solid);
+    --bs-btn-hover-border-color: var(--jb-danger-solid);
+    --bs-btn-active-color: var(--jb-on-primary);
+    --bs-btn-active-bg: var(--jb-danger-solid-h);
+    --bs-btn-active-border-color: var(--jb-danger-solid-h);
+}
+
+.btn-close:focus-visible {
+    outline: 2px solid var(--jb-focus-light);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* ---------- Formularios ---------- */
+.form-control,
+.form-select {
+    border-color: var(--jb-line-strong);
+    color: var(--jb-ink);
+}
+
+.form-control::placeholder { color: var(--jb-ink-3); opacity: 1; }
+
+/* Foco: borde azul de la marca + halo cian */
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    border-color: var(--jb-primary-h);
+    box-shadow: 0 0 0 .25rem var(--jb-input-focus);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+    background-color: var(--jb-disabled-bg);
+    color: var(--jb-disabled-ink);
+    border-color: var(--jb-line);
+}
+
+.form-check-input:checked {
+    background-color: var(--jb-primary-h);
+    border-color: var(--jb-primary-h);
+}
+
+/* ---------- Alertas ---------- */
+.alert {
+    --bs-alert-border-radius: var(--jb-radius-sm);
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    --bs-badge-font-weight: 600;
+    --bs-badge-border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* El ámbar de marca no es legible como texto sobre blanco */
+.text-warning { color: var(--jb-warning-text) !important; }
+
+/* ---------- Tablas ---------- */
+.table {
+    --bs-table-color: var(--jb-ink);
+    --bs-table-bg: var(--jb-surface);
+    --bs-table-border-color: var(--jb-line);
+    --bs-table-striped-color: var(--jb-ink);
+    --bs-table-striped-bg: var(--jb-surface-2);
+    --bs-table-hover-color: var(--jb-ink);
+    --bs-table-hover-bg: var(--jb-row-hover);
+    --bs-table-active-color: var(--jb-ink);
+    --bs-table-active-bg: var(--jb-surface-hover);
+    font-variant-numeric: tabular-nums;
+}
+
+.table-light {
+    --bs-table-color: var(--jb-ink);
+    --bs-table-bg: var(--jb-surface-2);
+    --bs-table-border-color: var(--jb-line);
+    --bs-table-hover-color: var(--jb-ink);
+    --bs-table-hover-bg: var(--jb-row-hover);
+}
+
+.table-dark {
+    --bs-table-color: var(--jb-text);
+    --bs-table-bg: var(--jb-bg-2);
+    --bs-table-border-color: var(--jb-bg);
+    --bs-table-hover-color: var(--jb-text);
+    --bs-table-hover-bg: var(--jb-bg);
+}
+
+.table-success {
+    --bs-table-color: var(--jb-success-ink);
+    --bs-table-bg: var(--jb-success-subtle);
+    --bs-table-border-color: var(--jb-success-line);
+    --bs-table-hover-color: var(--jb-success-ink);
+    --bs-table-hover-bg: var(--jb-success-line);
+}
+
+.table-warning {
+    --bs-table-color: var(--jb-warning-ink);
+    --bs-table-bg: var(--jb-warning-subtle);
+    --bs-table-border-color: var(--jb-warning-line);
+    --bs-table-hover-color: var(--jb-warning-ink);
+    --bs-table-hover-bg: var(--jb-warning-line);
+}
+
+/* ---------- Tarjetas y modales ---------- */
+.card {
+    --bs-card-border-color: var(--jb-line);
+    --bs-card-border-radius: var(--jb-radius);
+    --bs-card-cap-bg: var(--jb-surface-2);
+}
+
+.modal {
+    --bs-modal-border-radius: var(--jb-radius);
+    --bs-modal-border-color: var(--jb-line);
+    --bs-modal-header-border-color: var(--jb-line);
+    --bs-modal-footer-border-color: var(--jb-line);
+}
+
+.modal-title { font-family: var(--jb-font-title); font-weight: 600; }
+
+/* ---------- Celular y tablet: objetivos táctiles >= 44 px ---------- */
+@media (max-width: 991.98px) {
+    .btn { min-height: 44px; }
+    .form-control:not(textarea),
+    .form-select { min-height: 44px; }
+    .btn-close { width: 44px; height: 44px; padding: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn, .form-control, .form-select { transition: none; }
+}

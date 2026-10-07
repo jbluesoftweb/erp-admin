@@ -1,0 +1,233 @@
+/* ==========================================================================
+   Dashboard — JBlueSoft. Usa solo variables de jb-tokens.css.
+   ========================================================================== */
+
+/* TÍTULO */
+.dashboard-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    font-family: var(--jb-font-title);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--jb-ink);
+}
+
+.dashboard-title i { color: var(--jb-primary-h); font-size: .9em; }
+
+/* ROLES DISPLAY */
+.roles-display {
+    background: var(--jb-surface);
+    color: var(--jb-ink);
+    padding: 14px 20px;
+    border-radius: var(--jb-radius);
+    margin-bottom: 24px;
+    border: 1px solid var(--jb-line);
+    box-shadow: var(--jb-shadow-sm);
+    font-size: 14px;
+}
+
+.roles-display strong {
+    font-weight: 600;
+    color: var(--jb-ink-2);
+    margin-right: 4px;
+}
+
+/* ALERTS */
+.alert-custom {
+    padding: 12px 18px;
+    border-radius: var(--jb-radius-sm);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+.alert-success { background: var(--jb-success-subtle); color: var(--jb-success-ink); border: 1px solid var(--jb-success-line); }
+.alert-danger  { background: var(--jb-danger-subtle); color: var(--jb-danger-ink-2); border: 1px solid var(--jb-danger-line); }
+
+/* CARDS — los modificadores green/blue/yellow se conservan en el HTML; cada uno
+   toma un tono de la marca (azul, cian, neutro) en lugar del verde/azul/amarillo
+   de Bootstrap, porque no expresan éxito ni advertencia. */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.dashboard-card {
+    --card-tint: var(--jb-primary-tint);
+    --card-ink: var(--jb-primary-h);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: var(--jb-surface);
+    border: 1px solid var(--jb-line);
+    border-radius: var(--jb-radius);
+    padding: 24px;
+    box-shadow: var(--jb-shadow-sm);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    cursor: pointer;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--jb-shadow-md);
+    border-color: var(--jb-line-strong);
+}
+
+.dashboard-card.green  { --card-tint: var(--jb-primary-tint); --card-ink: var(--jb-primary-h); }
+.dashboard-card.blue   { --card-tint: var(--jb-accent-tint);  --card-ink: var(--jb-accent-ink); }
+.dashboard-card.yellow { --card-tint: var(--jb-surface-hover); --card-ink: var(--jb-neutral); }
+
+/* Ícono en un cuadro tintado */
+.dashboard-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 18px;
+    border-radius: var(--jb-radius);
+    background: var(--card-tint);
+    color: var(--card-ink);
+    font-size: 26px;
+}
+
+.dashboard-card-title {
+    font-family: var(--jb-font-title);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--jb-ink);
+}
+
+.dashboard-card-description {
+    font-size: 14px;
+    color: var(--jb-ink-2);
+    margin-bottom: 18px;
+    flex: 1;
+}
+
+.dashboard-card-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 9px 18px;
+    border: 1px solid transparent;
+    border-radius: var(--jb-radius-sm);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.dashboard-card-button:focus-visible {
+    outline: 2px solid var(--jb-focus-light);
+    outline-offset: 2px;
+}
+
+/* Acción principal: azul */
+.dashboard-card.green .dashboard-card-button {
+    background: var(--jb-primary-h);
+    border-color: var(--jb-primary-h);
+    color: var(--jb-on-primary);
+}
+
+.dashboard-card.green .dashboard-card-button:hover {
+    background: var(--jb-primary-d);
+    border-color: var(--jb-primary-d);
+}
+
+/* Secundaria: cian con texto oscuro */
+.dashboard-card.blue .dashboard-card-button {
+    background: var(--jb-accent);
+    border-color: var(--jb-accent);
+    color: var(--jb-ink);
+}
+
+.dashboard-card.blue .dashboard-card-button:hover {
+    background: var(--jb-accent-h);
+    border-color: var(--jb-accent-h);
+}
+
+/* Neutra: contorno azul */
+.dashboard-card.yellow .dashboard-card-button {
+    background: var(--jb-surface);
+    border-color: var(--jb-primary-h);
+    color: var(--jb-link);
+}
+
+.dashboard-card.yellow .dashboard-card-button:hover {
+    background: var(--jb-primary-h);
+    color: var(--jb-on-primary);
+}
+
+/* INFORMACIÓN DEL SISTEMA */
+.system-info {
+    background: var(--jb-surface);
+    border: 1px solid var(--jb-line);
+    border-radius: var(--jb-radius);
+    padding: 24px;
+    box-shadow: var(--jb-shadow-sm);
+}
+
+.system-info-title {
+    font-family: var(--jb-font-title);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--jb-ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.system-info-title i { color: var(--jb-primary-h); }
+
+.system-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+    gap: 20px;
+}
+
+.system-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.system-info-label {
+    font-size: 12px;
+    color: var(--jb-ink-2);
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+}
+
+.system-info-value {
+    font-size: 14px;
+    color: var(--jb-ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Marca de "en funcionamiento": aquí el verde sí expresa estado correcto */
+.system-info-value i {
+    color: var(--jb-success-solid);
+}
+
+@media (max-width: 991.98px) {
+    .dashboard-card-button { min-height: 44px; }
+    .dashboard-title { font-size: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-card, .dashboard-card-button { transition: none; }
+    .dashboard-card:hover { transform: none; }
+}

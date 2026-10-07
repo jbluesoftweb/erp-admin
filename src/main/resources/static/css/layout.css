@@ -463,11 +463,15 @@
     outline-offset: 2px;
 }
 
-/* ---------- CONTENIDO ---------- */
+/* ---------- CONTENIDO ----------
+   En pantallas muy grandes el contenido se centra con un ancho máximo
+   (--jb-content-max, 1440px). Una pantalla que necesite todo el ancho puede
+   declarar  .content-area { --jb-content-max: 100%; }  en su propio CSS. */
 .content-area {
+    --jb-content-gutter: max(32px, calc((100% - var(--jb-content-max)) / 2));
     flex: 1;
     min-width: 0;
-    padding: 28px max(32px, env(safe-area-inset-right)) 32px 32px;
+    padding: 28px max(var(--jb-content-gutter), env(safe-area-inset-right)) 32px var(--jb-content-gutter);
     background: var(--jb-page-bg);
 }
 

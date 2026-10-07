@@ -69,6 +69,64 @@
   --jb-shadow-pop:    0 12px 32px rgba(15, 23, 42, .14), 0 2px 6px rgba(15, 23, 42, .06);
   --jb-shadow-drawer: 8px 0 32px rgba(0, 0, 0, .35);
 
+  /* Componentes sobre tema claro (tarjetas, tablas, formularios, botones) */
+  --jb-surface-2:      #F8FAFC;   /* encabezados de tabla, zonas secundarias */
+  --jb-line-strong:    #858FA3;   /* borde de inputs (>= 3:1 sobre blanco, WCAG 1.4.11) */
+  --jb-ink-3:          #64708A;   /* placeholder, pistas (>= 4.5:1 sobre blanco) */
+  --jb-link:           #1A5CC4;   /* enlaces y texto azul sobre claro */
+  --jb-link-h:         #144A9E;
+  --jb-primary-active: #164FA8;   /* botón azul presionado */
+  --jb-primary-tint:   #E8F0FE;   /* cuadro de ícono azul */
+  --jb-accent-h:       #0EA5E9;   /* botón cian al pasar el mouse */
+  --jb-accent-active:  #0284C7;
+  --jb-accent-tint:    #E0F4FD;   /* cuadro de ícono cian */
+  --jb-accent-ink:     #075985;   /* ícono/texto cian sobre tinte claro */
+  --jb-neutral:        #475569;   /* botón secundario */
+  --jb-neutral-h:      #334155;
+  --jb-input-focus:    rgba(56, 189, 248, .35);  /* halo cian alrededor del borde azul */
+  --jb-row-hover:      #F3F6FB;
+  --jb-shadow-sm:      0 1px 2px rgba(15, 23, 42, .05), 0 1px 3px rgba(15, 23, 42, .05);
+  --jb-shadow-md:      0 6px 18px rgba(15, 23, 42, .08), 0 2px 4px rgba(15, 23, 42, .04);
+  --jb-disabled-bg:    #E9EDF3;   /* controles deshabilitados: sin opacidad, contraste >= 4.5:1 */
+  --jb-disabled-ink:   var(--jb-ink-2);
+  --jb-content-max:    1440px;    /* ancho máximo del contenido en pantallas grandes */
+
+  /* Estados semánticos sobre claro: sólido (fondo de botón), tenue (fondo de
+     alerta/badge), tinta (texto sobre tenue) y línea (borde). */
+  --jb-success-solid:  #15803D;
+  --jb-success-solid-h:#166534;
+  --jb-success-subtle: #E9F7EF;
+  --jb-success-ink:    #14532D;
+  --jb-success-line:   #B5E2C6;
+  --jb-warning-solid:  #FBBF24;   /* con texto --jb-ink */
+  --jb-warning-solid-h:#F59E0B;
+  --jb-warning-subtle: #FEF6E0;
+  --jb-warning-ink:    #713F12;
+  --jb-warning-line:   #F3D99A;
+  --jb-warning-text:   #B45309;   /* ámbar legible sobre blanco (text-warning) */
+  --jb-danger-solid:   var(--jb-danger-ink);
+  --jb-danger-solid-h: #A61F1F;
+  --jb-danger-subtle:  #FDEDED;
+  --jb-danger-ink-2:   #8A1C1C;   /* texto sobre --jb-danger-subtle */
+  --jb-danger-line:    #F3C1C1;
+  --jb-info-solid:     #0369A1;   /* cian oscuro: lleva texto blanco (bg-info + text-white) */
+  --jb-info-subtle:    #E6F6FD;
+  --jb-info-ink:       #075985;
+  --jb-info-line:      #B3E1F6;
+
+  /* Tripletes RGB para las utilidades de Bootstrap (bg-*, text-*, focus) */
+  --jb-primary-h-rgb:      31, 107, 224;
+  --jb-link-rgb:           26, 92, 196;
+  --jb-link-h-rgb:         20, 74, 158;
+  --jb-ink-rgb:            15, 23, 42;
+  --jb-neutral-rgb:        71, 85, 105;
+  --jb-success-solid-rgb:  21, 128, 61;
+  --jb-warning-solid-rgb:  251, 191, 36;
+  --jb-danger-solid-rgb:   198, 40, 40;
+  --jb-info-solid-rgb:     3, 105, 161;
+  --jb-accent-rgb:         56, 189, 248;
+  --jb-surface-rgb:        255, 255, 255;
+
   /* Tipografía */
   --jb-font-title: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   --jb-font-body:  "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
