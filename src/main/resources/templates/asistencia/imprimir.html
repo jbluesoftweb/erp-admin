@@ -3,223 +3,7 @@
 <head>
     <th:block th:replace="~{layout :: head}"></th:block>
 
-    <style>
-        /* CONTROLES DE IMPRESIÓN (Solo en pantalla) */
-        .print-controls {
-            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border: 2px solid #4a7c2a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .date-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .date-selector i {
-            font-size: 18px;
-        }
-
-        .date-selector label {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .btn-print {
-            background: #d4af37;
-            border: 2px solid #b8941f;
-            color: #1a1a1a;
-            padding: 10px 40px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-print:hover {
-            background: #e6c04d;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
-        }
-
-        .btn-print:disabled {
-            background: #ccc;
-            border-color: #999;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ALERTS */
-        .alert-custom {
-            padding: 15px 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        /* ========== ESTILOS PARA IMPRESIÓN ========== */
-
-        /* Ocultar contenido en pantalla */
-        .print-only {
-            display: none;
-        }
-
-        /* Al imprimir */
-        @media print {
-            /* Configurar página A4 horizontal */
-            @page {
-                size: A4 landscape;
-                margin: 5mm;
-            }
-
-            /* Ocultar todos los elementos con clase no-print */
-            .no-print {
-                display: none !important;
-            }
-
-            /* Asegurar que body, main-wrapper y content-area ocupen todo */
-            html, body {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-            }
-
-            .main-wrapper {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-            }
-
-            .content-area {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                background: white !important;
-            }
-
-            /* Mostrar el contenido del registro */
-            .print-only {
-                display: block !important;
-                width: 100% !important;
-                height: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                page-break-after: avoid !important;
-                page-break-inside: avoid !important;
-            }
-
-            /* Contenedor principal - altura completa */
-            .cuerpo {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                page-break-inside: avoid;
-            }
-
-            /* IZQUIERDA - 50% (Registro) */
-            .izquierda {
-                width: 50%;
-                float: left;
-                padding: 5px;
-                box-sizing: border-box;
-            }
-
-            /* DERECHA - 50% (Personal Presente) */
-            .derecha {
-                width: 50%;
-                float: right;
-                padding: 5px;
-                box-sizing: border-box;
-            }
-
-            .registro-title {
-                text-align: center;
-                font-size: 13px;
-                font-weight: bold;
-                margin: 5px 0;
-            }
-
-            .registro-table {
-                width: 100%;
-                padding: 1px;
-                border-collapse: collapse;
-                border: 1px solid #000;
-                font-size: 9px;
-                margin-bottom: 8px;
-            }
-
-            .registro-table th,
-            .registro-table td {
-                padding: 2px;
-                border: 1px solid #000;
-                text-align: center;
-                font-size: 8px;
-            }
-
-            .registro-table th {
-                font-size: 9px;
-                font-weight: bold;
-                background: #f0f0f0;
-            }
-
-            .registro-table td {
-                font-size: 9px;
-            }
-
-            .section-header {
-                font-size: 11px;
-                font-weight: bold;
-                margin: 6px 0 3px 0;
-            }
-
-            .ocurrencia-group {
-                background: #f5f5f5;
-                font-weight: bold;
-                text-align: left;
-                padding: 3px 5px;
-            }
-
-            h1, h2, h3 {
-                font-size: 13px;
-                margin: 5px 0;
-            }
-        }
-    </style>
+    <link th:href="@{/css/asistencia-imprimir.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -257,21 +41,20 @@
         </div>
 
         <!-- CONTROLES DE IMPRESIÓN -->
-        <div class="print-controls no-print">
+        <div class="controls-bar no-print">
             <div class="date-selector">
-                <i class="bi bi-calendar3"></i>
-                <label>Selecciona la fecha:</label>
+                <i class="bi bi-calendar3" aria-hidden="true"></i>
+                <label for="fechaRegistroInput">Selecciona la fecha:</label>
                 <input type="date"
                        id="fechaRegistroInput"
-                       th:value="${fechaSeleccionada}"
-                       style="background: white; color: #333; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px;">
+                       th:value="${fechaSeleccionada}">
             </div>
 
             <button type="button"
-                    class="btn-print"
+                    class="btn-institucional"
                     id="btnImprimir"
                     onclick="imprimirRegistro()">
-                <i class="bi bi-printer"></i> Imprimir
+                <i class="bi bi-printer" aria-hidden="true"></i> Imprimir
             </button>
         </div>
 

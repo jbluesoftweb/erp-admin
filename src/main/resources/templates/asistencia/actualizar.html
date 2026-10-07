@@ -3,53 +3,7 @@
 <head>
   <th:block th:replace="~{layout :: head}"></th:block>
 
-  <style>
-    /* ALERTS */
-    .alert-custom {
-      padding: 15px 20px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-    }
-
-    .alert-success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .alert-danger {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-
-    .alert-warning {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeeba;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 991px) {
-      .info-bar {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-
-      .date-display,
-      .effective-counter {
-        justify-self: center;
-      }
-
-      .data-table {
-        font-size: 12px;
-      }
-    }
-  </style>
+  <link th:href="@{/css/asistencia-actualizar.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -188,7 +142,7 @@
               </td>
             </tr>
             <tr th:if="${#lists.isEmpty(grupo1)}">
-              <td colspan="6" style="text-align: center; color: #999; padding: 20px;">
+              <td colspan="6" class="td-empty">
                 No hay personal de [[${etiquetas['rrhh.personal.grupo1']}]] registrado
               </td>
             </tr>
@@ -257,7 +211,7 @@
               </td>
             </tr>
             <tr th:if="${#lists.isEmpty(grupo2)}">
-              <td colspan="6" style="text-align: center; color: #999; padding: 20px;">
+              <td colspan="6" class="td-empty">
                 No hay personal de [[${etiquetas['rrhh.personal.grupo2']}]] registrado
               </td>
             </tr>
@@ -323,7 +277,7 @@
               </td>
             </tr>
             <tr th:if="${#lists.isEmpty(ocurrenciasPreLlenadas)}">
-              <td colspan="6" style="text-align: center; color: #999; padding: 20px;">
+              <td colspan="6" class="td-empty">
                 No hay ocurrencias del último registro
               </td>
             </tr>

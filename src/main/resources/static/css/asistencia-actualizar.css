@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Asistencia — Actualizar registro
+   Alertas, barra de información y tablas vienen de common.css.
+   ========================================================================== */
+
+/* Tablet y celular: la barra de información en una sola columna */
+@media (max-width: 991.98px) {
+    .info-bar {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .info-bar .date-display,
+    .info-bar .effective-counter {
+        justify-self: center;
+    }
+}

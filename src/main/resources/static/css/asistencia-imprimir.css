@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Asistencia — Imprimir registro
+   En pantalla solo se ven las alertas y los controles (componentes de
+   common.css). El registro (.print-only) aparece únicamente al imprimir.
+   Usa solo variables de jb-tokens.css.
+   ========================================================================== */
+
+/* Ocultar contenido en pantalla */
+.print-only {
+    display: none;
+}
+
+/* ========== ESTILOS PARA IMPRESIÓN ==========
+   Hoja en blanco y negro (--jb-print-*): no cambiar su aspecto. */
+@media print {
+    /* Configurar página A4 horizontal */
+    @page {
+        size: A4 landscape;
+        margin: 5mm;
+    }
+
+    /* Ocultar todos los elementos con clase no-print */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Asegurar que body, main-wrapper y content-area ocupen todo */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .main-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .content-area {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: var(--jb-print-paper) !important;
+    }
+
+    /* Mostrar el contenido del registro */
+    .print-only {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Contenedor principal - altura completa */
+    .cuerpo {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        page-break-inside: avoid;
+    }
+
+    /* IZQUIERDA - 50% (Registro) */
+    .izquierda {
+        width: 50%;
+        float: left;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    /* DERECHA - 50% (Personal Presente) */
+    .derecha {
+        width: 50%;
+        float: right;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    .registro-title {
+        text-align: center;
+        font-size: 13px;
+        font-weight: bold;
+        margin: 5px 0;
+    }
+
+    .registro-table {
+        width: 100%;
+        padding: 1px;
+        border-collapse: collapse;
+        border: 1px solid var(--jb-print-ink);
+        font-size: 9px;
+        margin-bottom: 8px;
+    }
+
+    .registro-table th,
+    .registro-table td {
+        padding: 2px;
+        border: 1px solid var(--jb-print-ink);
+        text-align: center;
+        font-size: 8px;
+    }
+
+    .registro-table th {
+        font-size: 9px;
+        font-weight: bold;
+        background: var(--jb-print-head-bg);
+    }
+
+    .registro-table td {
+        font-size: 9px;
+    }
+
+    .section-header {
+        font-size: 11px;
+        font-weight: bold;
+        margin: 6px 0 3px 0;
+    }
+
+    .ocurrencia-group {
+        background: var(--jb-print-group-bg);
+        font-weight: bold;
+        text-align: left;
+        padding: 3px 5px;
+    }
+
+    h1, h2, h3 {
+        font-size: 13px;
+        margin: 5px 0;
+    }
+}

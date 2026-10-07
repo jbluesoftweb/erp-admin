@@ -34,19 +34,6 @@
     margin-right: 4px;
 }
 
-/* ALERTS */
-.alert-custom {
-    padding: 12px 18px;
-    border-radius: var(--jb-radius-sm);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-}
-.alert-success { background: var(--jb-success-subtle); color: var(--jb-success-ink); border: 1px solid var(--jb-success-line); }
-.alert-danger  { background: var(--jb-danger-subtle); color: var(--jb-danger-ink-2); border: 1px solid var(--jb-danger-line); }
-
 /* CARDS — los modificadores green/blue/yellow se conservan en el HTML; cada uno
    toma un tono de la marca (azul, cian, neutro) en lugar del verde/azul/amarillo
    de Bootstrap, porque no expresan éxito ni advertencia. */

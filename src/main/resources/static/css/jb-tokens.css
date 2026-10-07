@@ -114,6 +114,13 @@
   --jb-info-ink:       #075985;
   --jb-info-line:      #B3E1F6;
 
+  /* Hoja impresa (asistencia/imprimir): blanco y negro, sin la marca.
+     Son los valores originales; cambiarlos cambia el documento impreso. */
+  --jb-print-paper:    #FFFFFF;
+  --jb-print-ink:      #000000;
+  --jb-print-head-bg:  #F0F0F0;   /* encabezados de tabla */
+  --jb-print-group-bg: #F5F5F5;   /* fila de grupo de ocurrencia */
+
   /* Tripletes RGB para las utilidades de Bootstrap (bg-*, text-*, focus) */
   --jb-primary-h-rgb:      31, 107, 224;
   --jb-link-rgb:           26, 92, 196;

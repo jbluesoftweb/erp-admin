@@ -157,6 +157,31 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
 }
 
+/* Campo de fecha de las barras (flatpickr o input date). Las pantallas que
+   aún tienen estilo inline lo conservan: el atributo style gana. */
+.date-selector input {
+    font: inherit;
+    font-size: 14px;
+    min-height: 40px;
+    width: 11rem;
+    max-width: 100%;
+    padding: 8px 12px;
+    background: var(--jb-surface);
+    color: var(--jb-ink);
+    border: 1px solid var(--jb-line-strong);
+    border-radius: var(--jb-radius-sm);
+    font-variant-numeric: tabular-nums;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.date-selector input::placeholder { color: var(--jb-ink-3); opacity: 1; }
+
+.date-selector input:focus {
+    outline: none;
+    border-color: var(--jb-primary-h);
+    box-shadow: 0 0 0 3px var(--jb-input-focus);
+}
+
 .date-badge, .efectivo-badge {
     background: var(--jb-primary-tint);
     color: var(--jb-link);
@@ -321,7 +346,7 @@ h1, h2, h3, h4, h5, h6 {
 .data-table tbody tr:hover { background: var(--jb-row-hover); }
 .data-table tbody tr:last-child td { border-bottom: none; }
 
-.td-num {
+.td-num, .data-table .row-num {
     text-align: center;
     color: var(--jb-ink-2);
     font-weight: 600;
@@ -348,6 +373,31 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     white-space: nowrap;
 }
+
+/* Fila "no hay registros" dentro de una tabla */
+.data-table .td-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--jb-ink-2);
+}
+
+/* Datos de la persona en dos líneas: grado/especialidad arriba, nombre abajo */
+.td-persona { font-weight: 600; color: var(--jb-ink); }
+.td-persona > span { display: block; }
+.td-persona > span:first-child {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--jb-ink-2);
+}
+
+/* Tabla de registro por persona (N°, Datos, Ocurrencia, Inicio, Fin, Detalle):
+   anchos mínimos en vez de fijos. Si no caben, la tabla se desplaza dentro de
+   .data-table y los controles mantienen un tamaño usable. */
+.data-table .col-num        { width: 3rem; }
+.data-table .col-datos      { min-width: 14rem; }
+.data-table .col-ocurrencia { min-width: 11rem; }
+.data-table .col-fecha      { min-width: 10.5rem; }
+.data-table .col-detalle    { min-width: 12rem; }
 
 /* Forms */
 .form-section-title {
@@ -534,6 +584,74 @@ h1, h2, h3, h4, h5, h6 {
     cursor: not-allowed;
 }
 
+/* Alertas de página (éxito, error, aviso, información)
+   HTML de las pantallas:
+     <div class="alert-custom alert-success"><i class="bi ..."></i><span>Mensaje</span></div>
+   Se limitan a .alert-custom para no tocar las .alert de Bootstrap. */
+.alert-custom {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    background: var(--jb-surface-2);
+    color: var(--jb-ink);
+    border: 1px solid var(--jb-line);
+    border-radius: var(--jb-radius-sm);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* Ícono alineado con la primera línea del texto */
+.alert-custom > .bi:first-child,
+.alert-custom::before {
+    flex: none;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.alert-custom > span {
+    flex: 1 1 14rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* Acción dentro de la alerta (p. ej. "Eliminar registro adelantado") */
+.alert-custom > .btn { align-self: center; }
+
+.alert-custom.alert-success { background: var(--jb-success-subtle); color: var(--jb-success-ink);  border-color: var(--jb-success-line); }
+.alert-custom.alert-danger  { background: var(--jb-danger-subtle);  color: var(--jb-danger-ink-2); border-color: var(--jb-danger-line); }
+.alert-custom.alert-warning { background: var(--jb-warning-subtle); color: var(--jb-warning-ink);  border-color: var(--jb-warning-line); }
+.alert-custom.alert-info    { background: var(--jb-info-subtle);    color: var(--jb-info-ink);     border-color: var(--jb-info-line); }
+
+.alert-custom.alert-success > .bi:first-child { color: var(--jb-success-solid); }
+.alert-custom.alert-danger  > .bi:first-child { color: var(--jb-danger-solid); }
+.alert-custom.alert-warning > .bi:first-child { color: var(--jb-warning-text); }
+.alert-custom.alert-info    > .bi:first-child { color: var(--jb-info-solid); }
+
+/* Alertas cuyo texto viene directo en el div (th:text), sin <i>: el ícono
+   se agrega aquí, decorativo (texto alternativo vacío), en el margen
+   izquierdo para que el texto no salte a otra línea. */
+.alert-custom:not(:has(> .bi)) {
+    display: block;
+    position: relative;
+    padding-left: 44px;
+}
+.alert-custom:not(:has(> .bi))::before {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-family: "bootstrap-icons";
+    font-style: normal;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+}
+.alert-custom.alert-success:not(:has(> .bi))::before { content: "\f26a"; content: "\f26a" / ""; color: var(--jb-success-solid); }
+.alert-custom.alert-danger:not(:has(> .bi))::before  { content: "\f33a"; content: "\f33a" / ""; color: var(--jb-danger-solid); }
+.alert-custom.alert-warning:not(:has(> .bi))::before { content: "\f33a"; content: "\f33a" / ""; color: var(--jb-warning-text); }
+.alert-custom.alert-info:not(:has(> .bi))::before    { content: "\f430"; content: "\f430" / ""; color: var(--jb-info-solid); }
+
 /* Status Badges */
 .badge-institucional {
     display: inline-block;
@@ -574,7 +692,8 @@ h1, h2, h3, h4, h5, h6 {
     .form-group select,
     .form-group textarea,
     .filter-group select,
-    .filter-group input { font-size: 16px; min-height: 44px; }
+    .filter-group input,
+    .date-selector input { font-size: 16px; min-height: 44px; }
 
     .btn-institucional,
     .btn-institucional-gold,
@@ -588,11 +707,13 @@ h1, h2, h3, h4, h5, h6 {
     .info-bar .date-selector,
     .info-bar .effective-counter { justify-self: center; }
     .btn-update, .btn-save { width: 100%; padding-inline: 24px; }
+    .data-table .col-datos { min-width: 11rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .btn-update, .btn-save, .btn-institucional, .btn-institucional-gold,
     .form-group input, .form-group select, .form-group textarea,
+    .date-selector input,
     .data-table tbody tr { transition: none; }
     .btn-update:hover, .btn-save:hover { transform: none; }
 }
