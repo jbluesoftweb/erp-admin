@@ -78,6 +78,23 @@ h1, h2, h3, h4, h5, h6 {
     padding: 24px 28px;
 }
 
+/* Título de página (h2 al inicio del contenido) */
+.page-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin: 0 0 20px;
+    font-family: var(--jb-font-title);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--jb-ink);
+    overflow-wrap: anywhere;
+}
+
+.page-title i { color: var(--jb-primary-h); font-size: .9em; }
+
 /* Section Titles (Common in List Views) */
 .section-title {
     position: relative;
@@ -305,6 +322,13 @@ h1, h2, h3, h4, h5, h6 {
 .data-table table {
     width: 100%;
     border-collapse: collapse;
+}
+
+/* Tabla dentro de una tarjeta: la tarjeta pone el marco */
+.page-card > .data-table {
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 0;
 }
 
 .data-table thead {
@@ -708,6 +732,7 @@ h1, h2, h3, h4, h5, h6 {
     .info-bar .effective-counter { justify-self: center; }
     .btn-update, .btn-save { width: 100%; padding-inline: 24px; }
     .data-table .col-datos { min-width: 11rem; }
+    .page-title { font-size: 19px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

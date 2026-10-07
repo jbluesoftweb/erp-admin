@@ -89,18 +89,18 @@
           <table>
             <thead>
             <tr>
-              <th style="width: 40px;">N°</th>
-              <th style="width: 280px;">Datos</th>
-              <th style="width: 200px;">Ocurrencia</th>
-              <th style="width: 140px;">Inicio</th>
-              <th style="width: 140px;">Fin</th>
-              <th>Detalle</th>
+              <th class="col-num">N°</th>
+              <th class="col-datos">Datos</th>
+              <th class="col-ocurrencia">Ocurrencia</th>
+              <th class="col-fecha">Inicio</th>
+              <th class="col-fecha">Fin</th>
+              <th class="col-detalle">Detalle</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="pd, iter : ${grupo1}">
               <td class="row-num" th:text="${iter.count}">1</td>
-              <td>
+              <td class="td-persona">
                 <span th:text="${pd.nivelSnapshot + ' ' + pd.especialidadSnapshot}">MY ART</span>
                 <span th:text="${pd.fullName}">Martinez Sanchez John</span>
                 <input type="hidden" th:name="'registros[' + ${iter.index} + '].idPersonal'" th:value="${pd.personal.idPersonal}">
@@ -156,18 +156,18 @@
           <table>
             <thead>
             <tr>
-              <th style="width: 40px;">N°</th>
-              <th style="width: 280px;">Datos</th>
-              <th style="width: 200px;">Ocurrencia</th>
-              <th style="width: 140px;">Inicio</th>
-              <th style="width: 140px;">Fin</th>
-              <th>Detalle</th>
+              <th class="col-num">N°</th>
+              <th class="col-datos">Datos</th>
+              <th class="col-ocurrencia">Ocurrencia</th>
+              <th class="col-fecha">Inicio</th>
+              <th class="col-fecha">Fin</th>
+              <th class="col-detalle">Detalle</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="pd, iter : ${grupo2}">
               <td class="row-num" th:text="${iter.count}">1</td>
-              <td>
+              <td class="td-persona">
                 <span th:text="${pd.nivelSnapshot + ' ' + pd.especialidadSnapshot}">TCO 1 T/INTG</span>
                 <span th:text="${pd.fullName}">Perez Jobs Arnold</span>
                 <input type="hidden"
@@ -225,18 +225,18 @@
           <table>
             <thead>
             <tr>
-              <th style="width: 40px;">N°</th>
-              <th style="width: 280px;">Datos</th>
-              <th style="width: 200px;">Ocurrencia</th>
-              <th style="width: 140px;">Inicio</th>
-              <th style="width: 140px;">Fin</th>
-              <th>Detalle</th>
+              <th class="col-num">N°</th>
+              <th class="col-datos">Datos</th>
+              <th class="col-ocurrencia">Ocurrencia</th>
+              <th class="col-fecha">Inicio</th>
+              <th class="col-fecha">Fin</th>
+              <th class="col-detalle">Detalle</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="pd, iter : ${ocurrenciasPreLlenadas}">
               <td class="row-num" th:text="${iter.count}">1</td>
-              <td>
+              <td class="td-persona">
                 <span th:text="${pd.nivelSnapshot + ' ' + pd.especialidadSnapshot}">MY ART</span>
                 <span th:text="${pd.fullName}">Martinez Sanchez John</span>
                 <input type="hidden"
@@ -343,7 +343,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" style="font-size: 15px;">
+            <div class="modal-body">
                 ¿Eliminar el registro adelantado del
                 <strong th:text="${fechaRegistro}"></strong>?
                 <br><br>
@@ -353,7 +353,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Cancelar
                 </button>
-                <form th:action="@{/asistencia/eliminar-ultimo}" method="post" style="display:inline;">
+                <form th:action="@{/asistencia/eliminar-ultimo}" method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <input type="hidden" name="idDepartamento" th:value="${departamento.idDepartamento}"/>
                     <button type="submit" class="btn btn-warning">

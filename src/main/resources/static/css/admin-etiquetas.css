@@ -1,0 +1,22 @@
+/* ==========================================================================
+   Admin — Etiquetas del sistema
+   Tarjeta, tabla, aviso, botones y campos vienen de common.css y del tema
+   de Bootstrap. Aquí solo lo propio de esta pantalla.
+   ========================================================================== */
+
+/* Columnas de texto alineadas a la izquierda (la tabla común las centra) */
+.etiquetas-table th,
+.etiquetas-table td { text-align: left; }
+
+.etiquetas-table th.td-acciones,
+.etiquetas-table td.td-acciones { text-align: center; }
+
+.etiquetas-table .valor-defecto { color: var(--jb-ink-2); }
+.etiquetas-table .texto-secundario { color: var(--jb-ink-2); }
+
+/* Campo de valor personalizado: ancho mínimo legible; la tabla se desplaza
+   dentro de su contenedor si no cabe */
+.etiquetas-table .input-valor { min-width: 12rem; }
+
+/* El form del botón Guardar va en la celda */
+.etiquetas-table .td-acciones form { display: inline; margin: 0; }

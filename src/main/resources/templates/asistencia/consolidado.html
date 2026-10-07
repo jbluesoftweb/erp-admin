@@ -6,193 +6,7 @@
     <!-- Flatpickr para datepicker -->
     <link rel="stylesheet" th:href="@{/css/flatpickr.min.css}">
 
-    <style>
-        /* CONTROLES SUPERIORES */
-        .controls-bar {
-            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 2px solid #4a7c2a;
-        }
-
-        .date-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .date-selector i {
-            font-size: 20px;
-        }
-
-        .date-selector label {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .date-selector input {
-            background: white;
-            color: #333;
-            border: 1px solid #ddd;
-            padding: 8px 15px;
-            border-radius: 4px;
-            font-size: 14px;
-            min-width: 180px;
-        }
-
-        .btn-print {
-            background: #d4af37;
-            color: #1a1a1a;
-            border: 2px solid #b8941f;
-            padding: 10px 30px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-print:hover {
-            background: #e5c04a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
-        }
-
-        .botones-accion {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        /* SECCIONES */
-        .section-title {
-            background: linear-gradient(90deg, #2d5016 0%, #3d6b1f 100%);
-            padding: 12px 20px;
-            margin: 25px 0 0 0;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            border-left: 4px solid #d4af37;
-            text-align: center;
-        }
-
-        /* TABLAS */
-        .data-table {
-            background: white;
-            border: 1px solid #ddd;
-            margin-bottom: 25px;
-            overflow-x: auto;
-        }
-
-        .data-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table thead {
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .data-table th {
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-            color: #495057;
-            border-right: 1px solid #dee2e6;
-            white-space: nowrap;
-        }
-
-        .data-table th:first-child {
-            text-align: left;
-            padding-left: 15px;
-        }
-
-        .data-table th:last-child {
-            border-right: none;
-        }
-
-        .data-table td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #e9ecef;
-            border-right: 1px solid #e9ecef;
-            font-size: 13px;
-            text-align: center;
-        }
-
-        .data-table td:first-child {
-            text-align: left;
-            padding-left: 15px;
-            font-weight: 600;
-        }
-
-        .data-table td:last-child {
-            border-right: none;
-            font-weight: 600;
-            background: #f8f9fa;
-        }
-
-        .data-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .data-table tbody tr:hover {
-            background: #f8f9fa;
-        }
-
-        /* TABLA DE OCURRENCIAS */
-        .ocurrencias-table {
-            background: white;
-            border: 1px solid #ddd;
-            margin-bottom: 25px;
-        }
-
-        .ocurrencias-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .ocurrencias-table thead th {
-            background: #f8f9fa;
-            padding: 10px 8px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 12px;
-            color: #495057;
-            border-right: 1px solid #dee2e6;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .ocurrencias-table tbody td {
-            padding: 8px;
-            border-bottom: 1px solid #e9ecef;
-            border-right: 1px solid #e9ecef;
-            font-size: 12px;
-        }
-
-        .ocurrencia-group {
-            background: #3d6b1f;
-            color: white;
-            font-weight: bold;
-            text-align: left;
-            padding: 8px 15px;
-        }
-
-        .row-num {
-            text-align: center;
-            font-weight: bold;
-            color: #666;
-            width: 50px;
-        }
-
-    </style>
+    <link th:href="@{/css/asistencia-consolidado.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -218,8 +32,8 @@
         <!-- CONTROLES -->
         <div class="controls-bar">
             <div class="date-selector">
-                <i class="bi bi-calendar3"></i>
-                <label>Selecciona la fecha:</label>
+                <i class="bi bi-calendar3" aria-hidden="true"></i>
+                <label for="fechaInput">Selecciona la fecha:</label>
                 <input type="text"
                        id="fechaInput"
                        class="flatpickr-input"
@@ -229,28 +43,28 @@
             </div>
 
             <div class="botones-accion">
-                <button type="button" class="btn-print" onclick="irAImprimir()">
-                    <i class="bi bi-printer"></i> Imprimir
+                <button type="button" class="btn-institucional" onclick="irAImprimir()">
+                    <i class="bi bi-printer" aria-hidden="true"></i> Imprimir
                 </button>
 
-                <button type="button" class="btn-print" onclick="irADescargarPdf()">
-                    <i class="bi bi-download"></i> Descargar PDF
+                <button type="button" class="btn btn-outline-primary" onclick="irADescargarPdf()">
+                    <i class="bi bi-download" aria-hidden="true"></i> Descargar PDF
                 </button>
             </div>
         </div>
 
         <!-- LEYENDA DEL SEMÁFORO -->
-        <div style="background: white; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; gap: 25px; border: 1px solid #ddd;">
-                <span style="font-weight: 600; color: #333;">
-                    <i class="bi bi-info-circle"></i> Estado de Registros:
-                </span>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="display: inline-block; width: 20px; height: 20px; background: #dc3545; border-radius: 3px;"></span>
-                <span style="font-size: 13px; color: #666;">No Registrado</span>
+        <div class="leyenda-estado">
+            <span class="leyenda-titulo">
+                <i class="bi bi-info-circle" aria-hidden="true"></i> Estado de Registros:
+            </span>
+            <div class="leyenda-item">
+                <span class="leyenda-muestra is-no-registrado" aria-hidden="true"></span>
+                <span>No Registrado</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="display: inline-block; width: 20px; height: 20px; background: #28a745; border-radius: 3px;"></span>
-                <span style="font-size: 13px; color: #666;">Registrado</span>
+            <div class="leyenda-item">
+                <span class="leyenda-muestra is-registrado" aria-hidden="true"></span>
+                <span>Registrado</span>
             </div>
         </div>
 
@@ -263,7 +77,7 @@
                 DEL <span th:text="${#temporals.format(consolidado.fechaRegistro, 'dd-MM-yyyy')}">10-03-2026</span>
             </div>
 
-            <div class="data-table">
+            <div class="data-table tabla-resumen">
                 <table>
                     <thead>
                     <tr>
@@ -302,7 +116,7 @@
                 DEL <span th:text="${#temporals.format(consolidado.fechaRegistro, 'dd-MM-yyyy')}">10-03-2026</span>
             </div>
 
-            <div class="data-table">
+            <div class="data-table tabla-resumen">
                 <table>
                     <thead>
                     <tr>
@@ -335,24 +149,24 @@
             </div>
 
             <!-- OCURRENCIAS -->
-            <h4 style="margin: 20px 0 10px 0; color: #2d5016; font-weight: bold;">OCURRENCIAS</h4>
+            <h4 class="section-title">OCURRENCIAS</h4>
 
-            <div class="ocurrencias-table">
+            <div class="data-table ocurrencias-table">
                 <table>
                     <thead>
                     <tr>
-                        <th style="width: 50px;">N°</th>
-                        <th style="width: 120px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
-                        <th style="width: 280px;">APELLIDOS Y NOMBRES</th>
-                        <th style="width: 100px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.departamento'])}">DEPARTAMENTO</th>
-                        <th style="width: 100px;">INICIO</th>
-                        <th style="width: 100px;">FIN</th>
-                        <th>DETALLE</th>
+                        <th class="col-num">N°</th>
+                        <th class="col-nivel" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+                        <th class="col-nombre">APELLIDOS Y NOMBRES</th>
+                        <th class="col-dpto" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.departamento'])}">DEPARTAMENTO</th>
+                        <th class="col-dia">INICIO</th>
+                        <th class="col-dia">FIN</th>
+                        <th class="col-detalle">DETALLE</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:if="${#maps.isEmpty(consolidado.ocurrenciasAgrupadas)}">
-                        <td colspan="7" style="text-align: center; color: #999; padding: 20px;">
+                        <td colspan="7" class="td-empty">
                             No hay ocurrencias registradas
                         </td>
                     </tr>
@@ -367,9 +181,9 @@
                             <td class="row-num" th:text="${iter.count}">1</td>
                             <td th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
                             <td th:text="${registro.fullName}">García Pérez Juan</td>
-                            <td style="text-align: center;" th:text="${registro.departamento.descripcionCorta}">DEPTO-1</td>
-                            <td style="text-align: center;" th:text="${registro.fechaInicio != null ? #temporals.format(registro.fechaInicio, 'dd/MM') : '-'}">01/03</td>
-                            <td style="text-align: center;" th:text="${registro.fechaTermino != null ? #temporals.format(registro.fechaTermino, 'dd/MM') : '-'}">05/03</td>
+                            <td class="text-center" th:text="${registro.departamento.descripcionCorta}">DEPTO-1</td>
+                            <td class="text-center" th:text="${registro.fechaInicio != null ? #temporals.format(registro.fechaInicio, 'dd/MM') : '-'}">01/03</td>
+                            <td class="text-center" th:text="${registro.fechaTermino != null ? #temporals.format(registro.fechaTermino, 'dd/MM') : '-'}">05/03</td>
                             <td th:text="${registro.detalle != null ? registro.detalle : '-'}">Médico</td>
                         </tr>
                     </th:block>
@@ -378,21 +192,21 @@
             </div>
 
             <!-- PERSONAL PRESENTE -->
-            <h4 style="margin: 20px 0 10px 0; color: #2d5016; font-weight: bold;">PERSONAL PRESENTE</h4>
+            <h4 class="section-title">PERSONAL PRESENTE</h4>
 
-            <div class="ocurrencias-table">
+            <div class="data-table ocurrencias-table">
                 <table>
                     <thead>
                     <tr>
-                        <th style="width: 50px;">N°</th>
-                        <th style="width: 120px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
-                        <th style="width: 280px;">APELLIDOS Y NOMBRES</th>
-                        <th style="width: 100px;" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.departamento'])}">DEPARTAMENTO</th>
+                        <th class="col-num">N°</th>
+                        <th class="col-nivel" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.nivel'])}">NIVEL</th>
+                        <th class="col-nombre">APELLIDOS Y NOMBRES</th>
+                        <th class="col-dpto" th:text="${#strings.toUpperCase(etiquetas['rrhh.personal.departamento'])}">DEPARTAMENTO</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:if="${#lists.isEmpty(consolidado.personalPresente)}">
-                        <td colspan="4" style="text-align: center; color: #999; padding: 20px;">
+                        <td colspan="4" class="td-empty">
                             No hay personal presente
                         </td>
                     </tr>
@@ -400,7 +214,7 @@
                         <td class="row-num" th:text="${iter.count}">1</td>
                         <td th:text="${registro.nivelSnapshot + ' ' + registro.especialidadSnapshot}">MY ART</td>
                         <td th:text="${registro.fullName}">García Pérez Juan</td>
-                        <td style="text-align: center;" th:text="${registro.departamento.descripcionCorta}">DEPTO-1</td>
+                        <td class="text-center" th:text="${registro.departamento.descripcionCorta}">DEPTO-1</td>
                     </tr>
                     </tbody>
                 </table>
@@ -495,15 +309,14 @@
                 <h5 class="modal-title" id="modalRegistroDepartamentoTitulo">Registro de Asistencia por Departamento</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-0" id="modalRegistroBody" style="height: 75vh;">
+            <div class="modal-body p-0" id="modalRegistroBody">
                 <iframe id="iframeRegistroDepartamento"
-                        style="width: 100%; height: 100%; border: none;"
                         title="Registro de Asistencia por Departamento"></iframe>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-print" onclick="imprimirModalRegistro()">
-                    <i class="bi bi-printer"></i> Imprimir
+                <button type="button" class="btn btn-primary" onclick="imprimirModalRegistro()">
+                    <i class="bi bi-printer" aria-hidden="true"></i> Imprimir
                 </button>
             </div>
         </div>

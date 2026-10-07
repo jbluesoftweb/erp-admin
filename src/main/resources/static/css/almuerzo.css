@@ -1,0 +1,79 @@
+/* ==========================================================================
+   Almuerzo — Personal presente del día
+   Título, barra de controles, campo de fecha, aviso y estado vacío vienen
+   de common.css. Aquí solo la tarjeta del total.
+   ========================================================================== */
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    position: relative;
+    background: var(--jb-surface);
+    border: 1px solid var(--jb-line);
+    border-left: 4px solid var(--jb-primary-h);
+    border-radius: var(--jb-radius);
+    box-shadow: var(--jb-shadow-sm);
+    padding: 24px;
+    text-align: center;
+    transition: box-shadow .2s, transform .2s;
+}
+
+.stat-card:hover {
+    box-shadow: var(--jb-shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Total general: una sola tarjeta centrada (antes estilo inline) */
+.stat-card.red {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.stat-card .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 8px;
+    border-radius: var(--jb-radius);
+    background: var(--jb-primary-tint);
+    color: var(--jb-link);
+    font-size: 28px;
+}
+
+.stat-card .number {
+    margin: 4px 0;
+    font-family: var(--jb-font-title);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--jb-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-card .label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--jb-ink-2);
+    text-transform: uppercase;
+}
+
+.stat-card .sublabel {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--jb-ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stat-card { transition: none; }
+    .stat-card:hover { transform: none; }
+}

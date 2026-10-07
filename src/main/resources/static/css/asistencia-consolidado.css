@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Asistencia — Consolidado de la empresa
+   Barra de controles, campo de fecha, títulos de sección y tablas vienen de
+   common.css. Aquí solo lo propio de esta pantalla. Las tablas anchas se
+   desplazan dentro de su .data-table (overflow-x de common.css).
+   ========================================================================== */
+
+.botones-accion {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Botón secundario de la barra (Descargar PDF): mismo tamaño que el principal */
+.botones-accion .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 9px 22px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Leyenda del semáforo de departamentos */
+.leyenda-estado {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    background: var(--jb-surface);
+    border: 1px solid var(--jb-line);
+    border-radius: var(--jb-radius);
+    box-shadow: var(--jb-shadow-sm);
+}
+
+.leyenda-titulo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--jb-ink);
+}
+
+.leyenda-titulo i { color: var(--jb-primary-h); }
+
+.leyenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--jb-ink-2);
+}
+
+.leyenda-muestra {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+}
+
+.leyenda-muestra.is-no-registrado { background: var(--jb-danger-solid); }
+.leyenda-muestra.is-registrado    { background: var(--jb-success-solid); }
+
+/* El título lleva texto y fechas en línea: que fluya como párrafo */
+.section-title { display: block; }
+
+/* Tablas de resumen: primera columna (concepto) y última (total) */
+.tabla-resumen td { text-align: center; }
+
+.tabla-resumen th:first-child,
+.tabla-resumen td:first-child {
+    text-align: left;
+    padding-left: 16px;
+    font-weight: 600;
+    color: var(--jb-ink);
+}
+
+.tabla-resumen td:last-child {
+    font-weight: 700;
+    background: var(--jb-surface-2);
+}
+
+/* Cabecera de cada departamento: el color viene del servidor en th:style
+   (rojo = sin registro, verde = registrado). Se reemplaza por los tonos de
+   la marca con contraste suficiente para el texto blanco. */
+.tabla-resumen th[style*="#dc3545"] {
+    background: var(--jb-danger-solid) !important;
+    color: var(--jb-on-primary) !important;
+}
+
+.tabla-resumen th[style*="#28a745"] {
+    background: var(--jb-success-solid) !important;
+    color: var(--jb-on-primary) !important;
+}
+
+.tabla-resumen th[style*="#dc3545"]:hover,
+.tabla-resumen th[style*="#28a745"]:hover { text-decoration: underline; }
+
+/* Ocurrencias y personal presente: anchos mínimos por columna */
+.ocurrencias-table .col-nivel  { min-width: 8rem; }
+.ocurrencias-table .col-nombre { min-width: 14rem; }
+.ocurrencias-table .col-dpto   { min-width: 8rem; }
+.ocurrencias-table .col-dia    { min-width: 5.5rem; }
+.ocurrencias-table .col-detalle{ min-width: 10rem; }
+
+.ocurrencias-table th,
+.ocurrencias-table td { text-align: left; }
+
+.ocurrencias-table .row-num,
+.ocurrencias-table .text-center,
+.ocurrencias-table th.col-dpto,
+.ocurrencias-table th.col-dia { text-align: center; }
+
+/* Fila de grupo de ocurrencia ("PERSONAL - PERMISO") */
+.ocurrencias-table .ocurrencia-group {
+    padding: 8px 16px;
+    background: var(--jb-primary-tint);
+    color: var(--jb-link-h);
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-align: left;
+}
+
+.ocurrencias-table tbody tr:hover .ocurrencia-group { background: var(--jb-primary-tint); }
+
+/* Modal con la vista del registro de un departamento */
+#modalRegistroBody { height: 75vh; }
+
+#iframeRegistroDepartamento {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Celular y tablet: objetivo táctil de 44 px como el resto de botones */
+@media (max-width: 991.98px) {
+    .botones-accion .btn { min-height: 44px; }
+}

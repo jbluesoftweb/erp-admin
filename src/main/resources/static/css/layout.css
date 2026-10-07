@@ -127,12 +127,19 @@
     text-align: center;
 }
 
+/* Nombres largos (p. ej. "ADMINISTRAR ETIQUETAS"): hasta dos líneas; solo
+   si no caben en dos se cortan con puntos suspensivos. El ícono queda
+   centrado verticalmente y la barra del activo crece con el ítem. */
 .menu-label {
     flex: 1;
     min-width: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .menu-item:hover,
@@ -173,14 +180,6 @@
     font-size: 12.5px;
     font-weight: 600;
     letter-spacing: .03em;
-}
-
-/* El nombre del departamento puede ser largo: hasta dos líneas, sin cortar */
-.menu-category .menu-label {
-    white-space: normal;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
 }
 
 .menu-group:first-child > .menu-category { margin-top: 0; }

@@ -15,3 +15,7 @@
         justify-self: center;
     }
 }
+
+/* Modal "Eliminar registro adelantado" */
+#modalConfirmarEliminarAdelantado .modal-body { font-size: 15px; }
+#modalConfirmarEliminarAdelantado .modal-footer form { display: inline; margin: 0; }
