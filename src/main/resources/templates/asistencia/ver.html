@@ -1,47 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
-      lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Registros del Día</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/css/bootstrap-icons.min.css}" rel="stylesheet">
+    <th:block th:replace="~{layout :: head}"></th:block>
+    <link th:href="@{/css/asistencia-ver.css}" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <span class="navbar-brand">Sistema de Asistencia</span>
-            <div class="d-flex align-items-center">
-                <span class="navbar-text text-white me-3">
-                    <i class="bi bi-person-circle"></i> <span sec:authentication="name">Usuario</span>
-                </span>
-                <a href="/dashboard" class="btn btn-outline-light btn-sm me-2">
-                    <i class="bi bi-house"></i> Dashboard
-                </a>
-                <form th:action="@{/logout}" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                        <i class="bi bi-box-arrow-right"></i> Salir
-                    </button>
-                </form>
-            </div>
-        </div>
-    </nav>
+<div th:replace="~{layout :: sidebar}"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <div class="container-fluid mt-4">
+<div class="main-wrapper">
+    <div th:replace="~{layout :: header}"></div>
+
+    <div class="content-area">
         <!-- Header -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card border-info">
-                    <div class="card-header bg-info text-white">
-                        <h4 class="mb-0">
-                            <i class="bi bi-list-check"></i> Registros del Día
-                        </h4>
+                <div class="page-card resumen-card">
+                    <div class="page-card-header">
+                        <i class="bi bi-list-check" aria-hidden="true"></i>
+                        <span>Registros del Día</span>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
+                    <div class="page-card-body">
+                        <div class="row g-3 resumen-dia">
                             <div class="col-md-3">
                                 <strong>Fecha:</strong> 
                                 <span th:text="${#temporals.format(fecha, 'dd/MM/yyyy')}">08/03/2026</span>
@@ -66,12 +47,12 @@
 
         <!-- Botones -->
         <div class="row mb-3">
-            <div class="col-12 d-flex align-items-center gap-2 flex-wrap">
-                <a th:href="@{/asistencia/registrar}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Registrar Asistencia
+            <div class="col-12 ver-acciones no-print">
+                <a th:href="@{/asistencia/registrar}" class="btn-institucional">
+                    <i class="bi bi-plus-circle" aria-hidden="true"></i> Registrar Asistencia
                 </a>
-                <button onclick="window.print()" class="btn btn-secondary">
-                    <i class="bi bi-printer"></i> Imprimir
+                <button onclick="window.print()" class="btn btn-outline-primary">
+                    <i class="bi bi-printer" aria-hidden="true"></i> Imprimir
                 </button>
 
                 <!-- ELIMINAR ÚLTIMO REGISTRO: solo ADMIN_SYS -->
@@ -79,7 +60,6 @@
                      th:if="${totalRegistros > 0}">
                     <form th:action="@{/asistencia/eliminar-ultimo}"
                           method="post"
-                          style="display:inline;"
                           th:data-fecha="${fechaConsulta}"
                           onsubmit="return confirmarEliminar(this)">
                         <input type="hidden"
@@ -88,7 +68,7 @@
                         <input type="hidden" name="idDepartamento"
                                th:value="${departamento.idDepartamento}"/>
                         <button type="submit" class="btn btn-danger">
-                            <i class="bi bi-trash-fill"></i>
+                            <i class="bi bi-trash-fill" aria-hidden="true"></i>
                             Eliminar Registro
                         </button>
                     </form>
@@ -99,16 +79,15 @@
         <!-- Tabla de Registros -->
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-light">
-                        <h5 class="mb-0">
-                            <i class="bi bi-table"></i> Detalle de Registros
-                        </h5>
+                <div class="page-card detalle-card">
+                    <div class="page-card-header">
+                        <i class="bi bi-table" aria-hidden="true"></i>
+                        <span>Detalle de Registros</span>
                     </div>
-                    <div class="card-body p-0">
+                    <div>
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered mb-0">
-                                <thead class="table-dark">
+                                <thead class="table-light">
                                     <tr>
                                         <th>#</th>
                                         <th>Código</th>
@@ -124,7 +103,7 @@
                                 <tbody>
                                     <tr th:if="${#lists.isEmpty(registros)}">
                                         <td colspan="9" class="text-center text-muted">
-                                            <i class="bi bi-inbox"></i> No hay registros para esta fecha
+                                            <i class="bi bi-inbox" aria-hidden="true"></i> No hay registros para esta fecha
                                         </td>
                                     </tr>
                                     <tr th:each="registro, iterStat : ${registros}" 
@@ -175,15 +154,9 @@
             </div>
         </div>
     </div>
+</div>
 
-    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-    
-    <style>
-        @media print {
-            .navbar, .btn, .no-print {
-                display: none !important;
-            }
-        }
-    </style>
+<div th:replace="~{layout :: footer}"></div>
+<div th:replace="~{layout :: scripts}"></div>
 </body>
 </html>

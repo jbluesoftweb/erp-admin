@@ -189,6 +189,17 @@
         else if (isDrawerOpen()) { closeDrawer(true); }
     });
 
+    // ---------- Elementos con role="button" que no son <button> ----------
+    // Enter y Espacio hacen lo mismo que un clic (p. ej. las cabeceras de
+    // departamento del consolidado), como en un botón nativo.
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') { return; }
+        var el = e.target;
+        if (!el.matches || !el.matches('[role="button"]:not(button):not(a):not(input)')) { return; }
+        e.preventDefault();   // Espacio no desplaza la página
+        el.click();
+    });
+
     syncTooltips();
     syncToggle();
 

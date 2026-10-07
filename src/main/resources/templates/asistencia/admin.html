@@ -3,172 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:replace="~{layout :: head}"></th:block>
-    <style>
-        .admin-badge {
-            background: #1a2e0f;
-            color: #d4af37;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .search-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            overflow: hidden;
-            max-width: 700px;
-        }
-        .search-card-header {
-            background: linear-gradient(90deg, #2d5016 0%, #3d6b1f 100%);
-            padding: 14px 20px;
-            border-left: 4px solid #d4af37;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .search-card-header span {
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .search-card-body { padding: 25px 30px; }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            margin-bottom: 18px;
-        }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #444;
-            text-transform: uppercase;
-        }
-        .form-group select,
-        .form-group input {
-            padding: 9px 12px;
-            font-size: 13px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            color: #333;
-        }
-        .form-group select:focus,
-        .form-group input:focus {
-            outline: none;
-            border-color: #2d5016;
-            box-shadow: 0 0 0 2px rgba(45,80,22,0.12);
-        }
-        .btn-buscar {
-            background: #2d5016;
-            color: white;
-            border: none;
-            padding: 10px 28px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-buscar:hover { background: #3d6b1f; }
-
-        .result-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        .result-header {
-            background: #f8f9fa;
-            padding: 12px 20px;
-            border-bottom: 2px solid #dee2e6;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .result-header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-        .badge-count {
-            background: #2d5016;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 12px;
-        }
-        .data-table { width: 100%; border-collapse: collapse; }
-        .data-table th {
-            padding: 10px 14px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #495057;
-            text-transform: uppercase;
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-            text-align: left;
-        }
-        .data-table td {
-            padding: 10px 14px;
-            font-size: 13px;
-            border-bottom: 1px solid #e9ecef;
-            vertical-align: middle;
-        }
-        .data-table tbody tr:hover { background: #f8f9fa; }
-        .ocurrencia-badge {
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .disponible { background: #d4edda; color: #155724; }
-        .descuento  { background: #fff3cd; color: #856404; }
-
-        .btn-eliminar {
-            background: #dc3545;
-            color: white;
-            border: 2px solid #b02a37;
-            padding: 9px 24px;
-            font-size: 14px;
-            font-weight: 700;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-eliminar:hover { background: #b02a37; }
-
-        .warning-box {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 4px;
-            padding: 14px 18px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 13px;
-            color: #664d03;
-        }
-        .empty-box {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 30px;
-            text-align: center;
-            color: #999;
-            font-size: 14px;
-        }
-    </style>
+    <link th:href="@{/css/asistencia-admin.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -191,29 +26,29 @@
         </div>
 
         <!-- ADVERTENCIA -->
-        <div class="warning-box">
-            <i class="bi bi-exclamation-triangle-fill" style="font-size:20px; color:#ffc107; flex-shrink:0;"></i>
-            <div>
+        <div class="alert-custom alert-warning">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+            <span>
                 <strong>Zona de Administración — ADMIN_SYS</strong><br>
                 Esta vista permite eliminar registros de asistencia por departamento y fecha.
                 Al eliminar un registro también se elimina su autorización.
                 Use esta función solo cuando sea estrictamente necesario.
-            </div>
+            </span>
         </div>
 
         <!-- BUSCADOR -->
-        <div class="search-card">
-            <div class="search-card-header">
-                <i class="bi bi-search" style="color:#d4af37; font-size:18px;"></i>
+        <div class="page-card search-card">
+            <div class="page-card-header">
+                <i class="bi bi-search" aria-hidden="true"></i>
                 <span>Buscar Registro por Departamento y Fecha</span>
-                <span class="admin-badge" style="margin-left:auto;">ADMIN_SYS</span>
+                <small><span class="admin-badge">ADMIN_SYS</span></small>
             </div>
-            <div class="search-card-body">
+            <div class="page-card-body">
                 <form th:action="@{/asistencia/admin}" method="get">
                     <div class="form-row">
                         <div class="form-group">
-                            <label><span th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</span> <span style="color:#dc3545;">*</span></label>
-                            <select name="idDepartamento" required>
+                            <label for="idDepartamento"><span th:text="${etiquetas['rrhh.personal.departamento']}">Departamento</span> <span class="required">*</span></label>
+                            <select id="idDepartamento" name="idDepartamento" required>
                                 <option value="">-- selecciona --</option>
                                 <option th:each="c : ${departamentos}"
                                         th:value="${c.idDepartamento}"
@@ -223,14 +58,14 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Fecha <span style="color:#dc3545;">*</span></label>
-                            <input type="date" name="fecha"
+                            <label for="fecha">Fecha <span class="required">*</span></label>
+                            <input type="date" id="fecha" name="fecha"
                                    th:value="${fecha}"
                                    required>
                         </div>
                     </div>
-                    <button type="submit" class="btn-buscar">
-                        <i class="bi bi-search"></i> Buscar
+                    <button type="submit" class="btn-institucional">
+                        <i class="bi bi-search" aria-hidden="true"></i> Buscar
                     </button>
                 </form>
             </div>
@@ -240,19 +75,19 @@
         <div th:if="${busquedaRealizada}">
 
             <!-- SIN RESULTADOS -->
-            <div th:if="${registros == null or registros.isEmpty()}" class="empty-box">
-                <i class="bi bi-inbox" style="font-size:36px; display:block; margin-bottom:10px;"></i>
-                No existe registro de asistencia para ese departamento y fecha.
+            <div th:if="${registros == null or registros.isEmpty()}" class="empty-state empty-box">
+                <i class="bi bi-inbox" aria-hidden="true"></i>
+                <p>No existe registro de asistencia para ese departamento y fecha.</p>
             </div>
 
             <!-- CON RESULTADOS -->
             <div th:if="${registros != null and !registros.isEmpty()}">
-                <div class="result-card">
+                <div class="page-card result-card">
                     <div class="result-header">
                         <div class="result-header-left">
-                            <i class="bi bi-table"></i>
+                            <i class="bi bi-table" aria-hidden="true"></i>
                             Registro encontrado
-                            <span class="badge-count"
+                            <span class="badge-total"
                                   th:text="${registros.size() + ' registros'}">
                             </span>
                         </div>
@@ -269,17 +104,18 @@
                                    th:value="${idDepartamento}"/>
                             <input type="hidden" name="fecha"
                                    th:value="${fecha}"/>
-                            <button type="submit" class="btn-eliminar">
-                                <i class="bi bi-trash-fill"></i>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash-fill" aria-hidden="true"></i>
                                 Eliminar Este Registro
                             </button>
                         </form>
                     </div>
 
-                    <table class="data-table">
+                    <div class="data-table admin-registros-table">
+                    <table>
                         <thead>
                         <tr>
-                            <th>N°</th>
+                            <th class="col-num">N°</th>
                             <th th:text="${etiquetas['rrhh.personal.nivel']} + ' / ' + ${etiquetas['rrhh.personal.especialidad']}">Nivel / Especialidad</th>
                             <th>Apellidos y Nombres</th>
                             <th>Ocurrencia</th>
@@ -288,11 +124,10 @@
                         </thead>
                         <tbody>
                         <tr th:each="p, i : ${registros}">
-                            <td th:text="${i.count}">1</td>
+                            <td class="row-num" th:text="${i.count}">1</td>
                             <td>
                                 <span th:text="${p.nivelSnapshot}"></span>
-                                <span th:text="${p.especialidadSnapshot}"
-                                      style="color:#666; margin-left:4px;">
+                                <span class="especialidad" th:text="${p.especialidadSnapshot}">
                                     </span>
                             </td>
                             <td th:text="${p.fullName}"></td>
@@ -306,6 +141,7 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>

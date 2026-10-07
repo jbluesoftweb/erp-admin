@@ -143,5 +143,10 @@ MIT — ver [LICENSE](LICENSE).
 
 ## Contribuir
 
-_Pendiente de definir el flujo de contribución para el repositorio
-público._
+El flujo de contribución para el repositorio público aún no está definido.
+
+Si vas a modificar o agregar pantallas, lee primero la
+[guía de diseño de la interfaz](docs/DISENO.md): explica la paleta y la
+tipografía, cómo se organizan las hojas de estilo, qué componentes
+compartidos existen y los pasos para que una pantalla nueva siga el mismo
+estilo.

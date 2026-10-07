@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Asistencia — Ver registros del día
+   Marco, tarjetas, botones y tabla (Bootstrap .table con el tema) vienen
+   de layout.css, common.css y bootstrap-theme.css.
+   ========================================================================== */
+
+/* Resumen: fecha y contadores */
+.resumen-dia > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--jb-ink);
+}
+
+.resumen-dia strong { color: var(--jb-ink-2); font-weight: 600; }
+
+/* Acciones: registrar, imprimir, eliminar */
+.ver-acciones {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Botones de Bootstrap del mismo tamaño que .btn-institucional */
+.ver-acciones .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 9px 22px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.ver-acciones form { margin: 0; }
+
+/* Las filas de Bootstrap (.row mb-*) ya separan las tarjetas */
+.resumen-card,
+.detalle-card { margin-bottom: 0; }
+
+/* Tabla de detalle: tamaño de letra de las demás tablas y ancho mínimo;
+   en pantallas angostas se desplaza dentro de .table-responsive */
+.detalle-card .table {
+    min-width: 60rem;
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+.detalle-card .table th { white-space: nowrap; }
+
+@media (max-width: 991.98px) {
+    .ver-acciones .btn { min-height: 44px; }
+}
+
+/* Impresión: solo el resumen y la tabla (sin botones ni pie) */
+@media print {
+    .btn, .no-print, .footer { display: none !important; }
+    .page-card { box-shadow: none; }
+    .content-area { padding: 0; background: var(--jb-print-paper); }
+}

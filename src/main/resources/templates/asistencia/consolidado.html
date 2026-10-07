@@ -122,6 +122,8 @@
                     <tr>
                         <th>PERSONAL</th>
                         <th th:each="comp : ${consolidado.consolidadoTotal}"
+                            role="button" tabindex="0"
+                            th:aria-label="${'Ver registro de ' + comp.departamentoDescripcion + (comp.efectivos == 0 ? ' (no registrado)' : ' (registrado)')}"
                             th:style="${comp.efectivos == 0 ? 'background: #dc3545; color: white; cursor: pointer;' : 'background: #28a745; color: white; cursor: pointer;'}"
                             th:text="${comp.departamentoDescripcion}"
                             th:attr="onclick=|verRegistroDepartamento(${comp.idDepartamento}, '${comp.departamentoDescripcion}')|">DEPTO-1</th>

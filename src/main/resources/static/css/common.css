@@ -4,18 +4,6 @@
    de jb-tokens.css. Los nombres de clase se mantienen: las pantallas los usan.
    ========================================================================== */
 
-/* Variables anteriores, ahora alias de los tokens de la marca */
-:root {
-    --verde-institucional: var(--jb-primary-h);
-    --verde-brillante: var(--jb-primary-d);
-    --dorado: var(--jb-accent);
-    --dorado-hover: var(--jb-accent-h);
-    --fondo-gris: var(--jb-page-bg);
-    --borde-color: var(--jb-line);
-    --texto-oscuro: var(--jb-ink);
-    --texto-gris: var(--jb-ink-2);
-}
-
 /* Base: cuerpo, tipografía y fondo general (identidad JBlueSoft, ver jb-tokens.css).
    El marco (barra lateral, cabecera, pie) está en layout.css. */
 body {
@@ -784,21 +772,6 @@ h1, h2, h3, h4, h5, h6 {
 .td-acciones form { display: inline; }
 .td-acciones > .btn,
 .td-acciones > form { margin: 3px 2px; vertical-align: middle; }
-
-/* Status Badges */
-.badge-institucional {
-    display: inline-block;
-    padding: 3px 10px;
-    font-size: 11px;
-    font-weight: 600;
-    border-radius: 999px;
-    letter-spacing: .03em;
-    text-transform: uppercase;
-}
-
-.badge-presente { background-color: var(--jb-success-subtle); color: var(--jb-success-ink); border: 1px solid var(--jb-success-line); }
-.badge-falta { background-color: var(--jb-danger-subtle); color: var(--jb-danger-ink-2); border: 1px solid var(--jb-danger-line); }
-.badge-comision { background-color: var(--jb-warning-subtle); color: var(--jb-warning-ink); border: 1px solid var(--jb-warning-line); }
 
 /* Empty States */
 .empty-state {

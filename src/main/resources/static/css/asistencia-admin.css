@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Asistencia — Admin registros (eliminar un registro por departamento y fecha)
+   Tarjetas, formulario, aviso, tabla, badges y botones vienen de common.css
+   y del tema de Bootstrap. Aquí solo lo propio de esta pantalla.
+   ========================================================================== */
+
+/* Buscador: tarjeta angosta */
+.search-card { max-width: 700px; }
+
+/* Cabecera de resultados: título + total a la izquierda, botón eliminar a la derecha */
+.result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--jb-line);
+    background: var(--jb-surface-2);
+}
+
+.result-header-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: var(--jb-font-title);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--jb-ink);
+}
+
+.result-header-left > i { color: var(--jb-primary-h); }
+
+.result-header form { margin: 0; }
+
+/* Columnas de texto alineadas a la izquierda (la tabla común las centra) */
+.admin-registros-table th,
+.admin-registros-table td { text-align: left; }
+
+.admin-registros-table .especialidad { margin-left: 4px; color: var(--jb-ink-2); }
+
+/* Tipo de ocurrencia: disponible (asistió) o descuento */
+.ocurrencia-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ocurrencia-badge.disponible { background: var(--jb-success-subtle); color: var(--jb-success-ink); border-color: var(--jb-success-line); }
+.ocurrencia-badge.descuento  { background: var(--jb-warning-subtle); color: var(--jb-warning-ink); border-color: var(--jb-warning-line); }
+
+/* Sin resultados: tarjeta con el estado vacío común */
+.empty-box {
+    background: var(--jb-surface);
+    border: 1px solid var(--jb-line);
+    border-radius: var(--jb-radius);
+}
