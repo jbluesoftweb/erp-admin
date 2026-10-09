@@ -316,6 +316,12 @@ public class RegistroDiarioController {
             model.addAttribute("registrosPorOcurrencia", registrosPorOcurrencia);
             model.addAttribute("totalRegistros", registros.size());
 
+            long totalPersonal = personalService.contarPorDepartamento(idDepartamento);
+            model.addAttribute("totalPersonal", totalPersonal);
+            model.addAttribute("pendientes", Math.max(0, totalPersonal - registros.size()));
+            model.addAttribute("fechaUltimoRegistro", registroDiarioService.obtenerFechaUltimoRegistro(idDepartamento));
+            model.addAttribute("headerTitle", "Registros de asistencia");
+
             return "asistencia/ver";
 
         } catch (Exception e) {

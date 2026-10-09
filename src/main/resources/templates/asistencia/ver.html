@@ -25,7 +25,7 @@
                         <div class="row g-3 resumen-dia">
                             <div class="col-md-3">
                                 <strong>Fecha:</strong> 
-                                <span th:text="${#temporals.format(fecha, 'dd/MM/yyyy')}">08/03/2026</span>
+                                <span th:text="${#temporals.format(fechaConsulta, 'dd/MM/yyyy')}">08/03/2026</span>
                             </div>
                             <div class="col-md-3">
                                 <strong>Registrados:</strong> 
@@ -57,10 +57,10 @@
 
                 <!-- ELIMINAR ÚLTIMO REGISTRO: solo ADMIN_SYS -->
                 <div sec:authorize="hasRole('ADMIN_SYS')"
-                     th:if="${totalRegistros > 0}">
+                     th:if="${fechaUltimoRegistro != null and fechaUltimoRegistro == fechaConsulta}">
                     <form th:action="@{/asistencia/eliminar-ultimo}"
                           method="post"
-                          th:data-fecha="${fechaConsulta}"
+                          th:data-fecha="${#temporals.format(fechaUltimoRegistro, 'dd/MM/yyyy')}"
                           onsubmit="return confirmarEliminar(this)">
                         <input type="hidden"
                                th:name="${_csrf.parameterName}"
@@ -73,6 +73,15 @@
                         </button>
                     </form>
                 </div>
+                <p sec:authorize="hasRole('ADMIN_SYS')"
+                   th:if="${fechaUltimoRegistro != null and fechaUltimoRegistro != fechaConsulta}"
+                   class="small text-muted mb-0 w-100">
+                    <i class="bi bi-info-circle" aria-hidden="true"></i>
+                    Solo se puede eliminar el último registro
+                    (<a th:href="@{/asistencia/ver(fecha=${#temporals.format(fechaUltimoRegistro, 'yyyy-MM-dd')})}"
+                        th:text="${#temporals.format(fechaUltimoRegistro, 'dd/MM/yyyy')}">08/03/2026</a>).
+                    Consúltalo para eliminarlo.
+                </p>
             </div>
         </div>
 
@@ -158,5 +167,18 @@
 
 <div th:replace="~{layout :: footer}"></div>
 <div th:replace="~{layout :: scripts}"></div>
+
+<script>
+    function confirmarEliminar(form) {
+        const fecha = form.getAttribute('data-fecha');
+        return confirm(
+            '⚠️ CONFIRMAR ELIMINACIÓN\n\n' +
+            'Fecha: ' + fecha + '\n\n' +
+            'Se eliminarán TODAS las filas de este registro.\n\n' +
+            'Esta acción no se puede deshacer.\n\n' +
+            '¿Confirma la eliminación?'
+        );
+    }
+</script>
 </body>
 </html>
