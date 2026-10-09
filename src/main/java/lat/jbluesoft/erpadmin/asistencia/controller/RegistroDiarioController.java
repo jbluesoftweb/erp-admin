@@ -285,53 +285,6 @@ public class RegistroDiarioController {
     }
 
     /**
-     * Muestra los registros para una fecha específica
-     */
-    @GetMapping("/ver")
-    @PreAuthorize("hasAnyRole('ADMIN_DPTO', 'ADMIN_APP', 'ADMIN_SYS')")
-    public String verRegistros(@AuthenticationPrincipal CustomUserDetails userDetails,
-                            @RequestParam(required = false) LocalDate fecha,
-                            Model model) {
-
-        log.info("Consultando registros para usuario: {}", userDetails.getUsername());
-
-        try {
-            Integer idDepartamento = userDetails.getIdDepartamento();
-            LocalDate fechaConsulta = (fecha != null) ? fecha : LocalDate.now();
-
-            // Obtener departamento
-            Departamento departamento = departamentoService.buscarPorId(idDepartamento)
-                    .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
-
-            // Obtener registros del día
-            List<RegistroDiario> registros = registroDiarioService.listarPorDepartamentoYFecha(idDepartamento, fechaConsulta);
-
-            // Agrupar por ocurrencia
-            Map<String, List<RegistroDiario>> registrosPorOcurrencia = registros.stream()
-                    .collect(Collectors.groupingBy(p -> p.getOcurrencia().getDescripcion()));
-
-            model.addAttribute("departamento", departamento);
-            model.addAttribute("fechaConsulta", fechaConsulta);
-            model.addAttribute("registros", registros);
-            model.addAttribute("registrosPorOcurrencia", registrosPorOcurrencia);
-            model.addAttribute("totalRegistros", registros.size());
-
-            long totalPersonal = personalService.contarPorDepartamento(idDepartamento);
-            model.addAttribute("totalPersonal", totalPersonal);
-            model.addAttribute("pendientes", Math.max(0, totalPersonal - registros.size()));
-            model.addAttribute("fechaUltimoRegistro", registroDiarioService.obtenerFechaUltimoRegistro(idDepartamento));
-            model.addAttribute("headerTitle", "Registros de asistencia");
-
-            return "asistencia/ver";
-
-        } catch (Exception e) {
-            log.error("Error al consultar registros: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al cargar los registros: " + e.getMessage());
-            return "error";
-        }
-    }
-
-    /**
      * Muestra la página de impresión del registro de asistencia
      * Sin fecha pre-seleccionada - el usuario debe seleccionar
      */
@@ -857,12 +810,12 @@ public class RegistroDiarioController {
         } catch (IllegalArgumentException e) {
             log.warn("Error al eliminar registro: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/asistencia/ver";
+            return "redirect:/asistencia/actualizar";
         } catch (Exception e) {
             log.error("Error inesperado al eliminar registro: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
                     "Error al eliminar el registro: " + e.getMessage());
-            return "redirect:/asistencia/ver";
+            return "redirect:/asistencia/actualizar";
         }
     }
 
