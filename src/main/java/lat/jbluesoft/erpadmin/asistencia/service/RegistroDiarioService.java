@@ -74,7 +74,7 @@ public interface RegistroDiarioService {
     LocalDate obtenerDiaHabilSiguiente(LocalDate fecha);
 
     /**
-     * Obtiene solo las ocurrencias (id_ocurrencia != 1) del último registro
+     * Obtiene solo las ocurrencias (código distinto de ASI) del último registro
      *
      * @param idDepartamento ID del departamento
      * @return Lista de registros con ocurrencias del último registro
@@ -114,7 +114,7 @@ public interface RegistroDiarioService {
     ResumenRegistroDTO obtenerResumenRegistro(Integer idDepartamento, LocalDate fechaRegistro);
 
     /**
-     * Obtiene las ocurrencias (id_ocurrencia != 1) por tipo de personal
+     * Obtiene las ocurrencias (código distinto de ASI) por tipo de personal
      * Agrupadas por tipo de ocurrencia para mostrar en secciones
      *
      * @param idDepartamento ID del departamento
@@ -126,7 +126,7 @@ public interface RegistroDiarioService {
             Integer idDepartamento, LocalDate fechaRegistro, Integer tipoPersonal);
 
     /**
-     * Obtiene el personal presente (id_ocurrencia = 1)
+     * Obtiene el personal presente (código ASI)
      * Mezclados: Grupo 1 + Grupo 2 ordenados por antigüedad
      *
      * @param idDepartamento ID del departamento

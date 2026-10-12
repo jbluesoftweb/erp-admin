@@ -50,6 +50,6 @@ public class OcurrenciaServiceImpl implements OcurrenciaService {
     @Override
     public Optional<Ocurrencia> obtenerOcurrenciaPorDefecto() {
         log.debug("Obteniendo ocurrencia por defecto (ASI)");
-        return ocurrenciaRepository.findByCodigo("ASI");
+        return ocurrenciaRepository.findByCodigo(Ocurrencia.CODIGO_ASISTENCIA);
     }
 }

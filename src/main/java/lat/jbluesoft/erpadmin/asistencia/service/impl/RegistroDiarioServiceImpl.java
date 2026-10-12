@@ -5,6 +5,7 @@ import lat.jbluesoft.erpadmin.asistencia.dto.ConsolidadoRegistroDTO;
 import lat.jbluesoft.erpadmin.asistencia.dto.AsistenciaRegistroDTO;
 import lat.jbluesoft.erpadmin.asistencia.dto.ResumenRegistroDTO;
 import lat.jbluesoft.erpadmin.rrhh.model.Departamento;
+import lat.jbluesoft.erpadmin.asistencia.model.Ocurrencia;
 import lat.jbluesoft.erpadmin.asistencia.model.RegistroDiario;
 import lat.jbluesoft.erpadmin.rrhh.model.Personal;
 import lat.jbluesoft.erpadmin.asistencia.repository.RegistroDiarioRepository;
@@ -166,7 +167,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
     @Transactional(readOnly = true)
     public List<RegistroDiario> obtenerOcurrenciasUltimoRegistro(Integer idDepartamento) {
         log.debug("Obteniendo ocurrencias del último registro de departamento: {}", idDepartamento);
-        List<RegistroDiario> ocurrencias = registroDiarioRepository.findOcurrenciasUltimoRegistro(idDepartamento);
+        List<RegistroDiario> ocurrencias = registroDiarioRepository.findOcurrenciasUltimoRegistro(idDepartamento, Ocurrencia.CODIGO_ASISTENCIA);
         cargarRelaciones(ocurrencias);
         return ocurrencias;
     }
@@ -252,8 +253,8 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
         resumen.setEfectivosGrupo2(efectivosGrupo2.intValue());
 
         // Contar descuentos por tipo de personal
-        Long descuentosOO = registroDiarioRepository.contarDescuentosPorTipoPersonal(idDepartamento, fechaRegistro, 1);
-        Long descuentosGrupo2 = registroDiarioRepository.contarDescuentosPorTipoPersonal(idDepartamento, fechaRegistro, 2);
+        Long descuentosOO = registroDiarioRepository.contarDescuentosPorTipoPersonal(idDepartamento, fechaRegistro, 1, Ocurrencia.CODIGO_ASISTENCIA);
+        Long descuentosGrupo2 = registroDiarioRepository.contarDescuentosPorTipoPersonal(idDepartamento, fechaRegistro, 2, Ocurrencia.CODIGO_ASISTENCIA);
 
         resumen.setDescuentosGrupo1(descuentosOO.intValue());
         resumen.setDescuentosGrupo2(descuentosGrupo2.intValue());
@@ -282,7 +283,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
 
         // Obtener todas las ocurrencias del tipo de personal
         List<RegistroDiario> ocurrencias = registroDiarioRepository.findOcurrenciasPorTipoPersonal(
-                idDepartamento, fechaRegistro, tipoPersonal);
+                idDepartamento, fechaRegistro, tipoPersonal, Ocurrencia.CODIGO_ASISTENCIA);
 
         // Cargar relaciones LAZY
         cargarRelaciones(ocurrencias);
@@ -305,7 +306,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
     public List<RegistroDiario> obtenerPersonalPresenteRegistro(Integer idDepartamento, LocalDate fechaRegistro) {
         log.info("Obteniendo personal presente para departamento: {} fecha: {}", idDepartamento, fechaRegistro);
 
-        List<RegistroDiario> presentes = registroDiarioRepository.findPersonalPresente(idDepartamento, fechaRegistro);
+        List<RegistroDiario> presentes = registroDiarioRepository.findPersonalPresente(idDepartamento, fechaRegistro, Ocurrencia.CODIGO_ASISTENCIA);
 
         // Cargar relaciones LAZY
         cargarRelaciones(presentes);
@@ -369,9 +370,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
 
             } else {
                 // PERSONA EXISTÍA EN EL ÚLTIMO REGISTRO
-                Integer idOcurrencia = registroAnterior.getOcurrencia().getIdOcurrencia();
-
-                if (idOcurrencia == 1) {
+                if (registroAnterior.getOcurrencia().esAsistencia()) {
                     // Tenía ASISTIÓ (PRESENTE) -> Va a Grupo 1 o Grupo 2
                     agregarAPorTipo(persona, grupo1, grupo2);
 
@@ -470,7 +469,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
 
             // 2. Obtener descuentos por departamento (Grupo 1) - Solo los que NO asistieron
             List<ConsolidadoDepartamentoDTO> descuentosOO =
-                    registroDiarioRepository.contarDescuentosPorDepartamento(fechaRegistro, 1);
+                    registroDiarioRepository.contarDescuentosPorDepartamento(fechaRegistro, 1, Ocurrencia.CODIGO_ASISTENCIA);
 
             // 3. Crear mapa de TODOS los departamentos de la empresa (inicializar en 0)
             Map<Integer, ConsolidadoDepartamentoDTO> mapaOO = new LinkedHashMap<>();
@@ -511,7 +510,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
 
             // 7. Obtener ocurrencias agrupadas (Grupo 1)
             List<RegistroDiario> ocurrenciasOO =
-                    registroDiarioRepository.findOcurrenciasConsolidadoPorTipoPersonal(fechaRegistro, 1);
+                    registroDiarioRepository.findOcurrenciasConsolidadoPorTipoPersonal(fechaRegistro, 1, Ocurrencia.CODIGO_ASISTENCIA);
 
             Map<String, List<RegistroDiario>> ocurrenciasOOAgrupadas = ocurrenciasOO.stream()
                     .collect(Collectors.groupingBy(
@@ -530,7 +529,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
 
             // 9. Obtener descuentos por departamento (Grupo 2)
             List<ConsolidadoDepartamentoDTO> descuentosGrupo2 =
-                    registroDiarioRepository.contarDescuentosPorDepartamento(fechaRegistro, 2);
+                    registroDiarioRepository.contarDescuentosPorDepartamento(fechaRegistro, 2, Ocurrencia.CODIGO_ASISTENCIA);
 
             // 10. Crear mapa de TODOS los departamentos de la empresa (inicializar en 0)
             Map<Integer, ConsolidadoDepartamentoDTO> mapaGrupo2 = new LinkedHashMap<>();
@@ -571,7 +570,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
 
             // 14. Obtener ocurrencias agrupadas (Grupo 2)
             List<RegistroDiario> ocurrenciasGrupo2 =
-                    registroDiarioRepository.findOcurrenciasConsolidadoPorTipoPersonal(fechaRegistro, 2);
+                    registroDiarioRepository.findOcurrenciasConsolidadoPorTipoPersonal(fechaRegistro, 2, Ocurrencia.CODIGO_ASISTENCIA);
 
             Map<String, List<RegistroDiario>> ocurrenciasGrupo2Agrupadas = ocurrenciasGrupo2.stream()
                     .collect(Collectors.groupingBy(
@@ -584,7 +583,7 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
 
             // ========== OCURRENCIAS (Grupo 1 + Grupo 2 unificado) ==========
             List<RegistroDiario> ocurrenciasTodas =
-                    registroDiarioRepository.findOcurrenciasConsolidado(fechaRegistro);
+                    registroDiarioRepository.findOcurrenciasConsolidado(fechaRegistro, Ocurrencia.CODIGO_ASISTENCIA);
 
             Map<String, List<RegistroDiario>> ocurrenciasAgrupadas = ocurrenciasTodas.stream()
                     .collect(Collectors.groupingBy(
@@ -596,14 +595,14 @@ public class RegistroDiarioServiceImpl implements RegistroDiarioService {
             consolidado.setOcurrenciasAgrupadas(ocurrenciasAgrupadas);
 
             // ========== PERSONAL PRESENTE ==========
-            List<RegistroDiario> presentes = registroDiarioRepository.findPersonalPresenteConsolidado(fechaRegistro);
+            List<RegistroDiario> presentes = registroDiarioRepository.findPersonalPresenteConsolidado(fechaRegistro, Ocurrencia.CODIGO_ASISTENCIA);
             consolidado.setPersonalPresente(presentes);
 
             // ========== CUADRO TOTAL POR DEPARTAMENTO (Grupo 1 + Grupo 2) ==========
             List<ConsolidadoDepartamentoDTO> efectivosTotal =
                     registroDiarioRepository.contarEfectivosPorDepartamentoTotal(fechaRegistro);
             List<ConsolidadoDepartamentoDTO> descuentosTotal =
-                    registroDiarioRepository.contarDescuentosPorDepartamentoTotal(fechaRegistro);
+                    registroDiarioRepository.contarDescuentosPorDepartamentoTotal(fechaRegistro, Ocurrencia.CODIGO_ASISTENCIA);
 
             Map<Integer, ConsolidadoDepartamentoDTO> mapaTotal = new LinkedHashMap<>();
             for (Departamento departamento : departamentosDeLaEmpresa) {

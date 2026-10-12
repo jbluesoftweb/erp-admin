@@ -240,8 +240,8 @@ public class RegistroDiarioController {
                 // Auditoría
                 registro.setCreatedBy(codigoUsuario);
 
-                // Solo asignar fechas y detalle si la ocurrencia NO es "Asistió" (id = 1)
-                if (idOcurrencia != 1) {
+                // Solo asignar fechas y detalle si la ocurrencia NO es "Asistió" (código ASI)
+                if (!ocurrencia.esAsistencia()) {
                     String fechaInicioStr = request.getParameter("registros[" + i + "].fechaInicio");
                     String fechaTerminoStr = request.getParameter("registros[" + i + "].fechaTermino");
                     String detalle = request.getParameter("registros[" + i + "].detalle");
@@ -356,23 +356,23 @@ public class RegistroDiarioController {
 
             // Separar en 3 grupos (IGUAL QUE REGISTRAR):
 
-            // 1. Grupo 1 que ASISTIERON (id_ocurrencia = 1)
+            // 1. Grupo 1 que ASISTIERON (código ASI)
             List<RegistroDiario> grupo1 = registrosUltimo.stream()
                     .filter(p -> p.getNivel() != null && p.getNivel().getTipoPersonal() != null)
                     .filter(p -> p.getNivel().getTipoPersonal().getIdTipoPersonal() == 1)
-                    .filter(p -> p.getOcurrencia().getIdOcurrencia() == 1)
+                    .filter(p -> p.getOcurrencia().esAsistencia())
                     .collect(Collectors.toList());
 
-            // 2. Grupo 2 que ASISTIERON (id_ocurrencia = 1)
+            // 2. Grupo 2 que ASISTIERON (código ASI)
             List<RegistroDiario> grupo2 = registrosUltimo.stream()
                     .filter(p -> p.getNivel() != null && p.getNivel().getTipoPersonal() != null)
                     .filter(p -> p.getNivel().getTipoPersonal().getIdTipoPersonal() == 2)
-                    .filter(p -> p.getOcurrencia().getIdOcurrencia() == 1)
+                    .filter(p -> p.getOcurrencia().esAsistencia())
                     .collect(Collectors.toList());
 
             // 3. Ocurrencias (TODOS los que NO asistieron, sin importar si son Grupo 1 o Grupo 2)
             List<RegistroDiario> ocurrenciasPreLlenadas = registrosUltimo.stream()
-                    .filter(p -> p.getOcurrencia().getIdOcurrencia() != 1)
+                    .filter(p -> !p.getOcurrencia().esAsistencia())
                     .collect(Collectors.toList());
 
             // Obtener todas las ocurrencias disponibles
@@ -498,8 +498,8 @@ public class RegistroDiarioController {
                 // Auditoría
                 registro.setCreatedBy(codigoUsuario);
 
-                // Solo asignar fechas y detalle si la ocurrencia NO es "Asistió" (id = 1)
-                if (idOcurrencia != 1) {
+                // Solo asignar fechas y detalle si la ocurrencia NO es "Asistió" (código ASI)
+                if (!ocurrencia.esAsistencia()) {
                     String fechaInicioStr = request.getParameter("registros[" + i + "].fechaInicio");
                     String fechaTerminoStr = request.getParameter("registros[" + i + "].fechaTermino");
                     String detalle = request.getParameter("registros[" + i + "].detalle");

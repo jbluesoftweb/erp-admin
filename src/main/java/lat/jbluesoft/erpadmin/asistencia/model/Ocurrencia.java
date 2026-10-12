@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Ocurrencia {
 
+    /** Código de la ocurrencia "Asistió". Identifica la asistencia sin depender del id. */
+    public static final String CODIGO_ASISTENCIA = "ASI";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_ocurrencia")
@@ -43,5 +46,11 @@ public class Ocurrencia {
     @Column(name = "almuerzo", nullable = false)
     private Boolean almuerzo = false;
 
-
+    /**
+     * Indica si esta ocurrencia es "Asistió" (código ASI).
+     * No es un getter, así que ni JPA ni Lombok lo tratan como propiedad.
+     */
+    public boolean esAsistencia() {
+        return CODIGO_ASISTENCIA.equals(codigo);
+    }
 }

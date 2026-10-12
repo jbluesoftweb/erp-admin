@@ -29,7 +29,7 @@ public class AsistenciaRegistroDTO {
     // Incluye: nuevos + los que tenían ASISTIÓ en último registro
     private List<Personal> grupo2;
 
-    // Personas con ocurrencias del último registro (id_ocurrencia != 1)
+    // Personas con ocurrencias del último registro (código distinto de ASI)
     // Van pre-llenadas en la tabla "Ocurrencias"
     private List<RegistroDiario> ocurrencias;
 

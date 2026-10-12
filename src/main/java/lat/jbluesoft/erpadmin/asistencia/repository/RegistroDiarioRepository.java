@@ -51,19 +51,21 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
     @Query("SELECT COUNT(pd) FROM RegistroDiario pd " +
             "WHERE pd.departamento.idDepartamento = :idDepartamento " +
             "AND pd.fechaRegistro = :fechaRegistro " +
-            "AND pd.ocurrencia.idOcurrencia = 1")
+            "AND pd.ocurrencia.codigo = :codigoAsistencia")
     Long contarAsistenciasPorDepartamentoYFecha(
             @Param("idDepartamento") Integer idDepartamento,
-            @Param("fechaRegistro") LocalDate fechaRegistro
+            @Param("fechaRegistro") LocalDate fechaRegistro,
+            @Param("codigoAsistencia") String codigoAsistencia
     );
 
     @Query("SELECT COUNT(pd) FROM RegistroDiario pd " +
             "WHERE pd.departamento.idDepartamento = :idDepartamento " +
             "AND pd.fechaRegistro = :fechaRegistro " +
-            "AND pd.ocurrencia.idOcurrencia != 1")
+            "AND pd.ocurrencia.codigo <> :codigoAsistencia")
     Long contarOcurrenciasPorDepartamentoYFecha(
             @Param("idDepartamento") Integer idDepartamento,
-            @Param("fechaRegistro") LocalDate fechaRegistro
+            @Param("fechaRegistro") LocalDate fechaRegistro,
+            @Param("codigoAsistencia") String codigoAsistencia
     );
 
     void deleteByDepartamento_IdDepartamentoAndFechaRegistro(Integer idDepartamento, LocalDate fechaRegistro);
@@ -97,8 +99,8 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "AND pd.fechaRegistro = (SELECT MAX(pd2.fechaRegistro) " +
             "FROM RegistroDiario pd2 " +
             "WHERE pd2.departamento.idDepartamento = :idDepartamento) " +
-            "AND pd.ocurrencia.idOcurrencia != 1")
-    List<RegistroDiario> findOcurrenciasUltimoRegistro(@Param("idDepartamento") Integer idDepartamento);
+            "AND pd.ocurrencia.codigo <> :codigoAsistencia")
+    List<RegistroDiario> findOcurrenciasUltimoRegistro(@Param("idDepartamento") Integer idDepartamento, @Param("codigoAsistencia") String codigoAsistencia);
 
     // ========== NUEVOS MÉTODOS PARA IMPRIMIR REGISTRO ==========
 
@@ -122,15 +124,16 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "WHERE pd.departamento.idDepartamento = :idDepartamento " +
             "AND pd.fechaRegistro = :fechaRegistro " +
             "AND pd.nivel.tipoPersonal.idTipoPersonal = :tipoPersonal " +
-            "AND pd.ocurrencia.idOcurrencia != 1")
+            "AND pd.ocurrencia.codigo <> :codigoAsistencia")
     Long contarDescuentosPorTipoPersonal(
             @Param("idDepartamento") Integer idDepartamento,
             @Param("fechaRegistro") LocalDate fechaRegistro,
-            @Param("tipoPersonal") Integer tipoPersonal
+            @Param("tipoPersonal") Integer tipoPersonal,
+            @Param("codigoAsistencia") String codigoAsistencia
     );
 
     /**
-     * Obtiene las ocurrencias (id_ocurrencia != 1) por tipo de personal
+     * Obtiene las ocurrencias (código distinto de ASI) por tipo de personal
      * Ordenadas por nivel y antigüedad
      */
     @Query("SELECT pd FROM RegistroDiario pd " +
@@ -142,16 +145,17 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "WHERE pd.departamento.idDepartamento = :idDepartamento " +
             "AND pd.fechaRegistro = :fechaRegistro " +
             "AND g.tipoPersonal.idTipoPersonal = :tipoPersonal " +
-            "AND o.idOcurrencia != 1 " +
+            "AND o.codigo <> :codigoAsistencia " +
             "ORDER BY o.idOcurrencia, g.orden, pd.antiguedad ASC")
     List<RegistroDiario> findOcurrenciasPorTipoPersonal(
             @Param("idDepartamento") Integer idDepartamento,
             @Param("fechaRegistro") LocalDate fechaRegistro,
-            @Param("tipoPersonal") Integer tipoPersonal
+            @Param("tipoPersonal") Integer tipoPersonal,
+            @Param("codigoAsistencia") String codigoAsistencia
     );
 
     /**
-     * Obtiene el personal presente (id_ocurrencia = 1)
+     * Obtiene el personal presente (código ASI)
      * Mezclados: Grupo 1 + Grupo 2 ordenados por antigüedad
      */
     @Query("SELECT pd FROM RegistroDiario pd " +
@@ -162,11 +166,12 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "JOIN FETCH pd.ocurrencia o " +
             "WHERE pd.departamento.idDepartamento = :idDepartamento " +
             "AND pd.fechaRegistro = :fechaRegistro " +
-            "AND o.idOcurrencia = 1 " +
+            "AND o.codigo = :codigoAsistencia " +
             "ORDER BY pd.antiguedad ASC")
     List<RegistroDiario> findPersonalPresente(
             @Param("idDepartamento") Integer idDepartamento,
-            @Param("fechaRegistro") LocalDate fechaRegistro
+            @Param("fechaRegistro") LocalDate fechaRegistro,
+            @Param("codigoAsistencia") String codigoAsistencia
     );
 
     // ========== MÉTODOS PARA CONSOLIDADO (ADMIN_APP) ==========
@@ -190,7 +195,7 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
 
     /**
      * Contar descuentos por departamento y tipo de personal
-     * Retorna el personal que NO asistió (id_ocurrencia != 1)
+     * Retorna el personal que NO asistió (código distinto de ASI)
      */
     @Query("SELECT new lat.jbluesoft.erpadmin.asistencia.dto.ConsolidadoDepartamentoDTO(" +
             "c.idDepartamento, c.descripcionCorta, COUNT(p)) " +
@@ -198,12 +203,13 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "JOIN p.departamento c " +
             "WHERE p.fechaRegistro = :fecha " +
             "AND p.nivel.tipoPersonal.idTipoPersonal = :tipoPersonal " +
-            "AND p.ocurrencia.idOcurrencia != 1 " +
+            "AND p.ocurrencia.codigo <> :codigoAsistencia " +
             "GROUP BY c.idDepartamento, c.descripcionCorta " +
             "ORDER BY c.idDepartamento")
     List<ConsolidadoDepartamentoDTO> contarDescuentosPorDepartamento(
             @Param("fecha") LocalDate fecha,
-            @Param("tipoPersonal") Integer tipoPersonal
+            @Param("tipoPersonal") Integer tipoPersonal,
+            @Param("codigoAsistencia") String codigoAsistencia
     );
 
     /**
@@ -228,10 +234,10 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "FROM RegistroDiario p " +
             "JOIN p.departamento c " +
             "WHERE p.fechaRegistro = :fecha " +
-            "AND p.ocurrencia.idOcurrencia != 1 " +
+            "AND p.ocurrencia.codigo <> :codigoAsistencia " +
             "GROUP BY c.idDepartamento, c.descripcionCorta " +
             "ORDER BY c.idDepartamento")
-    List<ConsolidadoDepartamentoDTO> contarDescuentosPorDepartamentoTotal(@Param("fecha") LocalDate fecha);
+    List<ConsolidadoDepartamentoDTO> contarDescuentosPorDepartamentoTotal(@Param("fecha") LocalDate fecha, @Param("codigoAsistencia") String codigoAsistencia);
 
     /**
      * Listar todas las ocurrencias (sin ASISTIÓ) para el consolidado
@@ -247,11 +253,12 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "JOIN FETCH p.ocurrencia " +
             "WHERE p.fechaRegistro = :fecha " +
             "AND p.nivel.tipoPersonal.idTipoPersonal = :tipoPersonal " +
-            "AND p.ocurrencia.idOcurrencia != 1 " +
+            "AND p.ocurrencia.codigo <> :codigoAsistencia " +
             "ORDER BY p.ocurrencia.idOcurrencia, p.nivel.orden ASC, p.antiguedad ASC")
     List<RegistroDiario> findOcurrenciasConsolidadoPorTipoPersonal(
             @Param("fecha") LocalDate fecha,
-            @Param("tipoPersonal") Integer tipoPersonal
+            @Param("tipoPersonal") Integer tipoPersonal,
+            @Param("codigoAsistencia") String codigoAsistencia
     );
 
     @Query("SELECT p FROM RegistroDiario p " +
@@ -261,9 +268,9 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "JOIN FETCH p.departamento " +
             "JOIN FETCH p.ocurrencia " +
             "WHERE p.fechaRegistro = :fecha " +
-            "AND p.ocurrencia.idOcurrencia = 1 " +
+            "AND p.ocurrencia.codigo = :codigoAsistencia " +
             "ORDER BY p.antiguedad ASC")
-    List<RegistroDiario> findPersonalPresenteConsolidado(@Param("fecha") LocalDate fecha);
+    List<RegistroDiario> findPersonalPresenteConsolidado(@Param("fecha") LocalDate fecha, @Param("codigoAsistencia") String codigoAsistencia);
 
     /**
      * Listar todas las ocurrencias (sin ASISTIÓ) para el consolidado, sin filtrar por tipo de personal
@@ -276,15 +283,15 @@ public interface RegistroDiarioRepository extends JpaRepository<RegistroDiario, 
             "JOIN FETCH p.departamento " +
             "JOIN FETCH p.ocurrencia " +
             "WHERE p.fechaRegistro = :fecha " +
-            "AND p.ocurrencia.idOcurrencia != 1 " +
+            "AND p.ocurrencia.codigo <> :codigoAsistencia " +
             "ORDER BY p.ocurrencia.idOcurrencia, p.antiguedad ASC")
-    List<RegistroDiario> findOcurrenciasConsolidado(@Param("fecha") LocalDate fecha);
+    List<RegistroDiario> findOcurrenciasConsolidado(@Param("fecha") LocalDate fecha, @Param("codigoAsistencia") String codigoAsistencia);
 
     // ========== MÉTODOS PARA ALMUERZO ==========
 
     /**
      * Obtener personal PRESENTE de un departamento por fecha
-     * SOLO los que ASISTIERON (id_ocurrencia = 1)
+     * SOLO ocurrencias marcadas con almuerzo = true
      * Para el módulo de Almuerzo
      */
     @Query("SELECT p FROM RegistroDiario p " +

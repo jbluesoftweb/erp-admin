@@ -90,9 +90,10 @@
                                     th:name="'registros[' + ${iter.index} + '].idOcurrencia'"
                                     th:data-index="${iter.index}">
                                 <option th:each="oc : ${ocurrencias}"
+                                        th:data-asistencia="${oc.esAsistencia()}"
                                         th:value="${oc.idOcurrencia}"
                                         th:text="${oc.descripcion}"
-                                        th:selected="${oc.idOcurrencia == 1}">Asistió</option>
+                                        th:selected="${oc.esAsistencia()}">Asistió</option>
                             </select>
                         </td>
                         <td>
@@ -156,9 +157,10 @@
                                     th:name="'registros[' + ${grupo1.size() + iter.index} + '].idOcurrencia'"
                                     th:data-index="${grupo1.size() + iter.index}">
                                 <option th:each="oc : ${ocurrencias}"
+                                        th:data-asistencia="${oc.esAsistencia()}"
                                         th:value="${oc.idOcurrencia}"
                                         th:text="${oc.descripcion}"
-                                        th:selected="${oc.idOcurrencia == 1}">Asistió</option>
+                                        th:selected="${oc.esAsistencia()}">Asistió</option>
                             </select>
                         </td>
                         <td>
@@ -222,6 +224,7 @@
                                     th:name="'registros[' + ${grupo1.size() + grupo2.size() + iter.index} + '].idOcurrencia'"
                                     th:data-index="${grupo1.size() + grupo2.size() + iter.index}">
                                 <option th:each="oc : ${ocurrencias}"
+                                        th:data-asistencia="${oc.esAsistencia()}"
                                         th:value="${oc.idOcurrencia}"
                                         th:text="${oc.descripcion}"
                                         th:selected="${oc.idOcurrencia == pd.ocurrencia.idOcurrencia}">Permiso</option>
@@ -311,7 +314,7 @@
                 const fechaFin = document.querySelector(`.fecha-fin[data-index="${index}"]`);
                 const detalle = document.querySelector(`.detalle-input[data-index="${index}"]`);
 
-                if (this.value === '1') { // Asistió
+                if (this.options[this.selectedIndex].dataset.asistencia === 'true') { // Asistió
                     fechaInicio.disabled = true;
                     fechaFin.disabled = true;
                     detalle.disabled = true;
