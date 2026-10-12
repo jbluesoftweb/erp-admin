@@ -1,7 +1,5 @@
 # erpadmin
 
-[![CI](https://github.com/jbluesoftweb/erp-admin/actions/workflows/ci.yml/badge.svg)](https://github.com/jbluesoftweb/erp-admin/actions/workflows/ci.yml)
-
 ERP administrativo genérico: gestión de personal, asistencia y reportes
 consolidados para cualquier institución u organización — pública o privada.
 
