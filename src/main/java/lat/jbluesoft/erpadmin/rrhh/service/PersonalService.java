@@ -39,11 +39,6 @@ public interface PersonalService {
     }
 
     /**
-     * Contar personal de un departamento
-     */
-    long contarPorDepartamento(Integer idDepartamento);
-
-    /**
      * Buscar personal por nombre (búsqueda parcial)
      */
     List<Personal> buscarPorNombre(String nombre);

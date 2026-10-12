@@ -27,20 +27,19 @@ public class PasswordUtil {
 
     /**
      * Main para generar passwords desde consola
-     * Ejemplo: java PasswordUtil "Admin123"
+     * Ejemplo: java PasswordUtil "<password>"
      */
     public static void main(String[] args) {
-//        if (args.length == 0) {
-//            System.out.println("Uso: java PasswordUtil <password>");
-//            System.out.println("Ejemplo: java PasswordUtil Admin123");
-//            return;
-//        }
+        if (args.length == 0) {
+            System.out.println("Uso: java PasswordUtil <password>");
+            System.out.println("Ejemplo: java PasswordUtil \"<password>\"");
+            return;
+        }
 
-//        String plainPassword = args[0];
-        String hashedPassword = encode("Master123");
+        String plainPassword = args[0];
+        String hashedPassword = encode(plainPassword);
 
         System.out.println("==================================================");
-//        System.out.println("PASSWORD ORIGINAL: " + plainPassword);
         System.out.println("PASSWORD HASHEADO: " + hashedPassword);
         System.out.println("==================================================");
         System.out.println("\nSQL UPDATE:");

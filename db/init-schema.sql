@@ -2,23 +2,13 @@
 -- init-schema.sql
 --
 -- Esquema completo de erpadmin para una instalación nueva.
--- Generado a partir de un pg_dump --schema-only de una base de desarrollo,
--- y luego limpiado:
---   - Se removió el esquema "imint" y todos sus objetos: pertenecen a
---     IMINT App, una aplicación distinta que convivía en la misma base
---     de datos del servidor original, no a erpadmin.
---   - Se removió la tabla asistencia.autorizacion_registro_legado y
---     todos sus objetos relacionados: era una tabla legado sin entidad
---     Java en el código de erpadmin (su eliminación ya estaba prevista
---     en el historial interno de migraciones).
---   - Se reescribieron dos comentarios de columna/tabla que tenían
---     texto específico de un ámbito militar ("Personal militar activo",
---     "Snapshot del arma...") por texto genérico, acorde al resto del
---     proyecto.
+-- Crea los esquemas, tablas y demás objetos de la base (secuencias,
+-- restricciones, índices, funciones y triggers).
+-- Ejecutar sobre una base vacía y después cargar los datos iniciales.
 --
 -- Uso:
 --   psql -U tu_usuario -d tu_base -f db/init-schema.sql
---   psql -U tu_usuario -d tu_base -f db/seed_admin_sys.sql
+--   psql -U tu_usuario -d tu_base -f db/seed_chimu.sql
 --
 
 SET statement_timeout = 0;

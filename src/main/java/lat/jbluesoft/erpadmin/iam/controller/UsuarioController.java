@@ -77,8 +77,7 @@ public class UsuarioController {
     @GetMapping("/crear")
     @PreAuthorize("hasAnyRole('ADMIN_SYS', 'ADMIN_APP')")
     public String mostrarCrear(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-        List<String> rolesExcluidos = List.of("ADMIN_IMINT", "USER_IMINT");
-        List<Rol> roles = rolRepository.findByCodigoNotIn(rolesExcluidos);
+        List<Rol> roles = rolRepository.findAll();
 
         if (!userDetails.hasRole("ADMIN_SYS")) {
             roles = roles.stream()
@@ -159,8 +158,7 @@ public class UsuarioController {
             return "redirect:/asistencia/usuarios";
         }
 
-        List<String> rolesExcluidos = List.of("ADMIN_IMINT", "USER_IMINT");
-        List<Rol> roles = rolRepository.findByCodigoNotIn(rolesExcluidos);
+        List<Rol> roles = rolRepository.findAll();
 
         if (!userDetails.hasRole("ADMIN_SYS")) {
             roles = roles.stream()

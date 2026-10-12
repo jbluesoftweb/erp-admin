@@ -99,13 +99,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Rol no encontrado: " + idRol));
 
-        List<String> rolesExcluidos = List.of("ADMIN_IMINT", "USER_IMINT");
-        if (rolesExcluidos.contains(rol.getCodigo())) {
-            throw new IllegalArgumentException(
-                    "El rol " + rol.getCodigo() + " no pertenece a ERP Admin (Asistencia). "
-                    + "Los roles de IMINT App se gestionan desde ese sistema.");
-        }
-
         Sistema sistema = sistemaRepository.findByCodigo("ASISTENCIA")
                 .orElseThrow(() -> new IllegalStateException(
                         "Sistema ASISTENCIA no encontrado."));

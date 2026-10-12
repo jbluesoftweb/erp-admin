@@ -100,12 +100,6 @@ public class PersonalServiceImpl implements PersonalService {
     }
 
     @Override
-    public long contarPorDepartamento(Integer idDepartamento) {
-        log.debug("Contando personal de departamento: {}", idDepartamento);
-        return personalRepository.countByDepartamento_IdDepartamentoAndEnabledTrue(idDepartamento);
-    }
-
-    @Override
     public List<Personal> buscarPorNombre(String nombre) {
         log.debug("Buscando personal por nombre: {}", nombre);
         return personalRepository.searchByNombre(nombre);
