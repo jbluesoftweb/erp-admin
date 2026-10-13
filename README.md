@@ -131,6 +131,8 @@ base de datos directamente.
 
 Desde **Menú → SISTEMA → Administrar Ocurrencias**, `ADMIN_SYS` también puede registrar ocurrencias nuevas y editar la descripción, el color y el orden de las existentes.
 
+Las páginas de error (404, 403, 500 y una genérica) están en `src/main/resources/templates/error/`; nunca muestran detalles técnicos y llevan un botón para regresar al comienzo.
+
 ## Roles del sistema
 
 | Rol | Alcance |

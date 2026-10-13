@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<!-- Página genérica para cualquier código sin página propia (p. ej. 400 o 405) -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{error/base :: pagina(
+          ${status != null and status >= 400 and status <= 599 ? status : null},
+          'No se pudo completar',
+          'No pudimos completar la acción',
+          'Vuelve al comienzo e inténtalo de nuevo. Si el problema continúa, avisa al administrador del sistema.')}">
+</html>

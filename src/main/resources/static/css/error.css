@@ -1,0 +1,140 @@
+/* ==========================================================================
+   Páginas de error (404, 403, 500 y genérica) — JBlueSoft
+   Autónomas, con la identidad del login. Usa solo variables de jb-tokens.css.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+.jb-error {
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  display: flex;
+  background: var(--jb-bg);
+  color: var(--jb-text);
+  font-family: var(--jb-font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.error-wrap {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-block:
+    max(32px, env(safe-area-inset-top))
+    max(32px, env(safe-area-inset-bottom));
+  padding-inline:
+    max(16px, env(safe-area-inset-left))
+    max(16px, env(safe-area-inset-right));
+}
+
+/* La tarjeta se mide en em: 16px base y hasta 24px en 4K.
+   margin:auto la centra; si no cabe, empieza arriba y se alcanza con scroll. */
+.error-card {
+  margin: auto;
+  width: 100%;
+  max-width: 28em;
+  font-size: clamp(1rem, .55rem + .4vw, 1.5rem);
+  background: var(--jb-bg-2);
+  border: 1px solid var(--jb-border);
+  border-radius: 1em;
+  padding: 2.25em 2em 2em;
+  box-shadow: var(--jb-shadow-card);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.error-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: .625em;
+  margin-bottom: 1.5em;
+  font-family: var(--jb-font-title);
+  font-weight: 700;
+  font-size: 1.125em;
+  color: var(--jb-text);
+}
+.error-marca img { width: 2em; height: 2em; display: block; }
+
+.error-codigo {
+  margin: 0;
+  font-family: var(--jb-font-title);
+  font-weight: 700;
+  font-size: 4.5em;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--jb-accent);
+}
+
+.error-titulo {
+  margin: .5em 0 .5em;
+  font-family: var(--jb-font-title);
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 1.25;
+  color: var(--jb-text);
+}
+
+.error-mensaje {
+  margin: 0 0 1.75em;
+  font-size: 1em;
+  line-height: 1.55;
+  color: var(--jb-text-2);
+}
+
+/* Botón principal: enlace normal, sin JavaScript */
+.error-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5em;
+  min-height: 3em;              /* 48px con base de 16px */
+  padding: .625em 1.5em;
+  background: var(--jb-primary-h);
+  color: var(--jb-on-primary);
+  border-radius: var(--jb-radius-sm);
+  font-family: var(--jb-font-title);
+  font-weight: 600;
+  font-size: 1em;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: background .15s, transform .15s, box-shadow .15s;
+}
+.error-boton:hover {
+  background: var(--jb-primary-d);
+  box-shadow: 0 8px 20px var(--jb-primary-shadow);
+  transform: translateY(-1px);
+}
+.error-boton:active { background: var(--jb-primary-active); transform: none; }
+.error-boton:focus-visible {
+  outline: 2px solid var(--jb-accent);
+  outline-offset: 3px;
+}
+
+/* Texto solo para lectores de pantalla ("Error 404") */
+.error-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 480px) {
+  .error-card { padding: 1.75em 1.25em 1.5em; }
+  .error-codigo { font-size: 3.75em; }
+  .error-titulo { font-size: 1.3em; }
+  .error-boton { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .error-boton { transition: none; }
+  .error-boton:hover { transform: none; }
+}

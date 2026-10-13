@@ -26,6 +26,15 @@ public class HomeController {
     private final DepartamentoService departamentoService;
 
     /**
+     * Raíz del sitio: lleva al dashboard (destino del botón "Regresar al comienzo"
+     * de las páginas de error). Sin sesión, la seguridad redirige antes al login.
+     */
+    @GetMapping("/")
+    public String inicio() {
+        return "redirect:/dashboard";
+    }
+
+    /**
      * Página principal - Dashboard
      * Muestra información general del sistema y accesos rápidos
      */

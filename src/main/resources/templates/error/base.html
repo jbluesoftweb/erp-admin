@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+  Estructura común de las páginas de error (404, 403, 500 y genérica).
+  Es autónoma: no usa layout.html porque su cabecera y menú necesitan una
+  sesión iniciada, y estas páginas deben verse con o sin sesión.
+  Nunca muestra detalles técnicos: solo el código, un título y un mensaje fijos.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="pagina(codigo, pestana, titulo, mensaje)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0B1220">
+    <meta name="robots" content="noindex">
+    <title th:text="${pestana + ' - erpadmin'}">Error - erpadmin</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo-icon.svg}">
+
+    <link th:href="@{/css/bootstrap-icons.min.css}" rel="stylesheet">
+    <link th:href="@{/css/jb-tokens.css}" rel="stylesheet">
+    <link th:href="@{/css/error.css}" rel="stylesheet">
+</head>
+<body class="jb-error">
+
+<main class="error-wrap">
+    <section class="error-card" aria-labelledby="error-titulo">
+        <div class="error-marca">
+            <img th:src="@{/img/logo-icon.svg}" alt="" width="36" height="36">
+            <span>erpadmin</span>
+        </div>
+
+        <p class="error-codigo" th:if="${codigo != null}">
+            <span class="error-oculto">Error </span><span th:text="${codigo}">404</span>
+        </p>
+        <h1 id="error-titulo" class="error-titulo" th:text="${titulo}">No encontramos esa página</h1>
+        <p class="error-mensaje" th:text="${mensaje}">La dirección no existe o fue movida.</p>
+
+        <a th:href="@{/}" class="error-boton">
+            <i class="bi bi-house-door-fill" aria-hidden="true"></i>
+            <span>Regresar al comienzo</span>
+        </a>
+    </section>
+</main>
+
+</body>
+</html>
