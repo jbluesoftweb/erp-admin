@@ -1,5 +1,6 @@
 package lat.jbluesoft.erpadmin.iam.controller;
 
+import lat.jbluesoft.erpadmin.core.util.MensajesError;
 import lat.jbluesoft.erpadmin.iam.model.Rol;
 import lat.jbluesoft.erpadmin.iam.model.Usuario;
 import lat.jbluesoft.erpadmin.iam.repository.RolRepository;
@@ -133,7 +134,7 @@ public class UsuarioController {
         } catch (Exception e) {
             log.error("Error al crear usuario: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
-                    "Error al crear usuario: " + e.getMessage());
+                    MensajesError.GENERICO);
             return "redirect:/asistencia/usuarios/crear";
         }
     }
@@ -296,8 +297,9 @@ public class UsuarioController {
             return "redirect:/asistencia/usuarios";
 
         } catch (Exception e) {
+            log.error("Error al resetear password del usuario ID {}: {}", id, e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
-                    "Error: " + e.getMessage());
+                    MensajesError.GENERICO);
             return "redirect:/asistencia/usuarios/resetear-password/" + id;
         }
     }

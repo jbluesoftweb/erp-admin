@@ -1,5 +1,6 @@
 package lat.jbluesoft.erpadmin.rrhh.controller;
 
+import lat.jbluesoft.erpadmin.core.util.MensajesError;
 import lat.jbluesoft.erpadmin.rrhh.model.*;
 import lat.jbluesoft.erpadmin.core.security.CustomUserDetails;
 import lat.jbluesoft.erpadmin.rrhh.service.*;
@@ -103,7 +104,7 @@ public class PersonalController {
 
         } catch (Exception e) {
             log.error("Error al listar personal: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al cargar el personal: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -147,7 +148,7 @@ public class PersonalController {
 
         } catch (Exception e) {
             log.error("Error al mostrar agregar personal: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -191,7 +192,7 @@ public class PersonalController {
 
         } catch (Exception e) {
             log.error("Error en búsqueda de personal: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error en la búsqueda: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -281,7 +282,7 @@ public class PersonalController {
 
         } catch (Exception e) {
             log.error("Error al cargar formulario de registro: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -368,7 +369,7 @@ public class PersonalController {
             return "redirect:/personal/registrar";
         } catch (Exception e) {
             log.error("Error al guardar personal: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("error", "Error al registrar: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", MensajesError.GENERICO);
             return "redirect:/personal/registrar";
         }
     }
@@ -430,7 +431,7 @@ public class PersonalController {
 
         } catch (Exception e) {
             log.error("Error al cargar edición: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -513,7 +514,7 @@ public class PersonalController {
             return "redirect:/personal/editar/" + id;
         } catch (Exception e) {
             log.error("Error al actualizar personal: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("error", "Error al actualizar: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", MensajesError.GENERICO);
             return "redirect:/personal/editar/" + id;
         }
     }
@@ -580,7 +581,7 @@ public class PersonalController {
         } catch (Exception e) {
             log.error("Error al mover personal a SIN_EMPRESA: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
-                    "Error al mover personal: " + e.getMessage());
+                    MensajesError.GENERICO);
             return "redirect:/personal/listar";
         }
     }

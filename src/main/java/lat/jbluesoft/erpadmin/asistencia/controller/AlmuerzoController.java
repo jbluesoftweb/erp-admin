@@ -1,5 +1,6 @@
 package lat.jbluesoft.erpadmin.asistencia.controller;
 
+import lat.jbluesoft.erpadmin.core.util.MensajesError;
 import lat.jbluesoft.erpadmin.asistencia.dto.AlmuerzoDTO;
 import lat.jbluesoft.erpadmin.rrhh.model.Departamento;
 import lat.jbluesoft.erpadmin.core.security.CustomUserDetails;
@@ -76,7 +77,7 @@ public class AlmuerzoController {
 
         } catch (Exception e) {
             log.error("Error al cargar almuerzo: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al cargar el almuerzo: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -113,7 +114,7 @@ public class AlmuerzoController {
 
         } catch (Exception e) {
             log.error("Error al generar impresión de almuerzo: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al generar la impresión: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }

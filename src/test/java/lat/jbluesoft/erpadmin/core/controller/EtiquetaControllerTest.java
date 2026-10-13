@@ -3,6 +3,7 @@ package lat.jbluesoft.erpadmin.core.controller;
 import lat.jbluesoft.erpadmin.core.config.SecurityConfig;
 import lat.jbluesoft.erpadmin.core.security.CustomUserDetailsService;
 import lat.jbluesoft.erpadmin.core.service.EtiquetaService;
+import lat.jbluesoft.erpadmin.core.util.MensajesError;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -13,10 +14,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -66,5 +72,18 @@ class EtiquetaControllerTest {
                         .param("clave", "rrhh.personal.nivel")
                         .param("valorPersonalizado", "Test"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN_SYS")
+    void refrescar_conErrorInesperado_noMuestraDetalleTecnico() throws Exception {
+        doThrow(new RuntimeException("detalle técnico secreto: tabla iam.usuario"))
+                .when(etiquetaService).refrescarCache();
+
+        mockMvc.perform(post("/admin/etiquetas/refrescar").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attribute("error", allOf(
+                        containsString(MensajesError.GENERICO),
+                        not(containsString("detalle técnico secreto")))));
     }
 }

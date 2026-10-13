@@ -1,6 +1,7 @@
 package lat.jbluesoft.erpadmin.core.controller;
 
 import jakarta.validation.Valid;
+import lat.jbluesoft.erpadmin.core.util.MensajesError;
 import lat.jbluesoft.erpadmin.core.dto.EtiquetaUpdateDTO;
 import lat.jbluesoft.erpadmin.core.security.CustomUserDetails;
 import lat.jbluesoft.erpadmin.core.service.EtiquetaService;
@@ -81,7 +82,7 @@ public class EtiquetaController {
             redirectAttributes.addFlashAttribute("success", "Etiquetas actualizadas correctamente.");
         } catch (Exception e) {
             log.error("Error al refrescar cache de etiquetas: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("error", "No se pudo actualizar las etiquetas: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", MensajesError.GENERICO);
         }
         return "redirect:/dashboard";
     }

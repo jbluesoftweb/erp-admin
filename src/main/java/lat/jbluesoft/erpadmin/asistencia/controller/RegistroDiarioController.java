@@ -1,5 +1,6 @@
 package lat.jbluesoft.erpadmin.asistencia.controller;
 
+import lat.jbluesoft.erpadmin.core.util.MensajesError;
 import lat.jbluesoft.erpadmin.asistencia.dto.ConsolidadoRegistroDTO;
 import lat.jbluesoft.erpadmin.asistencia.dto.AsistenciaRegistroDTO;
 import lat.jbluesoft.erpadmin.asistencia.dto.ResumenRegistroDTO;
@@ -121,7 +122,7 @@ public class RegistroDiarioController {
 
         } catch (Exception e) {
             log.error("Error al cargar formulario de registro: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al cargar el formulario: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -279,7 +280,7 @@ public class RegistroDiarioController {
         } catch (Exception e) {
             log.error("Error al guardar registro de asistencia en bloque: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
-                    "Error al guardar el registro: " + e.getMessage());
+                    MensajesError.GENERICO);
             return "redirect:/asistencia/registrar";
         }
     }
@@ -320,7 +321,7 @@ public class RegistroDiarioController {
 
         } catch (Exception e) {
             log.error("Error al cargar página de impresión: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al cargar la página: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -395,7 +396,7 @@ public class RegistroDiarioController {
 
         } catch (Exception e) {
             log.error("Error al cargar formulario de actualización: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al cargar el formulario: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -536,7 +537,7 @@ public class RegistroDiarioController {
         } catch (Exception e) {
             log.error("Error al actualizar registro de asistencia: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
-                    "Error al actualizar el registro: " + e.getMessage());
+                    MensajesError.GENERICO);
             return "redirect:/asistencia/actualizar";
         }
     }
@@ -624,7 +625,7 @@ public class RegistroDiarioController {
 
         } catch (Exception e) {
             log.error("Error al cargar consolidado: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al cargar el consolidado: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -703,7 +704,7 @@ public class RegistroDiarioController {
 
         } catch (Exception e) {
             log.error("Error al generar impresión del consolidado: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error al generar la impresión: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -814,7 +815,7 @@ public class RegistroDiarioController {
         } catch (Exception e) {
             log.error("Error inesperado al eliminar registro: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
-                    "Error al eliminar el registro: " + e.getMessage());
+                    MensajesError.GENERICO);
             return "redirect:/asistencia/actualizar";
         }
     }
@@ -862,7 +863,7 @@ public class RegistroDiarioController {
 
         } catch (Exception e) {
             log.error("Error en vista admin: {}", e.getMessage(), e);
-            model.addAttribute("error", "Error: " + e.getMessage());
+            model.addAttribute("error", MensajesError.GENERICO);
             return "error";
         }
     }
@@ -902,7 +903,7 @@ public class RegistroDiarioController {
         } catch (Exception e) {
             log.error("Error al eliminar registro: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error",
-                    "Error al eliminar: " + e.getMessage());
+                    MensajesError.GENERICO);
         }
 
         return "redirect:/asistencia/admin?idDepartamento=" + idDepartamento +
