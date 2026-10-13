@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{layout :: head}"></th:block>
+    <link th:href="@{/css/admin-ocurrencias.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{layout :: sidebar}"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="main-wrapper">
+    <div th:replace="~{layout :: header}"></div>
+    <div class="content-area">
+
+        <div th:if="${success}" class="alert-custom alert-success" role="status">
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+            <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert-custom alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="controls-bar">
+            <div class="controls-left">
+                <span class="badge-total">
+                    <i class="bi bi-list-check" aria-hidden="true"></i>
+                    <span th:text="${#lists.size(listaOcurrencias) + ' ocurrencias'}">0 ocurrencias</span>
+                </span>
+            </div>
+            <a th:href="@{/admin/ocurrencias/nueva}" class="btn-institucional">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva ocurrencia
+            </a>
+        </div>
+
+        <div class="page-card">
+            <div class="page-card-header">
+                <i class="bi bi-clipboard2-check-fill" aria-hidden="true"></i>
+                <span>Ocurrencias del registro de asistencia</span>
+            </div>
+            <div class="data-table ocurrencias-table">
+            <table>
+                <caption class="visually-hidden">Ocurrencias registradas, en el orden en que se muestran</caption>
+                <thead>
+                <tr>
+                    <th scope="col" class="td-num">Orden</th>
+                    <th scope="col">Código</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Almuerzo</th>
+                    <th scope="col" class="td-acciones">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${listaOcurrencias.isEmpty()}">
+                    <td colspan="7" class="td-empty">No hay ocurrencias registradas.</td>
+                </tr>
+                <tr th:each="o : ${listaOcurrencias}">
+                    <td class="td-num" th:text="${o.orden ?: '-'}">1</td>
+                    <td class="col-codigo">
+                        <span class="codigo" th:text="${o.codigo}">ASI</span>
+                        <span th:if="${o.esAsistencia()}" class="badge-base">Base del registro de asistencia</span>
+                    </td>
+                    <td th:text="${o.descripcion}">Asistió</td>
+                    <td th:text="${o.tipo}">DISPONIBLE</td>
+                    <td>
+                        <span th:if="${o.color != null}" class="color-muestra">
+                            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                                <rect x="0.5" y="0.5" width="19" height="19" rx="4" th:attr="fill=${o.color}"/>
+                            </svg>
+                            <code th:text="${#strings.toUpperCase(o.color)}">#28A745</code>
+                        </span>
+                        <span th:if="${o.color == null}" class="texto-secundario">Sin color</span>
+                    </td>
+                    <td th:text="${o.almuerzo ? 'Sí' : 'No'}">Sí</td>
+                    <td class="td-acciones">
+                        <a th:href="@{/admin/ocurrencias/{id}/editar(id=${o.idOcurrencia})}"
+                           class="btn btn-sm btn-outline-primary"
+                           th:attr="aria-label=${'Editar ' + o.codigo + ' (' + o.descripcion + ')'}">
+                            <i class="bi bi-pencil-square" aria-hidden="true"></i> Editar
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+<div th:replace="~{layout :: scripts}"></div>
+</body>
+</html>

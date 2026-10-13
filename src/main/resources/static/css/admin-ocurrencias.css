@@ -1,0 +1,154 @@
+/* ==========================================================================
+   Admin — Ocurrencias (listado y formulario de alta/edición)
+   Tarjeta, tabla, avisos, datos fijos, botones y campos vienen de common.css
+   y del tema de Bootstrap. Aquí solo lo propio de estas pantallas.
+   ========================================================================== */
+
+/* ---------- Listado ---------- */
+
+/* Columnas de texto alineadas a la izquierda (la tabla común las centra) */
+.ocurrencias-table th,
+.ocurrencias-table td { text-align: left; }
+
+.ocurrencias-table th.td-num,
+.ocurrencias-table td.td-num,
+.ocurrencias-table th.td-acciones,
+.ocurrencias-table td.td-acciones { text-align: center; }
+
+.ocurrencias-table .col-codigo { min-width: 9rem; }
+.ocurrencias-table .codigo {
+    display: block;
+    font-weight: 600;
+    color: var(--jb-ink);
+}
+
+/* Distintivo de texto de la fila ASI */
+.badge-base {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--jb-info-subtle);
+    color: var(--jb-info-ink);
+    border: 1px solid var(--jb-info-line);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Muestra de color + hexadecimal en texto (nunca solo el color) */
+.color-muestra {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.color-muestra svg { flex: none; }
+/* El relleno viene del atributo fill (dato); el borde garantiza 3:1 sobre blanco */
+.color-muestra rect { stroke: var(--jb-line-strong); stroke-width: 1; }
+.color-muestra code {
+    font-size: 13px;
+    color: var(--jb-ink);
+}
+
+.ocurrencias-table .texto-secundario { color: var(--jb-ink-2); }
+
+/* ---------- Formulario ---------- */
+
+.ocurrencia-card { max-width: 760px; }
+
+.datos-fijos-nota {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: var(--jb-ink-2);
+}
+
+.form-group .field-error {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--jb-danger-ink);
+}
+
+.form-group input[aria-invalid="true"],
+.form-group select[aria-invalid="true"] {
+    border-color: var(--jb-danger-solid);
+}
+
+/* Nota del tipo: varios párrafos dentro de la ayuda */
+.tipo-ayuda p { margin: 0 0 4px; }
+.tipo-ayuda p:last-child { margin-bottom: 0; }
+
+/* Almuerzo: grupo de opciones Sí / No */
+.ocurrencia-form .opciones {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+.ocurrencia-form .opciones legend {
+    float: none;
+    width: auto;
+    margin: 0 0 6px;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--jb-ink);
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+.ocurrencia-form .opcion {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    margin-right: 20px;
+}
+/* Los radios no llevan el relleno ni la altura de los campos de texto */
+.ocurrencia-form .opcion input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--jb-primary-h);
+}
+.ocurrencia-form .opcion label {
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    cursor: pointer;
+}
+.ocurrencia-form .opcion input[type="radio"]:focus-visible {
+    outline: 3px solid var(--jb-focus-light);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* Color: selector (con JS) + hexadecimal */
+.color-campo {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 0;
+}
+.color-campo input[type="text"] { flex: 1 1 auto; min-width: 0; }
+.form-group .color-campo input.color-selector {
+    flex: none;
+    width: 48px;
+    padding: 4px;
+    cursor: pointer;
+}
+.form-group .color-campo input.color-selector[hidden] { display: none; }
+
+/* ---------- Celular y tablet ---------- */
+@media (max-width: 991.98px) {
+    .ocurrencia-form .opcion { min-height: 44px; }
+    .ocurrencia-form .opcion input[type="radio"] { width: 24px; height: 24px; }
+    .form-group .color-campo input.color-selector { width: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-group .color-campo input.color-selector { transition: none; }
+}

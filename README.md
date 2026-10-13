@@ -129,6 +129,8 @@ personal, la "especialidad", el "departamento" o los dos grupos en que se
 divide el personal — sin necesidad de reiniciar la aplicación ni tocar la
 base de datos directamente.
 
+Desde **Menú → SISTEMA → Administrar Ocurrencias**, `ADMIN_SYS` también puede registrar ocurrencias nuevas y editar la descripción, el color y el orden de las existentes.
+
 ## Roles del sistema
 
 | Rol | Alcance |

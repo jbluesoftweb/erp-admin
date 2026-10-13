@@ -1,5 +1,7 @@
 package lat.jbluesoft.erpadmin.asistencia.service;
 
+import lat.jbluesoft.erpadmin.asistencia.dto.OcurrenciaCrearDTO;
+import lat.jbluesoft.erpadmin.asistencia.dto.OcurrenciaEditarDTO;
 import lat.jbluesoft.erpadmin.asistencia.model.Ocurrencia;
 
 import java.util.List;
@@ -35,4 +37,24 @@ public interface OcurrenciaService {
      * Obtener la ocurrencia por defecto (Asistió)
      */
     Optional<Ocurrencia> obtenerOcurrenciaPorDefecto();
+
+    // ========== ADMINISTRACIÓN (ADMIN_SYS) ==========
+
+    /**
+     * Listar todas las ocurrencias (habilitadas o no), por orden y luego por id
+     */
+    List<Ocurrencia> listarParaAdministracion();
+
+    /**
+     * Crear una ocurrencia nueva (queda habilitada).
+     * Lanza IllegalArgumentException si algún dato no es válido o el código ya existe.
+     */
+    Ocurrencia crear(OcurrenciaCrearDTO dto);
+
+    /**
+     * Actualizar descripción, color y orden de una ocurrencia.
+     * Código, tipo, almuerzo y enabled nunca se modifican, aunque lleguen en el DTO.
+     * Lanza IllegalArgumentException si algún dato no es válido o la ocurrencia no existe.
+     */
+    Ocurrencia actualizar(Integer id, OcurrenciaEditarDTO dto);
 }

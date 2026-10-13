@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{layout :: head}"></th:block>
+    <link th:href="@{/css/admin-ocurrencias.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{layout :: sidebar}"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="main-wrapper">
+    <div th:replace="~{layout :: header}"></div>
+    <div class="content-area">
+
+        <div th:if="${error}" class="alert-custom alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <a th:href="@{/admin/ocurrencias}" class="btn-cancelar">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver al listado
+        </a>
+
+        <div class="page-card ocurrencia-card">
+            <div class="page-card-header">
+                <i th:class="${esEdicion} ? 'bi bi-pencil-square' : 'bi bi-plus-square-fill'" aria-hidden="true"></i>
+                <span th:text="${esEdicion} ? 'Editar ocurrencia' : 'Nueva ocurrencia'">Nueva ocurrencia</span>
+            </div>
+            <div class="page-card-body">
+
+                <!-- ========== EDICIÓN: datos que no se pueden cambiar ========== -->
+                <th:block th:if="${esEdicion}">
+                    <div class="datos-fijos">
+                        <div class="datos-fijos-title">
+                            <i class="bi bi-lock-fill" aria-hidden="true"></i> Datos fijos
+                        </div>
+                        <div class="dato-item">
+                            <span class="dato-label">Código:</span>
+                            <span class="dato-valor" th:text="${ocurrencia.codigo}">ASI</span>
+                        </div>
+                        <div class="dato-item">
+                            <span class="dato-label">Tipo:</span>
+                            <span class="dato-valor" th:text="${ocurrencia.tipo}">DISPONIBLE</span>
+                        </div>
+                        <div class="dato-item">
+                            <span class="dato-label">Almuerzo:</span>
+                            <span class="dato-valor" th:text="${ocurrencia.almuerzo ? 'Sí' : 'No'}">Sí</span>
+                        </div>
+                        <p class="datos-fijos-nota">
+                            Estos datos definen cómo se cuenta la ocurrencia en los reportes y no se pueden cambiar.
+                        </p>
+                    </div>
+
+                    <div th:if="${ocurrencia.esAsistencia()}" class="alert-custom alert-info">
+                        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+                        <span>Esta ocurrencia es la base del registro de asistencia y no se puede desactivar ni eliminar.</span>
+                    </div>
+                </th:block>
+
+                <!-- ========== ALTA: aviso de datos definitivos ========== -->
+                <div th:unless="${esEdicion}" class="alert-custom alert-warning">
+                    <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+                    <span>El código, el tipo y la marca de almuerzo no se podrán cambiar después de crear la ocurrencia.</span>
+                </div>
+
+                <!-- th:action agrega el token CSRF automáticamente -->
+                <form th:action="${esEdicion} ? @{/admin/ocurrencias/{id}/actualizar(id=${ocurrencia.idOcurrencia})} : @{/admin/ocurrencias/crear}"
+                      th:object="${form}" method="post" novalidate class="ocurrencia-form">
+
+                    <!-- ===== Solo en el alta: código, tipo y almuerzo ===== -->
+                    <th:block th:unless="${esEdicion}">
+                        <div class="form-section-title">
+                            <i class="bi bi-key-fill" aria-hidden="true"></i> Identificación
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label for="codigo">Código <span class="required" aria-hidden="true">*</span></label>
+                                <input type="text" id="codigo" th:field="*{codigo}"
+                                       maxlength="10" required autocomplete="off"
+                                       spellcheck="false" autocapitalize="characters"
+                                       th:attr="aria-invalid=${#fields.hasErrors('codigo')},
+                                                aria-describedby=${#fields.hasErrors('codigo')} ? 'codigo-ayuda codigo-error' : 'codigo-ayuda'">
+                                <span id="codigo-ayuda" class="field-hint">
+                                    De 2 a 10 letras (sin tildes ni ñ) o números, sin espacios. Se guarda en mayúsculas.
+                                </span>
+                                <p th:if="${#fields.hasErrors('codigo')}" id="codigo-error" class="field-error"
+                                   th:errors="*{codigo}">Error</p>
+                            </div>
+                        </div>
+
+                        <div class="form-section-title">
+                            <i class="bi bi-calculator" aria-hidden="true"></i> Clasificación
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tipo">Tipo <span class="required" aria-hidden="true">*</span></label>
+                                <select id="tipo" th:field="*{tipo}" required
+                                        th:attr="aria-invalid=${#fields.hasErrors('tipo')},
+                                                 aria-describedby=${#fields.hasErrors('tipo')} ? 'tipo-ayuda tipo-error' : 'tipo-ayuda'">
+                                    <option value="">-- selecciona --</option>
+                                    <option value="DISPONIBLE">DISPONIBLE</option>
+                                    <option value="DESCUENTO">DESCUENTO</option>
+                                </select>
+                                <div id="tipo-ayuda" class="field-hint tipo-ayuda">
+                                    <p><strong>DISPONIBLE:</strong> en Administración de registros, la persona se
+                                        muestra con un distintivo verde.</p>
+                                    <p><strong>DESCUENTO:</strong> en Administración de registros, la persona se
+                                        muestra con un distintivo ámbar.</p>
+                                    <p>Los totales de los reportes (resumen del registro, consolidado e impresiones)
+                                        no usan el tipo: toda ocurrencia distinta de Asistió (ASI) se cuenta como
+                                        descuento.</p>
+                                </div>
+                                <p th:if="${#fields.hasErrors('tipo')}" id="tipo-error" class="field-error"
+                                   th:errors="*{tipo}">Error</p>
+                            </div>
+
+                            <div class="form-group">
+                                <fieldset class="opciones"
+                                          th:attr="aria-describedby=${#fields.hasErrors('almuerzo')} ? 'almuerzo-ayuda almuerzo-error' : 'almuerzo-ayuda'">
+                                    <legend>Almuerzo <span class="required" aria-hidden="true">*</span></legend>
+                                    <div class="opcion">
+                                        <input type="radio" id="almuerzoSi" th:field="*{almuerzo}" value="true" required>
+                                        <label for="almuerzoSi">Sí</label>
+                                    </div>
+                                    <div class="opcion">
+                                        <input type="radio" id="almuerzoNo" th:field="*{almuerzo}" value="false">
+                                        <label for="almuerzoNo">No</label>
+                                    </div>
+                                </fieldset>
+                                <span id="almuerzo-ayuda" class="field-hint">
+                                    Sí: el personal con esta ocurrencia aparece en la lista de almuerzo del día.
+                                </span>
+                                <p th:if="${#fields.hasErrors('almuerzo')}" id="almuerzo-error" class="field-error"
+                                   th:errors="*{almuerzo}">Error</p>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <!-- ===== Editables en alta y edición ===== -->
+                    <div class="form-section-title">
+                        <i class="bi bi-pencil" aria-hidden="true"></i> Presentación
+                    </div>
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <label for="descripcion">Descripción <span class="required" aria-hidden="true">*</span></label>
+                            <input type="text" id="descripcion" th:field="*{descripcion}"
+                                   maxlength="50" required autocomplete="off"
+                                   th:attr="aria-invalid=${#fields.hasErrors('descripcion')},
+                                            aria-describedby=${#fields.hasErrors('descripcion')} ? 'descripcion-ayuda descripcion-error' : 'descripcion-ayuda'">
+                            <span id="descripcion-ayuda" class="field-hint">
+                                Nombre que se ve al registrar la asistencia y en los reportes. Máximo 50 caracteres.
+                            </span>
+                            <p th:if="${#fields.hasErrors('descripcion')}" id="descripcion-error" class="field-error"
+                               th:errors="*{descripcion}">Error</p>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="color">Color <span class="required" aria-hidden="true">*</span></label>
+                            <div class="color-campo">
+                                <!-- El selector se muestra solo con JS (admin-ocurrencias.js);
+                                     sin JS se escribe el hexadecimal -->
+                                <input type="color" id="colorSelector" class="color-selector" hidden
+                                       aria-label="Elegir color con el selector">
+                                <input type="text" id="color" th:field="*{color}"
+                                       maxlength="7" required autocomplete="off"
+                                       spellcheck="false" autocapitalize="characters"
+                                       placeholder="#RRGGBB"
+                                       th:attr="aria-invalid=${#fields.hasErrors('color')},
+                                                aria-describedby=${#fields.hasErrors('color')} ? 'color-ayuda color-error' : 'color-ayuda'">
+                            </div>
+                            <span id="color-ayuda" class="field-hint">
+                                Formato #RRGGBB, por ejemplo #1F6BE0. Se guarda en mayúsculas.
+                            </span>
+                            <p th:if="${#fields.hasErrors('color')}" id="color-error" class="field-error"
+                               th:errors="*{color}">Error</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orden">Orden</label>
+                            <input type="number" id="orden" th:field="*{orden}"
+                                   min="1" step="1" inputmode="numeric" autocomplete="off"
+                                   th:attr="aria-invalid=${#fields.hasErrors('orden')},
+                                            aria-describedby=${#fields.hasErrors('orden')} ? 'orden-ayuda orden-error' : 'orden-ayuda'">
+                            <span id="orden-ayuda" class="field-hint"
+                                  th:text="${esEdicion} ? 'Posición en las listas de ocurrencias (1 o más). Si lo dejas vacío, se conserva el orden actual.' : 'Posición en las listas de ocurrencias (1 o más). Si lo dejas vacío, se pone al final.'">
+                                Posición en las listas de ocurrencias (1 o más).
+                            </span>
+                            <!-- Mensaje fijo: también cubre un valor que no es número (sin texto técnico) -->
+                            <p th:if="${#fields.hasErrors('orden')}" id="orden-error" class="field-error">
+                                El orden debe ser un número entero mayor o igual a 1.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-institucional">
+                            <i class="bi bi-floppy-fill" aria-hidden="true"></i>
+                            <span th:text="${esEdicion} ? 'Guardar cambios' : 'Crear ocurrencia'">Crear ocurrencia</span>
+                        </button>
+                        <a th:href="@{/admin/ocurrencias}" class="btn-cancelar">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+<div th:replace="~{layout :: scripts}"></div>
+<script th:src="@{/js/admin-ocurrencias.js}"></script>
+</body>
+</html>
