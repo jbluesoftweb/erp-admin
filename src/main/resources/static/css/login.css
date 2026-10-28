@@ -9,95 +9,27 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   min-height: 100vh;
   min-height: 100dvh; /* la barra del navegador móvil no tapa el botón */
   margin: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  background: var(--jb-bg);
+  display: flex;
+  padding-block:
+    max(32px, env(safe-area-inset-top))
+    max(32px, env(safe-area-inset-bottom));
+  padding-inline:
+    max(24px, env(safe-area-inset-left))
+    max(24px, env(safe-area-inset-right));
+  background:
+    radial-gradient(60% 50% at 15% 10%, var(--jb-primary-glow), transparent 70%),
+    radial-gradient(50% 45% at 90% 95%, var(--jb-accent-glow), transparent 70%),
+    var(--jb-bg);
   color: var(--jb-text);
   font-family: var(--jb-font-body);
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- Panel de marca (izquierda) ----------
-   Todo el panel se mide en em: el tamaño base escala con el ancho
-   (16px hasta ~1600px, ~19px en 2560, 24px en 3840) y el contenido
-   crece en proporción en vez de perderse en la pantalla. */
-.jb-brand {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2.5em;
-  font-size: clamp(1rem, .55rem + .4vw, 1.625rem);
-  padding-block:
-    max(clamp(32px, 5vh, 96px), env(safe-area-inset-top))
-    max(clamp(32px, 5vh, 96px), env(safe-area-inset-bottom));
-  /* En monitores anchos el contenido no se estira: el relleno crece
-     para dejar una columna de lectura de 34em centrada en el panel. */
-  --jb-brand-pad: max(clamp(32px, 4.5vw, 160px), calc((100% - 34em) / 2));
-  padding-inline: max(var(--jb-brand-pad), env(safe-area-inset-left)) var(--jb-brand-pad);
-  overflow: hidden;
-  background:
-    radial-gradient(60% 50% at 15% 10%, var(--jb-primary-glow), transparent 70%),
-    radial-gradient(50% 45% at 90% 95%, var(--jb-accent-glow), transparent 70%),
-    var(--jb-bg);
-  border-right: 1px solid var(--jb-border);
-}
-.jb-brand-top { display: flex; align-items: center; gap: .75em; }
-.jb-brand-top img { width: 2.75em; height: 2.75em; display: block; }
-.jb-brand-name {
-  font-family: var(--jb-font-title);
-  font-weight: 700;
-  font-size: 1.5em;
-  letter-spacing: .01em;
-}
-.jb-brand-main h1 {
-  font-family: var(--jb-font-title);
-  font-weight: 700;
-  font-size: clamp(2rem, .5rem + 2.6vw, 6rem);
-  line-height: 1.1;
-  letter-spacing: -.01em;
-  margin: 0 0 .5em;
-  max-width: 14ch;
-  overflow-wrap: break-word;
-}
-.jb-brand-main h1 span { color: var(--jb-accent); }
-.jb-brand-main p {
-  color: var(--jb-text-2);
-  font-size: 1.05em;
-  line-height: 1.6;
-  max-width: 44ch;
-  margin: 0 0 2em;
-}
-.jb-features { list-style: none; margin: 0; padding: 0; display: grid; gap: .9em; font-size: .95em; }
-.jb-features li { display: flex; align-items: center; gap: .75em; color: var(--jb-text); }
-.jb-features i {
-  flex: none;
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 2.2em; height: 2.2em; border-radius: var(--jb-radius-sm);
-  background: var(--jb-primary-soft);
-  color: var(--jb-accent);
-  font-size: 1.05em;
-}
-.jb-brand-foot { color: var(--jb-text-2); font-size: .85em; }
-.jb-brand-foot strong { color: var(--jb-text); font-family: var(--jb-font-title); font-weight: 600; }
-
-/* ---------- Panel del formulario (derecha) ---------- */
-.jb-form-wrap {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  padding-block:
-    max(32px, env(safe-area-inset-top))
-    max(32px, env(safe-area-inset-bottom));
-  padding-inline:
-    24px
-    max(24px, env(safe-area-inset-right));
-}
-/* La tarjeta también se mide en em:
-   16px base y hasta 24px en 4K. Nunca baja de 1rem, así los inputs quedan en >=16px. */
+/* La tarjeta se mide en em: 16px base y hasta 24px en 4K.
+   Nunca baja de 1rem, así los inputs quedan en >=16px. */
 .jb-card {
-  /* margin:auto centra cuando hay espacio y, si no cabe, la tarjeta
-     empieza arriba y se alcanza con scroll (nunca queda cortada). */
+  /* margin:auto centra en ambos ejes cuando hay espacio y, si no cabe,
+     la tarjeta empieza arriba y se alcanza con scroll (nunca queda cortada). */
   margin: auto;
   width: 100%;
   max-width: 25em;
@@ -105,20 +37,24 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   background: var(--jb-bg-2);
   border: 1px solid var(--jb-border);
   border-radius: 1em;
-  padding: 2.25em 2em 1.75em;
+  padding: 2.25em 2em 2em;
   box-shadow: var(--jb-shadow-card);
 }
-.jb-card-mobile-logo { display: none; align-items: center; gap: .625em; margin-bottom: 1.5em; }
-.jb-card-mobile-logo img { width: 2.25em; height: 2.25em; }
-.jb-card-mobile-logo span { font-family: var(--jb-font-title); font-weight: 700; font-size: 1.25em; }
 
-.jb-card h2 {
+.jb-title {
   font-family: var(--jb-font-title);
   font-weight: 700;
-  font-size: 1.6em;
+  font-size: 1.75em;
+  line-height: 1.2;
+  text-align: center;
   margin: 0 0 .25em;
 }
-.jb-card .jb-sub { color: var(--jb-text-2); font-size: .95em; margin: 0 0 1.5em; }
+.jb-sub {
+  color: var(--jb-text-2);
+  font-size: .95em;
+  text-align: center;
+  margin: 0 0 1.75em;
+}
 
 .jb-alert {
   display: flex; align-items: flex-start; gap: .625em;
@@ -195,24 +131,15 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .jb-btn.loading .jb-spinner { display: inline-block; }
 @keyframes jb-spin { to { transform: rotate(360deg); } }
 
-.jb-card-foot {
-  margin-top: 1.5em; padding-top: 1.125em;
-  border-top: 1px solid var(--jb-border);
-  text-align: center; color: var(--jb-text-2); font-size: .8em;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .jb-btn, .jb-input { transition: none; }
   .jb-btn:hover { transform: none; }
   .jb-spinner { animation-duration: 1.6s; }
 }
 
-/* ---------- Pantallas pequeñas: una sola columna ---------- */
+/* Celulares (hasta 880 px) */
 @media (max-width: 880px) {
-  .jb-login { grid-template-columns: minmax(0, 1fr); }
-  .jb-brand { display: none; }
-  .jb-card-mobile-logo { display: flex; }
-  .jb-form-wrap {
+  .jb-login {
     padding-block:
       max(24px, env(safe-area-inset-top))
       max(24px, env(safe-area-inset-bottom));
@@ -220,52 +147,19 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       max(16px, env(safe-area-inset-left))
       max(16px, env(safe-area-inset-right));
   }
-  .jb-card { padding: 1.75em 1.375em 1.375em; }
+  .jb-card { padding: 1.75em 1.375em 1.5em; }
 }
 
 /* Celulares muy angostos (320 px) */
 @media (max-width: 360px) {
-  .jb-form-wrap { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); }
+  .jb-login { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); }
   .jb-card { padding: 1.5em 1.125em 1.25em; }
 }
 
 /* Poca altura (celular en horizontal): tarjeta más compacta */
 @media (max-height: 480px) {
-  .jb-form-wrap { padding-block: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-bottom)); }
+  .jb-login { padding-block: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-bottom)); }
   .jb-card { padding-block: 1.25em 1em; }
-  .jb-card-mobile-logo { margin-bottom: .875em; }
-  .jb-card .jb-sub { margin-bottom: 1em; }
+  .jb-sub { margin-bottom: 1em; }
   .jb-field { margin-bottom: .75em; }
-  .jb-card-foot { margin-top: .875em; padding-top: .75em; }
-}
-
-/* Tablet en vertical (768x1024, 820x1180, 900x1200…): dos columnas
-   quedan apretadas y una sola columna deja la pantalla vacía, así que la
-   marca vuelve como encabezado compacto y el conjunto se centra.
-   Desde 1024 px (iPad en horizontal o iPad Pro en vertical) hay dos columnas. */
-@media (min-width: 600px) and (max-width: 1023px) and (min-height: 800px) and (orientation: portrait) {
-  .jb-login {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto;
-    align-content: center;
-  }
-  .jb-brand {
-    display: flex;
-    gap: 1.75em;
-    font-size: 1rem;
-    --jb-brand-pad: max(32px, calc((100% - 25rem) / 2));
-    padding-block: max(32px, env(safe-area-inset-top)) 0;
-    border-right: 0;
-    background: none;
-  }
-  .jb-brand-main h1 { font-size: 2.25rem; max-width: none; }
-  .jb-brand-main p { margin: 0; }
-  .jb-features, .jb-brand-foot { display: none; }
-  .jb-card-mobile-logo { display: none; }
-  .jb-form-wrap { padding-top: 32px; }
-  .jb-login {
-    background:
-      radial-gradient(60% 40% at 15% 0%, var(--jb-primary-glow), transparent 70%),
-      var(--jb-bg);
-  }
 }

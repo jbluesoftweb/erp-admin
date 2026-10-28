@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#0B1220">
-    <title>Iniciar sesión · erpadmin</title>
+    <title>erp-admin</title>
     <link rel="icon" type="image/svg+xml" th:href="@{/img/logo-icon.svg}">
 
     <link th:href="@{/css/bootstrap-icons.min.css}" rel="stylesheet">
@@ -14,82 +14,52 @@
 </head>
 <body class="jb-login">
 
-    <!-- Panel de marca (se oculta en pantallas pequeñas) -->
-    <aside class="jb-brand" aria-hidden="true">
-        <div class="jb-brand-top">
-            <img th:src="@{/img/logo-icon.svg}" alt="">
-            <span class="jb-brand-name">erpadmin</span>
+    <main class="jb-card">
+        <h1 class="jb-title">erp-admin</h1>
+        <p class="jb-sub">Sistemas de Administración Integrado</p>
+
+        <div th:if="${error}" class="jb-alert jb-alert-error" role="alert">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+            <span th:text="${error}"></span>
+        </div>
+        <div th:if="${message}" class="jb-alert jb-alert-success" role="status">
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+            <span th:text="${message}"></span>
         </div>
 
-        <div class="jb-brand-main">
-            <h1>Tu equipo, <span>bajo control.</span></h1>
-            <p>Gestión de personal, asistencia y reportes consolidados para cada sucursal y departamento.</p>
-            <ul class="jb-features">
-                <li><i class="bi bi-people"></i> Personal organizado por sucursal y departamento</li>
-                <li><i class="bi bi-calendar-check"></i> Registro diario de asistencia y ocurrencias</li>
-                <li><i class="bi bi-bar-chart-line"></i> Reportes consolidados listos para imprimir</li>
-            </ul>
-        </div>
-
-        <div class="jb-brand-foot">Desarrollado por <strong>JBlueSoft</strong></div>
-    </aside>
-
-    <!-- Formulario -->
-    <main class="jb-form-wrap">
-        <section class="jb-card">
-            <div class="jb-card-mobile-logo">
-                <img th:src="@{/img/logo-icon.svg}" alt="">
-                <span>erpadmin</span>
+        <form id="login-form" th:action="@{/login}" method="post">
+            <div class="jb-field">
+                <label for="codigo" class="jb-label">Código</label>
+                <input type="text" id="codigo" name="codigo" class="jb-input"
+                       placeholder="9 dígitos"
+                       inputmode="numeric" autocomplete="username"
+                       maxlength="9" pattern="[0-9]{9}"
+                       title="El código tiene 9 dígitos"
+                       required autofocus>
             </div>
 
-            <h2>Iniciar sesión</h2>
-            <p class="jb-sub">Ingresa con tu código de trabajador.</p>
-
-            <div th:if="${error}" class="jb-alert jb-alert-error" role="alert">
-                <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
-                <span th:text="${error}"></span>
-            </div>
-            <div th:if="${message}" class="jb-alert jb-alert-success" role="status">
-                <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                <span th:text="${message}"></span>
-            </div>
-
-            <form id="login-form" th:action="@{/login}" method="post">
-                <div class="jb-field">
-                    <label for="codigo" class="jb-label">Código</label>
-                    <input type="text" id="codigo" name="codigo" class="jb-input"
-                           placeholder="9 dígitos"
-                           inputmode="numeric" autocomplete="username"
-                           maxlength="9" pattern="[0-9]{9}"
-                           title="El código tiene 9 dígitos"
-                           required autofocus>
+            <div class="jb-field">
+                <label for="password" class="jb-label">Contraseña</label>
+                <div class="jb-input-wrap">
+                    <input type="password" id="password" name="password"
+                           class="jb-input has-toggle"
+                           placeholder="Tu contraseña"
+                           autocomplete="current-password" required>
+                    <button type="button" id="toggle-password" class="jb-toggle"
+                            aria-label="Mostrar contraseña" aria-pressed="false">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                    </button>
                 </div>
+                <span id="caps-hint" class="jb-caps" role="status">
+                    <i class="bi bi-exclamation-circle" aria-hidden="true"></i> Bloq Mayús está activado
+                </span>
+            </div>
 
-                <div class="jb-field">
-                    <label for="password" class="jb-label">Contraseña</label>
-                    <div class="jb-input-wrap">
-                        <input type="password" id="password" name="password"
-                               class="jb-input has-toggle"
-                               placeholder="Tu contraseña"
-                               autocomplete="current-password" required>
-                        <button type="button" id="toggle-password" class="jb-toggle"
-                                aria-label="Mostrar contraseña" aria-pressed="false">
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <span id="caps-hint" class="jb-caps" role="status">
-                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i> Bloq Mayús está activado
-                    </span>
-                </div>
-
-                <button type="submit" id="login-submit" class="jb-btn">
-                    <span class="jb-spinner" aria-hidden="true"></span>
-                    <span>Ingresar</span>
-                </button>
-            </form>
-
-            <div class="jb-card-foot">erpadmin v1.0.0 · JBlueSoft</div>
-        </section>
+            <button type="submit" id="login-submit" class="jb-btn">
+                <span class="jb-spinner" aria-hidden="true"></span>
+                <span>Ingresar</span>
+            </button>
+        </form>
     </main>
 
     <script th:src="@{/js/login.js}"></script>
